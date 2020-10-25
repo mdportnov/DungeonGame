@@ -1,0 +1,6 @@
+#ifndef _EQUIPMENTMATERIALS_H
+#define _EQUIPMENTMATERIALS_H
+
+enum EquipmentMaterials { LEATHER, IRON, DIAMOND };
+
+#endif //_EQUIPMENTMATERIALS_H

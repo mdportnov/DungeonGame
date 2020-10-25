@@ -16,13 +16,14 @@ namespace MyGame {
 
     void TApplication::Run() {
         Clock clock;
+        float CurrentFrame=0;
 
         Texture texture;
-        texture.loadFromFile("../img/egorov.png");
+        texture.loadFromFile("../img/leha_tiles.png");
 
         Sprite sprite;
         sprite.setTexture(texture);
-//        sprite.setTextureRect(IntRect(0, 192, 96, 96));
+        sprite.setTextureRect(IntRect(0, 0, 30, 50));
         sprite.setScale(2.0, 2.0);
         sprite.setPosition(50, 25);
 
@@ -38,9 +39,17 @@ namespace MyGame {
             }
 
             if (Keyboard::isKeyPressed(Keyboard::Left)) {
+                CurrentFrame+=0.005*time;
+                if(CurrentFrame>4) CurrentFrame-=4;
+                sprite.setTextureRect(IntRect(30*int(CurrentFrame), 0, 30, 50));
+                sprite.setScale(-2, 2);
                 sprite.move(-0.1*time, 0);
             }
             if (Keyboard::isKeyPressed(Keyboard::Right)) {
+                CurrentFrame+=0.005*time;
+                if(CurrentFrame>4) CurrentFrame-=4;
+                sprite.setTextureRect(IntRect(30*int(CurrentFrame), 0, 30, 50));
+                sprite.setScale(2, 2);
                 sprite.move(0.1*time, 0);
             }
             if (Keyboard::isKeyPressed(Keyboard::Up)) {

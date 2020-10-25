@@ -1,0 +1,6 @@
+#ifndef _EQUIPMENTTYPES_H
+#define _EQUIPMENTTYPES_H
+
+enum EquipmentTypes { HELMET, BREASTPLATE, BOOTS };
+
+#endif //_EQUIPMENTTYPES_H
