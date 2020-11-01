@@ -1,7 +1,7 @@
 #ifndef _CHEST_H
 #define _CHEST_H
 
-#include "ObjectOnField.h"
+#include "include/model/ObjectOnField.h"
 #include "Item.h"
 #include "BunchOfKeys.h"
 #include "Hero.h"

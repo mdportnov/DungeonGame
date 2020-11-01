@@ -10,41 +10,35 @@ find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 
 add_executable(DungeonGame
         src/main.cpp
-        include/main.h src/TApplication.cpp include/TApplication.h src/Player.cpp include/Player.h
+        include/main.h src/TApplication.cpp include/TApplication.h include/model/Player.h
 
-        src/model/Artefact.h
-        src/model/ArtefactEquipment.h
-        src/model/ArtefactWeapon.h
+        include/model/equip/Artefact.h
+        include/model/equip/ArtefactEquipment.h
+        include/model/equip/ArtefactWeapon.h
         src/model/BunchOfKeys.h
         src/model/Cell.h
         src/model/CellType.h
         src/model/CellWithChest.h
         src/model/CellWithItem.h
-        src/model/Characteristic.h
-        src/model/Characteristics.h
+        include/model/table/Characteristic.h
         src/model/Chest.h
-        src/model/EnchantedArtefactWeapon.h
-        src/model/EnchantedWeapon.h
+        include/model/equip/EnchantedArtefactWeapon.h
+        include/model/equip/EnchantedWeapon.h
         src/model/Enemy.h
-        src/model/Equipment.h
-        src/model/EquipmentMaterials.h
-        src/model/EquipmentTypes.h
+        include/model/equip/Equipment.h
+        include/model/equip/EquipmentMaterials.h
         src/model/Game.h
-        src/model/Hero.h
         src/model/Inventory.h
         src/model/Item.h
-        src/model/Iterator.h
         src/model/Key.h
         src/model/LastPositions.h
-        src/model/Level.h
-        src/model/Map.h
-        src/model/ObjectOnField.h
+        include/model/ObjectOnField.h
         src/model/PointType.h
-        src/model/Potion.h
+        include/model/equip/Potion.h
         src/model/Shortnames.h
-        src/model/TableOfCharacteristics.h
-        src/model/Unit.h
-        src/model/Weapon.h
-        )
+        include/model/table/TableOfCharacteristics.h
+        include/model/Unit.h
+        include/model/equip/Weapon.h
+        include/map.h include/view.h include/model/Enemy.h src/tinyxml2.cpp src/tinyxml2.h include/model/Level.h)
 
 target_link_libraries(DungeonGame sfml-graphics sfml-audio)

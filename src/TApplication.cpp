@@ -1,5 +1,8 @@
-#include "include/TApplication.h"
+#include <sstream>
 #include "iostream"
+#include "include/TApplication.h"
+#include "include/view.h"
+#include "include/model/Player.h"
 
 using namespace sf;
 
@@ -11,29 +14,36 @@ namespace MyGame {
     TApplication::~TApplication() = default;;
 
     void TApplication::Init() {
-        window = new sf::RenderWindow(sf::VideoMode(500, 500), "DungeonGame");
+        window = new sf::RenderWindow(sf::VideoMode(640, 480), "DungeonGame");
+        view.reset(sf::FloatRect(0, 0, 640, 480));
     }
 
     void TApplication::Run() {
         Clock clock;
         float CurrentFrame = 0;
 
-        Texture texture1;
-        Texture texture2;
-        texture1.loadFromFile("../res/img/temik_tiles.png");
-        texture2.loadFromFile("../res/img/leha_tiles.png");
+        Player p("temik_tiles.png", 50, 50, 30.0, 50.0);
 
-        Sprite sprite;
-        sprite.setTexture(texture1);
-        sprite.setTextureRect(IntRect(0, 0, 30, 50));
-        sprite.setScale(2.0, 2.0);
-        sprite.setPosition(50, 25);
+        Image map_image;
+        map_image.loadFromFile("../res/img/tileset_v2.png");
+        Texture map;
+        map.loadFromImage(map_image);
+        Sprite s_map;
+        s_map.setTexture(map);
 
-        Sprite sprite2;
-        sprite2.setTexture(texture2);
-        sprite2.setTextureRect(IntRect(0, 0, 30, 50));
-        sprite2.setScale(2.0, 2.0);
-        sprite2.setPosition(450, 25);
+        sf::SoundBuffer buffer;
+        buffer.loadFromFile("../res/sound/hookah.wav");
+
+        sf::Sound sound;
+        sound.setBuffer(buffer);
+
+        sf::RectangleShape textBG(sf::Vector2f(200, 40));
+        textBG.setFillColor(Color::Black);
+
+        Font font;
+        font.loadFromFile("../res/font/karmafuture.ttf");
+        Text text("", font, 20);
+        text.setStyle(sf::Text::Bold | sf::Text::Underlined);
 
         while (window->isOpen()) {
             float time = clock.getElapsedTime().asMicroseconds();
@@ -46,62 +56,37 @@ namespace MyGame {
                     window->close();
             }
 
-//            if (sprite2.getPosition().x < 500) {
-//                sprite2.move(0.1 * time, 0);
-//            } else if (sprite2.getPosition().x==500) {
-//                sprite2.setPosition(490, 25);
-//            } else {
-//                sprite2.setPosition(40, 25);
+//            if (Keyboard::isKeyPressed(Keyboard::H)) {
+//                sound.play();
 //            }
 
-            if (Keyboard::isKeyPressed(Keyboard::Left)) {
-                CurrentFrame += 0.005 * time;
-                if (CurrentFrame > 4) CurrentFrame -= 4;
-                sprite.setTextureRect(IntRect(30 * int(CurrentFrame), 0, 30, 50));
-                sprite.setScale(-2, 2);
-                sprite.move(-0.1 * time, 0);
-            }
-            if (Keyboard::isKeyPressed(Keyboard::Right)) {
-                CurrentFrame += 0.005 * time;
-                if (CurrentFrame > 4) CurrentFrame -= 4;
-                sprite.setTextureRect(IntRect(30 * int(CurrentFrame), 0, 30, 50));
-                sprite.setScale(2, 2);
-                sprite.move(0.1 * time, 0);
-            }
-            if (Keyboard::isKeyPressed(Keyboard::Up)) {
-                sprite.move(0, -0.1 * time);
-            }
-            if (Keyboard::isKeyPressed(Keyboard::Down)) {
-                sprite.move(0, 0.1 * time);
-            }
+            p.update(time);
+            viewMap(time);
+            changeView();
+            window->setView(view);
+            window->clear(sf::Color(169, 169, 169));
 
-            if (Keyboard::isKeyPressed(Keyboard::A)) {
-                CurrentFrame += 0.005 * time;
-                if (CurrentFrame > 4) CurrentFrame -= 4;
-                sprite2.setTextureRect(IntRect(30 * int(CurrentFrame), 0, 30, 50));
-                sprite2.setScale(-2, 2);
-                sprite2.move(-0.1 * time, 0);
-            }
-            if (Keyboard::isKeyPressed(Keyboard::D)) {
-                CurrentFrame += 0.005 * time;
-                if (CurrentFrame > 4) CurrentFrame -= 4;
-                sprite2.setTextureRect(IntRect(30 * int(CurrentFrame), 0, 30, 50));
-                sprite2.setScale(2, 2);
-                sprite2.move(0.1 * time, 0);
-            }
-            if (Keyboard::isKeyPressed(Keyboard::W)) {
-                sprite2.move(0, -0.1 * time);
-            }
-            if (Keyboard::isKeyPressed(Keyboard::S)) {
-                sprite2.move(0, 0.1 * time);
+            for (int i = 0; i < HEIGHT_MAP; ++i) {
+                for (int j = 0; j < WIDTH_MAP; ++j) {
+                    if (TileMap[i][j] == ' ') s_map.setTextureRect(IntRect(0, 0, 50, 50));
+                    if (TileMap[i][j] == '0') s_map.setTextureRect(IntRect(100, 100, 50, 50));
+                    if (TileMap[i][j] == '[') s_map.setTextureRect(IntRect(0, 50, 50, 50));
+                    if (TileMap[i][j] == ']') s_map.setTextureRect(IntRect(100, 50, 50, 50));
+                    if (TileMap[i][j] == 'h') s_map.setTextureRect(IntRect(50, 50, 50, 50));
+                    s_map.setPosition(j * 50, i * 50);
+                    window->draw(s_map);
+                }
             }
 
 
-
-
-            window->clear(sf::Color::Black);
-            window->draw(sprite);
-            window->draw(sprite2);
+            window->draw(p.sprite);
+//            std::ostringstream playerScoreString;
+//            playerScoreString << p.playerScore;
+//            text.setPosition(view.getCenter().x-300, view.getCenter().y-220);
+//            text.setString("Hookah Score: "+playerScoreString.str());
+//            textBG.setPosition(view.getCenter().x-310, view.getCenter().y-230);
+//            window->draw(textBG);
+//            window->draw(text);
             window->display();
         }
     }

@@ -12,7 +12,7 @@ public:
 /**
  * @param file
  */
-    Map loadLevelFromFile(string file);
+    map loadLevelFromFile(string file);
 
     void saveCurrentProgress();
 

@@ -1,4 +1,3 @@
-#include "include/main.h"
 #include "include/TApplication.h"
 
 int main() {
@@ -6,7 +5,6 @@ int main() {
     App.Init();
     App.Run();
     App.End();
-
 
     return 0;
 }

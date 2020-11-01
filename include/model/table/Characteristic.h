@@ -7,6 +7,8 @@ using namespace std;
 #ifndef _CHARACTERISTIC_H
 #define _CHARACTERISTIC_H
 
+enum Characteristics { health, maxHealth, precision, power, stamina, levelPoints };
+
 class Characteristic {
 public:
     string name;

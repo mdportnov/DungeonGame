@@ -1,7 +1,7 @@
 #ifndef _LASTPOSITIONS_H
 #define _LASTPOSITIONS_H
 
-#include "Unit.h"
+#include "include/model/Unit.h"
 #include "vector"
 
 using namespace std;

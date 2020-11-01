@@ -1,7 +1,7 @@
 #ifndef _POTION_H
 #define _POTION_H
 
-#include "Item.h"
+#include "src/model/Item.h"
 #include "vector"
 #include "utility"
 
