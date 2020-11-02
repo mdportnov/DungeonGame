@@ -16,8 +16,21 @@ public:
     TableOfCharacteristics attributes;
 
 
-    Player(const String &fileName, float x, float y, float w, float h) : Unit(fileName, x, y, w, h) {
+    sf::SoundBuffer buffer;
+
+    sf::Sound sound;
+
+//    Player(const String &fileName, float x, float y, float w, float h) : Unit(fileName, x, y, w, h) {
+//        framesCount = 4;
+//        buffer.loadFromFile("../res/sound/hookah.wav");
+//        sound.setBuffer(buffer);
+//    }
+    Player(Level level, std::string fileName, float x, float y, float w, float h) : Unit(level, fileName, x, y, w, h) {
+        level.GetAllObjects();
+
         framesCount = 4;
+        buffer.loadFromFile("../res/sound/hookah.wav");
+        sound.setBuffer(buffer);
     }
 
     void update(float time) override {
@@ -63,25 +76,28 @@ public:
             sprite.setTextureRect(IntRect(30 * int(currentFrame), 0, 30, 50));
             getPlayerCoordinateForView(this->getX(), this->getY());
         }
+        if (Keyboard::isKeyPressed(Keyboard::H)) {
+            sound.play();
+        }
     }
 
-    void takeItem(Item item){
+    void takeItem(Item item) {
 
     };
 
-    void drinkPotion(Potion potion){
+    void drinkPotion(Potion potion) {
 
     };
 
-    void openChest(){};
+    void openChest() {};
 
-    void improveCharacteristicByXP(string shortname){};
+    void improveCharacteristicByXP(string shortname) {};
 
-    void kickEgorov(){};
+    void kickEgorov() {};
 
-    int calculateDamage(){};
+    int calculateDamage() {};
 
-    int calculateProtection(){};
+    int calculateProtection() {};
 
-    bool updateWearings(){};
+    bool updateWearings() {};
 };

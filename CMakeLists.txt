@@ -39,6 +39,17 @@ add_executable(DungeonGame
         include/model/table/TableOfCharacteristics.h
         include/model/Unit.h
         include/model/equip/Weapon.h
-        include/map.h include/view.h include/model/Enemy.h src/tinyxml2.cpp src/tinyxml2.h include/model/Level.h)
+        include/map.h include/view.h
+        include/model/Enemy.h
+        include/TinyXML2/tinyxml2.h
+        include/TinyXML2/tinyxml2.cpp
+        include/model/Level.h
+        include/TinyXML/tinyxml.h
+        include/TinyXML/tinystr.h
+        include/TinyXML/tinystr.cpp
+        include/TinyXML/tinyxml.cpp
+        include/TinyXML/tinyxmlparser.cpp
+        include/TinyXML/tinyxmlerror.cpp
+        )
 
 target_link_libraries(DungeonGame sfml-graphics sfml-audio)
