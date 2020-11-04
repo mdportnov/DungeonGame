@@ -5,10 +5,15 @@
 #include "include/model/equip/Artefact.h"
 #include "include/model/ObjectOnField.h"
 
+class Item : public ObjectOnField {
+public:
+    string name;
 
-class Item: public EnchantedWeapon, public Artefact, public ObjectOnField {
-public: 
-  string name;
+    Item(const string &name) : name(name) {
+
+    }
+
+    Item() {}
 };
 
 #endif //_ITEM_H

@@ -1,6 +1,6 @@
 class ObjectOnField {
 public:
-    bool isBlockMovement();
+    float x, y, w, h;
 
     void interact(){
 

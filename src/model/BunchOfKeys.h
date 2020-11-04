@@ -7,7 +7,7 @@ using namespace std;
 #ifndef _BUNCHOFKEYS_H
 #define _BUNCHOFKEYS_H
 
-#include "Item.h"
+#include "include/model/Item.h"
 
 
 class BunchOfKeys : public Item {

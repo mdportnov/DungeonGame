@@ -1,7 +1,7 @@
-#include "include/TApplication.h"
+#include "include/DungeonGameApp.h"
 
 int main() {
-    MyGame::TApplication App;
+    MyGame::DungeonGameApp App;
     App.Init();
     App.Run();
     App.End();

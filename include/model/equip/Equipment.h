@@ -1,4 +1,4 @@
-#include "src/model/Item.h"
+#include "include/model/Item.h"
 #include "Artefact.h"
 #include "EnchantedWeapon.h"
 
@@ -6,9 +6,15 @@ enum class EquipmentTypes {
     HELMET, BREASTPLATE, BOOTS
 };
 
-class Equipment : public Item, public Artefact, public EnchantedWeapon {
+class Equipment : public Item {
 public:
+    explicit Equipment(const string &name) : Item(name) {
+
+    }
+
+    Equipment() = default;
+
     string type;
-    int protection;
+    int protection{};
     string material;
 };

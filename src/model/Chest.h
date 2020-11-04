@@ -2,7 +2,7 @@
 #define _CHEST_H
 
 #include "include/model/ObjectOnField.h"
-#include "Item.h"
+#include "include/model/Item.h"
 #include "BunchOfKeys.h"
 #include "Hero.h"
 #include "vector"

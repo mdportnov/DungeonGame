@@ -20,9 +20,8 @@ public:
     sf::Sound sound;
 
     Player(Level level, std::string fileName, float x, float y, float w, float h) : Unit(level, fileName, x, y, w, h) {
-        obj = level.GetAllObjects();
-
-        framesCount = 4;
+        obj = level.getAllObjects();
+        framesCount = 5;
         buffer.loadFromFile("../res/sound/hookah.wav");
         sound.setBuffer(buffer);
     }
@@ -34,8 +33,9 @@ public:
 
     void control(float time) {
         if (Keyboard::isKeyPressed(Keyboard::Left)) {
-            sprite.setScale(-1.f, 1.f);
-            dir = 1;
+            sprite.setOrigin({30, 0});
+            sprite.setScale({-1, 1});
+            state = left;
             speed = 0.1;
             currentFrame += 0.005 * time;
             if (currentFrame > framesCount) currentFrame -= framesCount;
@@ -44,8 +44,9 @@ public:
         }
 
         if (Keyboard::isKeyPressed(Keyboard::Right)) {
-            sprite.setScale(1.f, 1.f);
-            dir = 0;
+            sprite.setScale({1, 1});
+            sprite.setOrigin({0, 0});
+            state = right;
             speed = 0.1;
             currentFrame += 0.005 * time;
             if (currentFrame > framesCount) currentFrame -= framesCount;
@@ -54,7 +55,7 @@ public:
         }
 
         if (Keyboard::isKeyPressed(Keyboard::Up)) {
-            dir = 3;
+            state = up;
             speed = 0.1;
             currentFrame += 0.005 * time;
             if (currentFrame > framesCount) currentFrame -= framesCount;
@@ -63,16 +64,39 @@ public:
         }
 
         if (Keyboard::isKeyPressed(Keyboard::Down)) {
-            dir = 2;
+            state = down;
             speed = 0.1;
             currentFrame += 0.005 * time;
             if (currentFrame > framesCount) currentFrame -= framesCount;
             sprite.setTextureRect(IntRect(30 * int(currentFrame), 0, 30, 50));
             getPlayerCoordinateForView(this->getX(), this->getY());
         }
-        if (Keyboard::isKeyPressed(Keyboard::H)) {
-            sound.play();
+
+        if (Mouse::isButtonPressed(sf::Mouse::Left)) {
+            takeItem(Item("name"));
         }
+//        if (Keyboard::isKeyPressed(Keyboard::H)) {
+//            sound.play();
+//        }
+    }
+
+    void checkCollision(int num) override {
+        Unit::checkCollision(num);
+        for (auto &i : obj)
+            if (getRect().intersects(i.rect)) {
+                if (i.name == "ladder_up" &&
+                    Mouse::isButtonPressed(sf::Mouse::Left)
+//                    Keyboard::isKeyPressed(sf::Keyboard::L)
+                        ) {
+                    state = onladderup;
+                }
+                if (i.name == "ladder_down" &&
+                    Mouse::isButtonPressed(sf::Mouse::Left)
+//                    Keyboard::isKeyPressed(sf::Keyboard::L)
+                        ) {
+                    state = onladderdown;
+                }
+            }
     }
 
     void takeItem(Item item) {

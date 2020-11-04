@@ -6,11 +6,21 @@ set(CMAKE_CXX_STANDARD 14)
 include_directories(.)
 include_directories(/src/)
 
+set(TINY_SOURCES "include/TinyXML/tinyxml.h"
+        "include/TinyXML/tinystr.h"
+        "include/TinyXML/tinystr.cpp"
+        "include/TinyXML/tinyxml.cpp"
+        "include/TinyXML/tinyxmlparser.cpp"
+        "include/TinyXML/tinyxmlerror.cpp")
+
 find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 
 add_executable(DungeonGame
         src/main.cpp
-        include/main.h src/TApplication.cpp include/TApplication.h include/model/Player.h
+        include/main.h
+        src/DungeonGameApp.cpp
+        include/DungeonGameApp.h
+        include/model/Player.h
 
         include/model/equip/Artefact.h
         include/model/equip/ArtefactEquipment.h
@@ -24,12 +34,11 @@ add_executable(DungeonGame
         src/model/Chest.h
         include/model/equip/EnchantedArtefactWeapon.h
         include/model/equip/EnchantedWeapon.h
-        src/model/Enemy.h
         include/model/equip/Equipment.h
         include/model/equip/EquipmentMaterials.h
         src/model/Game.h
         src/model/Inventory.h
-        src/model/Item.h
+        include/model/Item.h
         src/model/Key.h
         src/model/LastPositions.h
         include/model/ObjectOnField.h
@@ -39,15 +48,11 @@ add_executable(DungeonGame
         include/model/table/TableOfCharacteristics.h
         include/model/Unit.h
         include/model/equip/Weapon.h
-        include/view.h
+        include/model/View.h
         include/model/Enemy.h
         include/model/Level.h
-        include/TinyXML/tinyxml.h
-        include/TinyXML/tinystr.h
-        include/TinyXML/tinystr.cpp
-        include/TinyXML/tinyxml.cpp
-        include/TinyXML/tinyxmlparser.cpp
-        include/TinyXML/tinyxmlerror.cpp
+
+        ${TINY_SOURCES}
         )
 
 target_link_libraries(DungeonGame sfml-graphics sfml-audio)

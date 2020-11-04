@@ -12,8 +12,9 @@ using namespace std;
 
 
 class ArtefactEquipment: public Artefact, public Equipment {
-public: 
+public:
 
+    ArtefactEquipment() {}
 };
 
 #endif //_ARTEFACTEQUIPMENT_H

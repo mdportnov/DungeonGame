@@ -3,7 +3,7 @@
 
 #include "EnchantedWeapon.h"
 #include "Artefact.h"
-#include "src/model/Item.h"
+#include "include/model/Item.h"
 
 
 class Weapon: public EnchantedWeapon, public Artefact, public Item {

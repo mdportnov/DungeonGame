@@ -1,5 +1,5 @@
 #include "vector"
-#include "Item.h"
+#include "include/model/Item.h"
 
 #ifndef _INVENTORY_H
 #define _INVENTORY_H

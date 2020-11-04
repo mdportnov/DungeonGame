@@ -1,11 +1,11 @@
 #include "main.h"
 namespace MyGame {
-    class TApplication {
+    class DungeonGameApp {
     protected:
         sf::RenderWindow *window;
     public:
-        TApplication();
-        ~TApplication();
+        DungeonGameApp();
+        ~DungeonGameApp();
         void Init();
         void Run();
         void End();
