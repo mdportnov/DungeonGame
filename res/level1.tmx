@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="20" height="15" tilewidth="50" tileheight="50" infinite="0" nextlayerid="4" nextobjectid="10">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="20" height="15" tilewidth="50" tileheight="50" infinite="0" nextlayerid="5" nextobjectid="42">
  <editorsettings>
   <export target="level1." format="tmx"/>
  </editorsettings>
  <tileset firstgid="1" name="tileset_v2" tilewidth="50" tileheight="50" tilecount="9" columns="3">
-  <image source="../res/img/tileset_v2.png" width="150" height="150"/>
+  <image source="img/tileset_v2.png" width="150" height="150"/>
  </tileset>
  <layer id="1" name="layer" width="20" height="15">
   <data>
@@ -89,9 +89,9 @@
    <tile gid="1"/>
    <tile gid="9"/>
    <tile gid="9"/>
-   <tile gid="9"/>
-   <tile gid="9"/>
-   <tile gid="9"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
    <tile gid="1"/>
    <tile gid="1"/>
    <tile gid="9"/>
@@ -310,8 +310,26 @@
    <tile gid="9"/>
   </data>
  </layer>
- <objectgroup id="3" name="collision">
-  <object id="7" name="solid" x="50" y="300" width="450" height="50"/>
-  <object id="8" name="solid" x="300.12" y="148.559" width="48.0192" height="150.06"/>
+ <objectgroup id="4" name="solid">
+  <object id="22" name="solid" x="0" y="-1.33333" width="1000" height="48"/>
+  <object id="23" name="solid" x="0" y="149.333" width="48" height="600"/>
+  <object id="24" name="solid" x="44" y="702.667" width="954.667" height="45.3333"/>
+  <object id="25" name="solid" x="950.667" y="154.667" width="48" height="550.667"/>
+  <object id="26" name="solid" x="949.333" y="49.3333" width="50.6667" height="41.3333"/>
+  <object id="27" name="solid" x="0" y="42" width="49" height="54"/>
+  <object id="28" name="solid" x="148" y="43" width="52" height="154"/>
+  <object id="29" name="solid" x="299" y="151" width="50" height="149"/>
+  <object id="30" name="solid" x="49" y="300" width="451" height="46"/>
+  <object id="31" name="solid" x="248" y="450" width="451" height="50"/>
+  <object id="32" name="solid" x="648" y="47" width="54" height="401"/>
+  <object id="33" name="solid" x="451" y="151" width="196" height="48"/>
+  <object id="34" name="solid" x="450" y="48" width="50" height="48"/>
+  <object id="35" name="solid" x="150" y="452" width="48" height="151"/>
+  <object id="36" name="solid" x="152" y="599" width="246" height="46"/>
+  <object id="37" name="solid" x="350" y="554" width="299" height="46"/>
+  <object id="38" name="solid" x="601" y="603" width="249" height="46"/>
+  <object id="39" name="solid" x="800" y="449" width="48" height="149"/>
+  <object id="40" name="solid" x="700" y="354" width="146" height="41"/>
+  <object id="41" name="solid" x="798" y="202" width="158" height="48"/>
  </objectgroup>
 </map>

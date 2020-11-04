@@ -39,10 +39,10 @@ void changeView() {
         view.zoom(1.0006f); //масштабируем, приближение
     }
 
-    if (Keyboard::isKeyPressed(Keyboard::R)) {
-        //view.setRotation(90);//сразу же задает поворот камере
-        view.rotate(1);//постепенно поворачивает камеру (отрицательное значение - в обратную сторону)
-    }
+//    if (Keyboard::isKeyPressed(Keyboard::R)) {
+//        view.setRotation(90);//сразу же задает поворот камере
+//        view.rotate(1);//постепенно поворачивает камеру (отрицательное значение - в обратную сторону)
+//    }
 
 
     if (Keyboard::isKeyPressed(Keyboard::I)) {
@@ -54,9 +54,9 @@ void changeView() {
     }
 
 
-    if (Keyboard::isKeyPressed(Keyboard::Q)) {
-        view.setViewport(sf::FloatRect(0, 0, 0.5f,1));
+//    if (Keyboard::isKeyPressed(Keyboard::Q)) {
+//        view.setViewport(sf::FloatRect(0, 0, 0.5f,1));
         //таким образом делается раздельный экран для игры на двоих. нужно только создать ещё один объект
         // View и привязывать к нему координаты игрока 2.
-    }
+//    }
 }

@@ -39,10 +39,8 @@ add_executable(DungeonGame
         include/model/table/TableOfCharacteristics.h
         include/model/Unit.h
         include/model/equip/Weapon.h
-        include/map.h include/view.h
+        include/view.h
         include/model/Enemy.h
-        include/TinyXML2/tinyxml2.h
-        include/TinyXML2/tinyxml2.cpp
         include/model/Level.h
         include/TinyXML/tinyxml.h
         include/TinyXML/tinystr.h

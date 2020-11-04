@@ -8,10 +8,11 @@
 #include <SFML/Graphics.hpp>
 #include <include/TinyXML/tinyxml.h>
 
-struct Object
-{
+struct Object {
     int GetPropertyInt(std::string name);
+
     float GetPropertyFloat(std::string name);
+
     std::string GetPropertyString(std::string name);
 
     std::string name;
@@ -22,20 +23,23 @@ struct Object
     sf::Sprite sprite;
 };
 
-struct Layer
-{
+struct Layer {
     int opacity;
     std::vector<sf::Sprite> tiles;
 };
 
-class Level
-{
+class Level {
 public:
     bool LoadFromFile(std::string filename);
+
     Object GetObject(std::string name);
+
     std::vector<Object> GetObjects(std::string name);
+
     std::vector<Object> GetAllObjects();
+
     void Draw(sf::RenderWindow &window);
+
     sf::Vector2i GetTileSize();
 
 private:
@@ -50,28 +54,23 @@ private:
 ///////////////////////////////////////
 
 
-int Object::GetPropertyInt(std::string name)
-{
+int Object::GetPropertyInt(std::string name) {
     return atoi(properties[name].c_str());
 }
 
-float Object::GetPropertyFloat(std::string name)
-{
+float Object::GetPropertyFloat(std::string name) {
     return strtod(properties[name].c_str(), NULL);
 }
 
-std::string Object::GetPropertyString(std::string name)
-{
+std::string Object::GetPropertyString(std::string name) {
     return properties[name];
 }
 
-bool Level::LoadFromFile(std::string filename)
-{
+bool Level::LoadFromFile(std::string filename) {
     TiXmlDocument levelFile(filename.c_str());
 
     // Загружаем XML-карту
-    if(!levelFile.LoadFile())
-    {
+    if (!levelFile.LoadFile()) {
         std::cout << "Loading level \"" << filename << "\" failed." << std::endl;
         return false;
     }
@@ -97,11 +96,10 @@ bool Level::LoadFromFile(std::string filename)
     image = tilesetElement->FirstChildElement("image");
     std::string imagepath = image->Attribute("source");
 
-    // Пытаемся загрузить тайлсет
-    sf::Image img;
 
-    if(!img.loadFromFile(imagepath))
-    {
+    // ПУТЬ К ТАЙЛСЕТУ, загрузка
+    sf::Image img;
+    if (!img.loadFromFile("../res/" + imagepath)) {
         std::cout << "Failed to load tile sheet." << std::endl;
         return false;
     }
@@ -118,9 +116,8 @@ bool Level::LoadFromFile(std::string filename)
     // Вектор из прямоугольников изображений (TextureRect)
     std::vector<sf::Rect<int> > subRects;
 
-    for(int y = 0; y < rows; y++)
-        for(int x = 0; x < columns; x++)
-        {
+    for (int y = 0; y < rows; y++)
+        for (int x = 0; x < columns; x++) {
             sf::Rect<int> rect;
 
             rect.top = y * tileHeight;
@@ -134,18 +131,14 @@ bool Level::LoadFromFile(std::string filename)
     // Работа со слоями
     TiXmlElement *layerElement;
     layerElement = map->FirstChildElement("layer");
-    while(layerElement)
-    {
+    while (layerElement) {
         Layer layer;
 
         // Если присутствует opacity, то задаем прозрачность слоя, иначе он полностью непрозрачен
-        if (layerElement->Attribute("opacity") != NULL)
-        {
+        if (layerElement->Attribute("opacity") != NULL) {
             float opacity = strtod(layerElement->Attribute("opacity"), NULL);
             layer.opacity = 255 * opacity;
-        }
-        else
-        {
+        } else {
             layer.opacity = 255;
         }
 
@@ -153,8 +146,7 @@ bool Level::LoadFromFile(std::string filename)
         TiXmlElement *layerDataElement;
         layerDataElement = layerElement->FirstChildElement("data");
 
-        if(layerDataElement == NULL)
-        {
+        if (layerDataElement == NULL) {
             std::cout << "Bad map. No layer information found." << std::endl;
         }
 
@@ -162,8 +154,7 @@ bool Level::LoadFromFile(std::string filename)
         TiXmlElement *tileElement;
         tileElement = layerDataElement->FirstChildElement("tile");
 
-        if(tileElement == NULL)
-        {
+        if (tileElement == NULL) {
             std::cout << "Bad map. No tile information found." << std::endl;
             return false;
         }
@@ -171,14 +162,12 @@ bool Level::LoadFromFile(std::string filename)
         int x = 0;
         int y = 0;
 
-        while(tileElement)
-        {
+        while (tileElement) {
             int tileGID = atoi(tileElement->Attribute("gid"));
             int subRectToUse = tileGID - firstTileID;
 
             // Устанавливаем TextureRect каждого тайла
-            if (subRectToUse >= 0)
-            {
+            if (subRectToUse >= 0) {
                 sf::Sprite sprite;
                 sprite.setTexture(tilesetImage);
                 sprite.setTextureRect(subRects[subRectToUse]);
@@ -191,11 +180,10 @@ bool Level::LoadFromFile(std::string filename)
             tileElement = tileElement->NextSiblingElement("tile");
 
             x++;
-            if (x >= width)
-            {
+            if (x >= width) {
                 x = 0;
                 y++;
-                if(y >= height)
+                if (y >= height)
                     y = 0;
             }
         }
@@ -209,26 +197,21 @@ bool Level::LoadFromFile(std::string filename)
     TiXmlElement *objectGroupElement;
 
     // Если есть слои объектов
-    if (map->FirstChildElement("objectgroup") != NULL)
-    {
+    if (map->FirstChildElement("objectgroup") != nullptr) {
         objectGroupElement = map->FirstChildElement("objectgroup");
-        while (objectGroupElement)
-        {
+        while (objectGroupElement) {
             // Контейнер <object>
             TiXmlElement *objectElement;
             objectElement = objectGroupElement->FirstChildElement("object");
 
-            while(objectElement)
-            {
+            while (objectElement) {
                 // Получаем все данные - тип, имя, позиция, etc
                 std::string objectType;
-                if (objectElement->Attribute("type") != NULL)
-                {
+                if (objectElement->Attribute("type") != NULL) {
                     objectType = objectElement->Attribute("type");
                 }
                 std::string objectName;
-                if (objectElement->Attribute("name") != NULL)
-                {
+                if (objectElement->Attribute("name") != NULL) {
                     objectName = objectElement->Attribute("name");
                 }
                 int x = atoi(objectElement->Attribute("x"));
@@ -238,16 +221,13 @@ bool Level::LoadFromFile(std::string filename)
 
                 sf::Sprite sprite;
                 sprite.setTexture(tilesetImage);
-                sprite.setTextureRect(sf::Rect<int>(0,0,0,0));
+                sprite.setTextureRect(sf::Rect<int>(0, 0, 0, 0));
                 sprite.setPosition(x, y);
 
-                if (objectElement->Attribute("width") != NULL)
-                {
+                if (objectElement->Attribute("width") != NULL) {
                     width = atoi(objectElement->Attribute("width"));
                     height = atoi(objectElement->Attribute("height"));
-                }
-                else
-                {
+                } else {
                     width = subRects[atoi(objectElement->Attribute("gid")) - firstTileID].width;
                     height = subRects[atoi(objectElement->Attribute("gid")) - firstTileID].height;
                     sprite.setTextureRect(subRects[atoi(objectElement->Attribute("gid")) - firstTileID]);
@@ -259,7 +239,7 @@ bool Level::LoadFromFile(std::string filename)
                 object.type = objectType;
                 object.sprite = sprite;
 
-                sf::Rect <float> objectRect;
+                sf::Rect<float> objectRect;
                 objectRect.top = y;
                 objectRect.left = x;
                 objectRect.height = height;
@@ -269,14 +249,11 @@ bool Level::LoadFromFile(std::string filename)
                 // "Переменные" объекта
                 TiXmlElement *properties;
                 properties = objectElement->FirstChildElement("properties");
-                if (properties != NULL)
-                {
+                if (properties != NULL) {
                     TiXmlElement *prop;
                     prop = properties->FirstChildElement("property");
-                    if (prop != NULL)
-                    {
-                        while(prop)
-                        {
+                    if (prop != NULL) {
+                        while (prop) {
                             std::string propertyName = prop->Attribute("name");
                             std::string propertyValue = prop->Attribute("value");
 
@@ -294,51 +271,44 @@ bool Level::LoadFromFile(std::string filename)
             }
             objectGroupElement = objectGroupElement->NextSiblingElement("objectgroup");
         }
-    }
-    else
-    {
+    } else {
         std::cout << "No object layers found..." << std::endl;
     }
 
     return true;
 }
 
-Object Level::GetObject(std::string name)
-{
+Object Level::GetObject(std::string name) {
     // Только первый объект с заданным именем
     for (int i = 0; i < objects.size(); i++)
         if (objects[i].name == name)
             return objects[i];
 }
 
-std::vector<Object> Level::GetObjects(std::string name)
-{
+std::vector<Object> Level::GetObjects(std::string name) {
     // Все объекты с заданным именем
     std::vector<Object> vec;
-    for(int i = 0; i < objects.size(); i++)
-        if(objects[i].name == name)
+    for (int i = 0; i < objects.size(); i++)
+        if (objects[i].name == name)
             vec.push_back(objects[i]);
 
     return vec;
 }
 
 
-std::vector<Object> Level::GetAllObjects()
-{
+std::vector<Object> Level::GetAllObjects() {
     return objects;
 };
 
 
-sf::Vector2i Level::GetTileSize()
-{
+sf::Vector2i Level::GetTileSize() {
     return sf::Vector2i(tileWidth, tileHeight);
 }
 
-void Level::Draw(sf::RenderWindow &window)
-{
+void Level::Draw(sf::RenderWindow &window) {
     // Рисуем все тайлы (объекты НЕ рисуем!)
-    for(int layer = 0; layer < layers.size(); layer++)
-        for(int tile = 0; tile < layers[layer].tiles.size(); tile++)
+    for (int layer = 0; layer < layers.size(); layer++)
+        for (int tile = 0; tile < layers[layer].tiles.size(); tile++)
             window.draw(layers[layer].tiles[tile]);
 }
 

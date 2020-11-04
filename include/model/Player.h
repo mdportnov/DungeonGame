@@ -15,18 +15,12 @@ public:
     vector<Item> inventory;
     TableOfCharacteristics attributes;
 
-
     sf::SoundBuffer buffer;
 
     sf::Sound sound;
 
-//    Player(const String &fileName, float x, float y, float w, float h) : Unit(fileName, x, y, w, h) {
-//        framesCount = 4;
-//        buffer.loadFromFile("../res/sound/hookah.wav");
-//        sound.setBuffer(buffer);
-//    }
     Player(Level level, std::string fileName, float x, float y, float w, float h) : Unit(level, fileName, x, y, w, h) {
-        level.GetAllObjects();
+        obj = level.GetAllObjects();
 
         framesCount = 4;
         buffer.loadFromFile("../res/sound/hookah.wav");

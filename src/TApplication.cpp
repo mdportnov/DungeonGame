@@ -25,14 +25,7 @@ namespace MyGame {
         Level level;
         level.LoadFromFile("../res/level1.tmx");
 
-        Player p(level, "temik_tiles.png", 50, 50, 30.0, 50.0);
-
-//        Image map_image;
-//        map_image.loadFromFile("../res/img/tileset_v2.png");
-//        Texture map;
-//        map.loadFromImage(map_image);
-//        Sprite s_map;
-//        s_map.setTexture(map);
+        Player p(level, "temik_tiles.png", 100, 50, 30.0, 50.0);
 
         sf::RectangleShape textBG(sf::Vector2f(200, 40));
         textBG.setFillColor(Color::Black);
@@ -53,10 +46,6 @@ namespace MyGame {
                     window->close();
             }
 
-//            if (Keyboard::isKeyPressed(Keyboard::H)) {
-//                sound.play();
-//            }
-
             p.update(time);
             viewMap(time);
             changeView();
@@ -65,17 +54,6 @@ namespace MyGame {
 
             level.Draw(*window);
 
-//            for (int i = 0; i < HEIGHT_MAP; ++i) {
-//                for (int j = 0; j < WIDTH_MAP; ++j) {
-//                    if (TileMap[i][j] == ' ') s_map.setTextureRect(IntRect(0, 0, 50, 50));
-//                    if (TileMap[i][j] == '0') s_map.setTextureRect(IntRect(100, 100, 50, 50));
-//                    if (TileMap[i][j] == '[') s_map.setTextureRect(IntRect(0, 50, 50, 50));
-//                    if (TileMap[i][j] == ']') s_map.setTextureRect(IntRect(100, 50, 50, 50));
-//                    if (TileMap[i][j] == 'h') s_map.setTextureRect(IntRect(50, 50, 50, 50));
-//                    s_map.setPosition(j * 50, i * 50);
-//                    window->draw(s_map);
-//                }
-//            }
             window->draw(p.sprite);
 //            std::ostringstream playerScoreString;
 //            playerScoreString << p.playerScore;
