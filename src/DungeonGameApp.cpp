@@ -27,7 +27,7 @@ namespace MyGame {
         Clock clock;
 
         Level level;
-        level.loadFromFile("../res/level1.tmx");
+        level.loadMapFromFile("../res/level1.tmx");
 
         Object player = level.getObject("player");
         Player p(level, "temik_tiles.png", player.name, player.rect.left, player.rect.top, 30, 50);

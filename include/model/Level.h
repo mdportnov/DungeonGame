@@ -8,6 +8,11 @@
 #include <SFML/Graphics.hpp>
 #include <include/TinyXML/tinyxml.h>
 
+struct Layer {
+    int opacity;
+    std::vector<sf::Sprite> tiles;
+};
+
 struct Object {
     int getPropertyInt(std::string name);
 
@@ -23,14 +28,11 @@ struct Object {
     sf::Sprite sprite;
 };
 
-struct Layer {
-    int opacity;
-    std::vector<sf::Sprite> tiles;
-};
-
 class Level {
 public:
-    bool loadFromFile(std::string filename);
+    bool loadMapFromFile(const std::string &filename);
+
+    bool loadStateFromFile(const std::string &filename);
 
     Object getObject(std::string name);
 
@@ -40,7 +42,7 @@ public:
 
     void draw(sf::RenderWindow &window);
 
-    sf::Vector2i getTileSize();
+    sf::Vector2i getTileSize() const;
 
     void goUp();
 
@@ -56,9 +58,8 @@ private:
     int firstTileID;
     sf::Rect<float> drawingBounds;
     sf::Texture tileSetImage;
-    std::vector<std::vector<Object>> objects;
-//    std::vector<Object> objects;
-    std::vector<Layer> layers;
+    std::vector<std::vector<Object>> objects; // стены, лестницы (object из objectgroup) из level.tmx
+    std::vector<Layer> layers; // layers из level.tmx
 };
 
 int Object::getPropertyInt(std::string name) {
@@ -73,8 +74,8 @@ std::string Object::getPropertyString(std::string name) {
     return properties[name];
 }
 
-// грузит только тайлы и объекты стен (solid) и лестниц(ladder_up/_down)
-bool Level::loadFromFile(std::string filename) {
+// грузит ТОЛЬКО тайлы и объекты стен (solid) и лестниц(ladder_up/_down)
+bool Level::loadMapFromFile(const std::string &filename) {
     TiXmlDocument levelFile(filename.c_str());
 
     // Загружаем XML-карту
@@ -288,6 +289,18 @@ bool Level::loadFromFile(std::string filename) {
     return true;
 }
 
+bool Level::loadStateFromFile(const std::string &filename) {
+    TiXmlDocument stateFile(filename.c_str());
+
+    // Загружаем XML
+    if (!stateFile.LoadFile()) {
+        std::cout << "Loading state of \"" << filename << "\" failed." << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
 Object Level::getObject(std::string name) {
     // Только первый объект с заданным именем
     for (auto &object : objects[currentObjectsLayer])
@@ -309,7 +322,7 @@ std::vector<Object> Level::getAllObjects() {
     return objects[currentObjectsLayer];
 };
 
-sf::Vector2i Level::getTileSize() {
+sf::Vector2i Level::getTileSize() const {
     return sf::Vector2i(tileWidth, tileHeight);
 }
 
