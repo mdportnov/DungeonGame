@@ -1,5 +1,7 @@
 #include "../main.h"
 
+#pragma once
+
 using namespace sf;
 
 class Unit : public ObjectOnField {
@@ -12,7 +14,6 @@ public:
     Image image;
     bool isAlive;
     std::vector<Object> obj; //вектор объектов карты
-//    std::vector<std::vector<Object>> obj;
 
     std::string name;
     Level level;
@@ -21,7 +22,8 @@ public:
         left, right, up, down, stay, onladderup, onladderdown
     } state;
 
-    Unit(Level &level, std::string &fileName, float x, float y, float w, float h) : ObjectOnField() {
+    Unit(Level &level, std::string &fileName, std::string &name, float x, float y, float w, float h) : ObjectOnField() {
+        this->name = name;
         this->w = w;
         this->h = h;
         this->x = x;
@@ -30,6 +32,7 @@ public:
         this->image.loadFromFile("../res/img/" + fileName);
 
         isAlive = true;
+        health = 100;
 
         dx = 0;
         dy = 0;

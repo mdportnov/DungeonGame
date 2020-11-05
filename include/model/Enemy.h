@@ -1,4 +1,8 @@
+#include <utility>
+
 #include "Level.h"
+
+#pragma once
 
 using namespace sf;
 
@@ -6,9 +10,10 @@ class Enemy : public Unit {
 public:
     bool state;
 
-    Enemy(Level level, std::string fileName, float x, float y, float w, float h) : Unit(level, fileName,
-                                                                                        x, y, w, h) {
+    Enemy(Level level, std::string fileName, std::string name,
+          float x, float y, float w, float h) : Unit(level, fileName, name, x, y, w, h) {
         state = false;
+        isAlive = true;
     }
 
     void update(float time) override {

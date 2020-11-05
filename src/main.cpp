@@ -1,3 +1,4 @@
+#include <include/TinyXML/tinyxml.h>
 #include "include/DungeonGameApp.h"
 
 int main() {

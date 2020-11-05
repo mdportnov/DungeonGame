@@ -46,9 +46,12 @@ public:
 
     void goDown();
 
+    int getCountOfLayers() const;
+
     int currentTileLayer = 0, currentObjectsLayer = 0;
 
 private:
+    int countOfLayers;
     float width, height, tileWidth, tileHeight;
     int firstTileID;
     sf::Rect<float> drawingBounds;
@@ -70,6 +73,7 @@ std::string Object::getPropertyString(std::string name) {
     return properties[name];
 }
 
+// грузит только тайлы и объекты стен (solid) и лестниц(ladder_up/_down)
 bool Level::loadFromFile(std::string filename) {
     TiXmlDocument levelFile(filename.c_str());
 
@@ -193,6 +197,7 @@ bool Level::loadFromFile(std::string filename) {
         layers.push_back(layer);
 
         layerElement = layerElement->NextSiblingElement("layer");
+        countOfLayers++;
     }
 
     // Работа с объектами
@@ -331,6 +336,10 @@ void Level::goDown() {
         std::cout << "Current tiles layer is: " << currentTileLayer << std::endl;
         std::cout << "Current objects layer is: " << currentObjectsLayer << std::endl;
     }
+}
+
+int Level::getCountOfLayers() const {
+    return countOfLayers;
 }
 
 #endif

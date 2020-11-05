@@ -4,6 +4,8 @@
 #include <include/model/table/TableOfCharacteristics.h>
 #include "Unit.h"
 
+#pragma once
+
 using namespace sf;
 
 class Player : public Unit {
@@ -19,7 +21,9 @@ public:
 
     sf::Sound sound;
 
-    Player(Level level, std::string fileName, float x, float y, float w, float h) : Unit(level, fileName, x, y, w, h) {
+    Player(Level level, std::string fileName, std::string name,
+           float x, float y, float w, float h) : Unit(level, fileName, name, x, y, w, h) {
+
         obj = level.getAllObjects();
         framesCount = 5;
         buffer.loadFromFile("../res/sound/hookah.wav");
@@ -32,7 +36,7 @@ public:
     }
 
     void control(float time) {
-        if (Keyboard::isKeyPressed(Keyboard::Left)) {
+        if (Keyboard::isKeyPressed(Keyboard::A)) {
             sprite.setOrigin({30, 0});
             sprite.setScale({-1, 1});
             state = left;
@@ -43,7 +47,7 @@ public:
             getPlayerCoordinateForView(this->getX(), this->getY());
         }
 
-        if (Keyboard::isKeyPressed(Keyboard::Right)) {
+        if (Keyboard::isKeyPressed(Keyboard::D)) {
             sprite.setScale({1, 1});
             sprite.setOrigin({0, 0});
             state = right;
@@ -54,7 +58,7 @@ public:
             getPlayerCoordinateForView(this->getX(), this->getY());
         }
 
-        if (Keyboard::isKeyPressed(Keyboard::Up)) {
+        if (Keyboard::isKeyPressed(Keyboard::W)) {
             state = up;
             speed = 0.1;
             currentFrame += 0.005 * time;
@@ -63,7 +67,7 @@ public:
             getPlayerCoordinateForView(this->getX(), this->getY());
         }
 
-        if (Keyboard::isKeyPressed(Keyboard::Down)) {
+        if (Keyboard::isKeyPressed(Keyboard::S)) {
             state = down;
             speed = 0.1;
             currentFrame += 0.005 * time;
@@ -86,13 +90,11 @@ public:
             if (getRect().intersects(i.rect)) {
                 if (i.name == "ladder_up" &&
                     Mouse::isButtonPressed(sf::Mouse::Left)
-//                    Keyboard::isKeyPressed(sf::Keyboard::L)
                         ) {
                     state = onladderup;
                 }
                 if (i.name == "ladder_down" &&
                     Mouse::isButtonPressed(sf::Mouse::Left)
-//                    Keyboard::isKeyPressed(sf::Keyboard::L)
                         ) {
                     state = onladderdown;
                 }

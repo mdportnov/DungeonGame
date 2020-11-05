@@ -1,6 +1,5 @@
 #include "include/model/Item.h"
-#include "Artefact.h"
-#include "EnchantedWeapon.h"
+#pragma once
 
 enum class EquipmentTypes {
     HELMET, BREASTPLATE, BOOTS

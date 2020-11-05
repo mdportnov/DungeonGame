@@ -51,6 +51,7 @@ add_executable(DungeonGame
         include/model/View.h
         include/model/Enemy.h
         include/model/Level.h
+        src/ObjectsParser.h
 
         ${TINY_SOURCES}
         )

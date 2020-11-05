@@ -16,18 +16,18 @@ void getPlayerCoordinateForView(float x, float y) {
 }
 
 void viewMap(float time) {
-    if (Keyboard::isKeyPressed(Keyboard::D)) {
+    if (Keyboard::isKeyPressed(Keyboard::Right)) {
         view.move(0.1 * time, 0);//скроллим карту вправо (см урок, когда мы двигали героя - всё тоже самое)
     }
 
-    if (Keyboard::isKeyPressed(Keyboard::S)) {
+    if (Keyboard::isKeyPressed(Keyboard::Down)) {
         view.move(0, 0.1 * time);//скроллим карту вниз (см урок, когда мы двигали героя - всё тоже самое)
     }
 
-    if (Keyboard::isKeyPressed(Keyboard::A)) {
+    if (Keyboard::isKeyPressed(Keyboard::Left)) {
         view.move(-0.1 * time, 0);//скроллим карту влево (см урок, когда мы двигали героя - всё тоже самое)
     }
-    if (Keyboard::isKeyPressed(Keyboard::W)) {
+    if (Keyboard::isKeyPressed(Keyboard::Up)) {
         view.move(0, -0.1 * time);//скроллим карту вправо (см урок, когда мы двигали героя - всё тоже самое)
     }
 }
