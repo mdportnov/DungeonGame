@@ -1,18 +1,23 @@
 #ifndef _ITEM_H
 #define _ITEM_H
-#include "include/model/equip/EnchantedWeapon.h"
-#include "include/model/equip/Artefact.h"
+
 #include "include/model/ObjectOnField.h"
+#include "Level.h"
 
 class Item : public ObjectOnField {
 public:
-    string name;
+    string name, filename;
 
-    Item(const string &name) : name(name) {
-
+    Item(Level level, std::string &fileName, std::string &name, float x, float y, float w, float h) : ObjectOnField(x,
+                                                                                                                    y,
+                                                                                                                    w,
+                                                                                                                    h,
+                                                                                                                    level) {
+        this->name = name;
+        this->filename = filename;
     }
+//        this->image.loadFromFile("../res/img/" + fileName);
 
-    Item() {}
 };
 
 #endif //_ITEM_H

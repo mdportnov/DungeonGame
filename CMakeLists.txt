@@ -21,7 +21,6 @@ add_executable(DungeonGame
         src/DungeonGameApp.cpp
         include/DungeonGameApp.h
         include/model/Player.h
-
         include/model/equip/Artefact.h
         include/model/equip/ArtefactEquipment.h
         include/model/equip/ArtefactWeapon.h
@@ -54,6 +53,6 @@ add_executable(DungeonGame
         src/ObjectsParser.h
 
         ${TINY_SOURCES}
-        )
+        include/model/Animation.h)
 
 target_link_libraries(DungeonGame sfml-graphics sfml-audio)

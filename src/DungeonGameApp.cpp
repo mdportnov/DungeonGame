@@ -28,17 +28,27 @@ namespace MyGame {
 
         Level level;
         level.loadMapFromFile("../res/level1.tmx");
+        level.loadStateFromFile("../res/level1objects.xml");
 
-        Object player = level.getObject("player");
-        Player p(level, "temik_tiles.png", player.name, player.rect.left, player.rect.top, 30, 50);
+        Object player = level.getPlayer();
+        Player p(level, player.imagePath, player.name, player.rect.left, player.rect.top, player.rect.width,
+                 player.rect.height);
 
-        std::list<Enemy *> enemies;
-        std::list<Enemy *>::iterator it;
-        std::vector<Object> enemiesObj = level.getObjects("egorov");
-        for (auto &i : enemiesObj) {
-            enemies.push_back(
-                    new Enemy(level, "leha_tiles.png", i.name, i.rect.left, i.rect.top, 30, 50));
+        std::vector<Object> enemiesObjects = level.getEnemies();
+        std::list<Enemy *> e;
+        std::list<Enemy *>::iterator enemy_it;
+
+        std::vector<Object> itemsObjects = level.getItems();
+        std::list<Item *> itemsList;
+        std::list<Item *>::iterator item_it;
+
+        for (auto &i : enemiesObjects) {
+            e.push_back(new Enemy(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width, i.rect.height));
         }
+//        for (auto &i : itemsObjects) {
+//            itemsList.push_back(
+//                    new Item(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width, i.rect.height));
+//        }
 
         while (window->isOpen()) {
             float time = clock.getElapsedTime().asMicroseconds();
@@ -50,26 +60,58 @@ namespace MyGame {
                 if (event.type == sf::Event::Closed)
                     window->close();
 
-                if (p.state == Unit::onladderup) {
+                if (p.STATE == Player::onladderup) {
                     level.goUp();
-                    p.state = Unit::stay;
-                    p.obj = level.getAllObjects();
+                    p.STATE = Player::stay;
+                    p.map = level.getAllMapObjects();
                 }
-                if (p.state == Unit::onladderdown) {
+                if (p.STATE == Player::onladderdown) {
                     level.goDown();
-                    p.state = Unit::stay;
-                    p.obj = level.getAllObjects();
+                    p.STATE = Player::stay;
+                    p.map = level.getAllMapObjects();
                 }
             }
 
+            if (Keyboard::isKeyPressed(Keyboard::A)) p.key["A"] = true;
+            if (Keyboard::isKeyPressed(Keyboard::D)) p.key["D"] = true;
+            if (Keyboard::isKeyPressed(Keyboard::W)) p.key["W"] = true;
+            if (Keyboard::isKeyPressed(Keyboard::S)) p.key["S"] = true;
 
             p.update(time);
 
-            for (it = enemies.begin(); it != enemies.end(); it++) {
+            for (auto &it : e) {
+                float offset = 20;
+                if (it->getRect().intersects(p.getRect())) {
+                    if (p.dx > 0) {
+                        std::cout << "(*it)->x" << it->x << "\n";//враг
+                        it->x = p.x + p.w + offset; //отталкиваем его от игрока вправо (впритык)
+                        it->dx = 0;//останавливаем
+                    }
+
+                    if (p.dx < 0) {
+                        it->x = p.x - it->w - offset; //отталкиваем его от игрока влево (впритык)
+                        it->dx = 0; //останавливаем
+                    }
+
+                    if (p.dy > 0) {
+                        it->y = p.y + p.h + offset;
+                        it->dy = 0;
+                    }
+
+                    if (p.dy < 0) {
+                        it->y = p.y - it->h - offset;
+                        it->dy = 0;
+                    }
+                    it->update(time);
+                    it->health-=30;
+                }
+            }
+
+            for (auto it = e.begin(); it != e.end(); it++) {
                 Enemy *b = *it;
                 b->update(time);
                 if (!b->isAlive) {
-                    it = enemies.erase(it);
+                    it = e.erase(it);
                     delete b;
                 }
             }
@@ -77,18 +119,18 @@ namespace MyGame {
             viewMap(time);
             changeView();
             window->setView(view);
-//            window->clear(sf::Color(169, 169, 169));
+            window->clear(sf::Color(169, 169, 169));
 
             level.draw(*window);
 
             window->draw(p.sprite);
 
-            for (auto enemy : enemies) {
-                window->draw(enemy->sprite);
+            for (auto layerObjects : e) {
+                window->draw(layerObjects->sprite);
             }
-            window->display();
-            ObjectsParser::saveToFileProgress(level, p, enemies);
 
+            window->display();
+            ObjectsParser::saveToFileProgress(level, p, e);
         }
     }
 

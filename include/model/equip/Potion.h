@@ -3,13 +3,11 @@
 
 #include "include/model/Item.h"
 #include "vector"
-#include "utility"
+#include "string"
 
-using namespace std;
-
-class Potion : public Item {
+class Potion {
 public:
-    vector<pair<string, int>> changesList;
+    vector<pair<std::string, int>> changesList;
 
     void changeCharacteristics();
 };

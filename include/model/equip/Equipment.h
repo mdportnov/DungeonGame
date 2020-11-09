@@ -1,4 +1,5 @@
 #include "include/model/Item.h"
+
 #pragma once
 
 enum class EquipmentTypes {
@@ -7,12 +8,11 @@ enum class EquipmentTypes {
 
 class Equipment : public Item {
 public:
-    explicit Equipment(const string &name) : Item(name) {
+    Equipment(Level &level, string &fileName, string &name, float x, float y, float w, float h, const string &type,
+              int protection, const string &material) : Item(level, fileName, name, x, y, w, h), type(type),
+                                                        protection(protection), material(material) {}
 
-    }
-
-    Equipment() = default;
-
+public:
     string type;
     int protection{};
     string material;

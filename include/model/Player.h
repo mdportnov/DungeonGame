@@ -3,6 +3,7 @@
 #include <include/model/equip/Potion.h>
 #include <include/model/table/TableOfCharacteristics.h>
 #include "Unit.h"
+#include "list"
 
 #pragma once
 
@@ -11,46 +12,98 @@ using namespace sf;
 class Player : public Unit {
 public:
     Weapon weapon;
-    Equipment equipment[3]; // helmet, breastplate, boots
+//    Equipment equipment[3] // helmet, breastplate, boots
     int fullDamage;
     int maxQuantityOfPotions;
     vector<Item> inventory;
     TableOfCharacteristics attributes;
+    std::vector<Object> objects; //вектор персонажей, предметов карты
 
-    sf::SoundBuffer buffer;
+    enum {
+        stay, onladderup, onladderdown, walk
+    } STATE;
 
-    sf::Sound sound;
+    std::map<std::string, bool> key;
 
     Player(Level level, std::string fileName, std::string name,
            float x, float y, float w, float h) : Unit(level, fileName, name, x, y, w, h) {
-
-        obj = level.getAllObjects();
         framesCount = 5;
-        buffer.loadFromFile("../res/sound/hookah.wav");
-        sound.setBuffer(buffer);
+        objects = level.getAllObjects();
+    }
+
+    Player(Level level, sf::Sprite &sprite, std::string name,
+           float x, float y, float w, float h) : Unit(level, sprite, name, x, y, w, h) {
+        this->sprite = sprite;
+        framesCount = 5;
     }
 
     void update(float time) override {
-        Unit::update(time);
         control(time);
+        keyboard();
+        Unit::update(time);
+    }
+
+    void keyboard() {
+        if (key["A"]) {
+            dx = -speed;
+            dy = 0;
+            if (STATE == stay) STATE = walk;
+        }
+
+        if (key["D"]) {
+            dx = speed;
+            dy = 0;
+            if (STATE == stay) STATE = walk;
+        }
+
+        if (key["W"]) {
+            dx = 0;
+            dy = -speed;
+        }
+
+        if (key["S"]) {
+            dx = 0;
+            dy = speed;
+        }
+
+        /////////////////////если клавиша отпущена///////////////////////////
+        if (!(key["D"] || key["A"])) {
+            dx = 0;
+            if (STATE == walk) STATE = stay;
+        }
+
+        if (!(key["W"] || key["S"])) {
+            dy = 0;
+            if (STATE == walk) STATE = stay;
+        }
+
+        key["A"] = key["S"] = key["W"] = key["D"] = key["Space"] = false;
     }
 
     void control(float time) {
-        if (Keyboard::isKeyPressed(Keyboard::A)) {
+        if (key["A"]) {
             sprite.setOrigin({30, 0});
             sprite.setScale({-1, 1});
-            state = left;
             speed = 0.1;
+
             currentFrame += 0.005 * time;
             if (currentFrame > framesCount) currentFrame -= framesCount;
             sprite.setTextureRect(IntRect(30 * int(currentFrame), 0, 30, 50));
             getPlayerCoordinateForView(this->getX(), this->getY());
         }
 
-        if (Keyboard::isKeyPressed(Keyboard::D)) {
+        if (key["D"]) {
             sprite.setScale({1, 1});
             sprite.setOrigin({0, 0});
-            state = right;
+            speed = 0.1;
+
+            currentFrame += 0.005 * time;
+            if (currentFrame > framesCount) currentFrame -= framesCount;
+            sprite.setTextureRect(IntRect(30 * int(currentFrame), 0, 30, 50));
+            getPlayerCoordinateForView(this->getX(), this->getY());
+        }
+
+        if (key["W"]) {
             speed = 0.1;
             currentFrame += 0.005 * time;
             if (currentFrame > framesCount) currentFrame -= framesCount;
@@ -58,47 +111,38 @@ public:
             getPlayerCoordinateForView(this->getX(), this->getY());
         }
 
-        if (Keyboard::isKeyPressed(Keyboard::W)) {
-            state = up;
+        if (key["S"]) {
             speed = 0.1;
             currentFrame += 0.005 * time;
             if (currentFrame > framesCount) currentFrame -= framesCount;
             sprite.setTextureRect(IntRect(30 * int(currentFrame), 0, 30, 50));
             getPlayerCoordinateForView(this->getX(), this->getY());
         }
-
-        if (Keyboard::isKeyPressed(Keyboard::S)) {
-            state = down;
-            speed = 0.1;
-            currentFrame += 0.005 * time;
-            if (currentFrame > framesCount) currentFrame -= framesCount;
-            sprite.setTextureRect(IntRect(30 * int(currentFrame), 0, 30, 50));
-            getPlayerCoordinateForView(this->getX(), this->getY());
-        }
-
-        if (Mouse::isButtonPressed(sf::Mouse::Left)) {
-            takeItem(Item("name"));
-        }
-//        if (Keyboard::isKeyPressed(Keyboard::H)) {
-//            sound.play();
-//        }
     }
 
     void checkCollision(int num) override {
         Unit::checkCollision(num);
-        for (auto &i : obj)
+        for (auto &i : map)
             if (getRect().intersects(i.rect)) {
                 if (i.name == "ladder_up" &&
                     Mouse::isButtonPressed(sf::Mouse::Left)
                         ) {
-                    state = onladderup;
+                    STATE = onladderup;
                 }
                 if (i.name == "ladder_down" &&
                     Mouse::isButtonPressed(sf::Mouse::Left)
                         ) {
-                    state = onladderdown;
+                    STATE = onladderdown;
                 }
             }
+
+//        for (it = objects.begin(); it != objects.end(); ++it)
+//            if (getRect().intersects(it->rect)) {
+//                if (it->name == "python") {
+//                    level.deleteObject(it);
+//                    objects=level.getAllObjects();
+//                }
+//            }
     }
 
     void takeItem(Item item) {

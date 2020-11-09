@@ -10,35 +10,46 @@ public:
         auto *decl = new TiXmlDeclaration("1.0", "utf-8", "");
         doc.LinkEndChild(decl);
         TiXmlElement *root;
-        root = new TiXmlElement("objects");
+        root = new TiXmlElement("map");
         root->SetAttribute("version", "1.0");
         doc.LinkEndChild(root);
 
-        TiXmlElement *unit;
-        auto *units = new TiXmlElement("units");
-        root->LinkEndChild(units);
+        auto *image = new TiXmlElement("image");
+        image->SetAttribute("source", "img/tileset_items.png");
+        image->SetAttribute("width", "300");
+        image->SetAttribute("height", "300");
+        image->SetAttribute("tileWidth", "50");
+        image->SetAttribute("tileHeight", "50");
+
+        root->LinkEndChild(image);
+
+        auto *objects = new TiXmlElement("objectgroup");
+        root->LinkEndChild(objects);
+        TiXmlElement *object;
 
 //        for (auto layers: level.getCountOfLayers())
 
-            for (auto enemy: enemiesList) {
-                unit = new TiXmlElement("object");
-                unit->SetAttribute("name", enemy->name.c_str());
-                unit->SetDoubleAttribute("x", enemy->x);
-                unit->SetDoubleAttribute("y", enemy->y);
-                unit->SetDoubleAttribute("width", enemy->w);
-                unit->SetDoubleAttribute("height", enemy->h);
-                units->LinkEndChild(unit);
-            }
+        for (auto enemy: enemiesList) {
+            object = new TiXmlElement("object");
+            object->SetAttribute("name", enemy->name.c_str());
+            object->SetAttribute("type", "enemy");
+            object->SetDoubleAttribute("health", enemy->health);
+            object->SetDoubleAttribute("x", enemy->x);
+            object->SetDoubleAttribute("y", enemy->y);
+            object->SetDoubleAttribute("width", enemy->w);
+            object->SetDoubleAttribute("height", enemy->h);
+            objects->LinkEndChild(object);
+        }
 
-        unit = new TiXmlElement("object");
-        unit->SetAttribute("name", player.name.c_str());
-        unit->SetDoubleAttribute("x", player.x);
-        unit->SetDoubleAttribute("y", player.y);
-        unit->SetDoubleAttribute("width", player.w);
-        unit->SetDoubleAttribute("height", player.h);
+        object = new TiXmlElement("object");
+        object->SetAttribute("name", player.name.c_str());
+        object->SetAttribute("type", "player");
+        object->SetDoubleAttribute("x", player.x);
+        object->SetDoubleAttribute("y", player.y);
+        object->SetDoubleAttribute("width", player.w);
+        object->SetDoubleAttribute("height", player.h);
 
-        units->LinkEndChild(unit);
-
+        objects->LinkEndChild(object);
 
         auto characteristics = new TiXmlElement("characteristics");
         root->LinkEndChild(characteristics);
@@ -46,9 +57,7 @@ public:
         auto equipment = new TiXmlElement("equipment");
         root->LinkEndChild(equipment);
 
-
-
-        doc.SaveFile("/home/mikhail/Desktop/sfml_test/res/level1objectss.xml");
+        doc.SaveFile("/home/mikhail/CLionProjects/DungeonGame/res/level1objects.xml");
     }
 
     static void loadFromFileProgress(const Level &level, const Player &player, const std::list<Enemy *> &enemiesList) {

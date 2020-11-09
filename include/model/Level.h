@@ -8,9 +8,11 @@
 #include <SFML/Graphics.hpp>
 #include <include/TinyXML/tinyxml.h>
 
+using namespace std;
+
 struct Layer {
     int opacity;
-    std::vector<sf::Sprite> tiles;
+    vector<sf::Sprite> tiles;
 };
 
 struct Object {
@@ -18,14 +20,15 @@ struct Object {
 
     float getPropertyFloat(std::string name);
 
-    std::string getPropertyString(std::string name);
+    string getPropertyString(std::string name);
 
-    std::string name;
-    std::string type;
+    string name;
+    string type;
     sf::Rect<float> rect;
-    std::map<std::string, std::string> properties;
+    map<std::string, std::string> properties;
 
     sf::Sprite sprite;
+    std::string imagePath;
 };
 
 class Level {
@@ -36,9 +39,9 @@ public:
 
     Object getObject(std::string name);
 
-    std::vector<Object> getObjects(std::string name);
+    vector<Object> getObjectsByName(std::string name);
 
-    std::vector<Object> getAllObjects();
+    vector<Object> getAllMapObjects();
 
     void draw(sf::RenderWindow &window);
 
@@ -48,18 +51,38 @@ public:
 
     void goDown();
 
-    int getCountOfLayers() const;
-
     int currentTileLayer = 0, currentObjectsLayer = 0;
+
+    vector<Object> getEnemies(const string &name);
+
+    vector<Object> getEnemies();
+
+    Object getPlayer();
+
+    vector<Object> getObjectsByType(const string &type);
+
+    vector<Object> getItems();
+
+    vector<Object> getAllObjects();
+
+//    void deleteObject(vector<Object>::iterator i);
+
+    void deleteObject(vector<Object>::const_iterator it);
+    void deleteObject(vector<Object>::const_iterator *it);
 
 private:
     int countOfLayers;
-    float width, height, tileWidth, tileHeight;
+    float width, height, tileWidth, tileHeight, objectsTileWidth, objectsTileHeight;
     int firstTileID;
     sf::Rect<float> drawingBounds;
     sf::Texture tileSetImage;
-    std::vector<std::vector<Object>> objects; // стены, лестницы (object из objectgroup) из level.tmx
-    std::vector<Layer> layers; // layers из level.tmx
+    sf::Texture itemsTileSetImage;
+
+    vector<std::vector<Object>> staticObjects; // стены, лестницы (object из objectgroup) из level.tmx
+
+    vector<std::vector<Object>> dynamicObjects; // предметы, юниты
+
+    vector<Layer> layers; // layers из level.tmx
 };
 
 int Object::getPropertyInt(std::string name) {
@@ -103,13 +126,15 @@ bool Level::loadMapFromFile(const std::string &filename) {
     // source - путь до картинки в контейнере image
     TiXmlElement *image;
     image = tilesetElement->FirstChildElement("image");
-    std::string imagepath = image->Attribute("source");
+    std::string imagePath = image->Attribute("source");
 
     // ПУТЬ К ТАЙЛСЕТУ, загрузка
     sf::Image img;
-    if (!img.loadFromFile("../res/" + imagepath)) {
-        std::cout << "Failed to load tile sheet." << std::endl;
+    if (!img.loadFromFile("../res/" + imagePath)) {
+        std::cout << "Failed to load level textures tile sheet." << std::endl;
         return false;
+    } else {
+        std::cout << "Level textures tiles loaded successfully." << std::endl;
     }
 
     img.createMaskFromColor(sf::Color(255, 255, 255));
@@ -278,7 +303,7 @@ bool Level::loadMapFromFile(const std::string &filename) {
 
                 objectElement = objectElement->NextSiblingElement("object");
             }
-            objects.push_back(currLayerObjects);
+            staticObjects.push_back(currLayerObjects);
 
             objectGroupElement = objectGroupElement->NextSiblingElement("objectgroup");
         }
@@ -298,29 +323,204 @@ bool Level::loadStateFromFile(const std::string &filename) {
         return false;
     }
 
+    TiXmlElement *map = stateFile.FirstChildElement("map"); // загрузил карту объектов
+    TiXmlElement *image = map->FirstChildElement("image"); // загрузил тайлсет объектов
+    objectsTileWidth = atoi(image->Attribute("tileWidth"));
+    objectsTileHeight = atoi(image->Attribute("tileHeight"));
+
+
+    std::string imagePath = image->Attribute("source");
+
+    // путь к тайлсету предметов, загрузка
+    sf::Image img;
+    if (!img.loadFromFile("../res/" + imagePath)) {
+        std::cout << "Failed to load tile sheet." << std::endl;
+        return false;
+    } else {
+        std::cout << "Items tiles loaded successfully." << std::endl;
+    }
+
+    img.createMaskFromColor(sf::Color(255, 255, 255));
+    itemsTileSetImage.loadFromImage(img);
+    itemsTileSetImage.setSmooth(true);
+
+    // Получаем количество столбцов и строк тайлсета
+    int columns = itemsTileSetImage.getSize().x / objectsTileWidth;
+    int rows = itemsTileSetImage.getSize().y / objectsTileHeight;
+
+    // Вектор из прямоугольников изображений предметов (TextureRect)
+    std::vector<sf::Rect<int> > subRects;
+
+    for (int y = 0; y < rows; y++)
+        for (int x = 0; x < columns; x++) {
+            sf::Rect<int> rect;
+
+            rect.top = y * objectsTileHeight;
+            rect.height = objectsTileHeight;
+            rect.left = x * objectsTileWidth;
+            rect.width = objectsTileWidth;
+
+            subRects.push_back(rect);
+        }
+
+    // Работа с объектами
+    TiXmlElement *objectGroupElement;
+
+    // Если есть слои объектов
+    if (map->FirstChildElement("objectgroup") != nullptr) {
+        objectGroupElement = map->FirstChildElement("objectgroup");
+
+        // идём по слоям объектов
+        while (objectGroupElement) {
+            // Контейнер <object>
+            TiXmlElement *objectElement;
+            objectElement = objectGroupElement->FirstChildElement("object");
+
+            std::vector<Object> currLayerObjects; // список объектов текущего слоя
+
+            while (objectElement) {
+                // Получаем все данные - тип, имя, позиция, etc
+                std::string objectType;
+                if (objectElement->Attribute("type") != nullptr) {
+                    objectType = objectElement->Attribute("type");
+                }
+                std::string objectName;
+                if (objectElement->Attribute("name") != nullptr) {
+                    objectName = objectElement->Attribute("name");
+                }
+                int x = atoi(objectElement->Attribute("x"));
+                int y = atoi(objectElement->Attribute("y"));
+
+                int width, height;
+                sf::Sprite sprite;
+                sprite.setPosition(x, y);
+
+
+                if (objectElement->Attribute("width") != nullptr) {
+                    width = atoi(objectElement->Attribute("width"));
+                    height = atoi(objectElement->Attribute("height"));
+                } else {
+                    width = subRects[atoi(objectElement->Attribute("gid")) - firstTileID].width;
+                    height = subRects[atoi(objectElement->Attribute("gid")) - firstTileID].height;
+                    sprite.setTextureRect(subRects[atoi(objectElement->Attribute("gid")) - firstTileID]);
+                }
+
+                sf::Image image;
+                sf::Texture texture;
+                if (objectType == "enemy") {
+                    image.loadFromFile("../res/img/enemies/" + objectName + ".png");
+                    imagePath = "enemies/" + objectName + ".png";
+                }
+                if (objectType == "items") {
+                    image.loadFromFile("../res/img/items/" + objectName + ".png");
+                    imagePath = "items/" + objectName + ".png";
+                }
+                if (objectType == "player") {
+                    image.loadFromFile("../res/img/temik.png");
+                    imagePath = objectName + ".png";
+                }
+
+                texture.loadFromImage(image);
+                sprite.setTexture(texture);
+                sprite.setTextureRect(sf::IntRect(0, 0, 50, 50));
+
+                // Экземпляр объекта
+                Object object;
+                object.name = objectName;
+                object.type = objectType;
+                object.sprite = sprite;
+                object.imagePath = imagePath;
+
+                sf::Rect<float> objectRect;
+                objectRect.top = y;
+                objectRect.left = x;
+                objectRect.height = height;
+                objectRect.width = width;
+                object.rect = objectRect;
+
+                // "Переменные" объекта
+                TiXmlElement *properties;
+                properties = objectElement->FirstChildElement("properties");
+                if (properties != nullptr) {
+                    TiXmlElement *prop;
+                    prop = properties->FirstChildElement("property");
+                    if (prop != nullptr) {
+                        while (prop) {
+                            std::string propertyName = prop->Attribute("name");
+                            std::string propertyValue = prop->Attribute("value");
+
+                            object.properties[propertyName] = propertyValue;
+
+                            prop = prop->NextSiblingElement("property");
+                        }
+                    }
+                }
+
+                currLayerObjects.push_back(object);
+                objectElement = objectElement->NextSiblingElement("object");
+            }
+            dynamicObjects.push_back(currLayerObjects); // переход к следующему слою объектов (другой слой карты)
+            objectGroupElement = objectGroupElement->NextSiblingElement("objectgroup");
+        }
+    } else {
+        std::cout << "No item & unit layers found..." << std::endl;
+    }
+
     return true;
 }
 
 Object Level::getObject(std::string name) {
     // Только первый объект с заданным именем
-    for (auto &object : objects[currentObjectsLayer])
+    for (auto &object : staticObjects[currentObjectsLayer])
         if (object.name == name)
             return object;
 }
 
-std::vector<Object> Level::getObjects(std::string name) {
-    // Все объекты с заданным именем
+Object Level::getPlayer() {
+    // Только первый объект с заданным именем
+    for (auto &object : dynamicObjects[currentObjectsLayer])
+        if (object.type == "player")
+            return object;
+}
+
+std::vector<Object> Level::getEnemies() {
     std::vector<Object> vec;
-    for (auto &object : objects[currentObjectsLayer])
-        if (object.name == name)
+    for (auto &object : dynamicObjects[currentObjectsLayer])
+        if (object.type == "enemy")
             vec.push_back(object);
 
     return vec;
 }
 
-std::vector<Object> Level::getAllObjects() {
-    return objects[currentObjectsLayer];
+std::vector<Object> Level::getItems() {
+    std::vector<Object> vec;
+    for (auto &object : dynamicObjects[currentObjectsLayer])
+        if (object.type == "item")
+            vec.push_back(object);
+
+    return vec;
+}
+
+std::vector<Object> Level::getObjectsByType(const std::string &type) {
+    // Все объекты с заданным типом
+    std::vector<Object> vec;
+    for (auto &object : dynamicObjects[currentObjectsLayer])
+        if (object.type == type)
+            vec.push_back(object);
+    return vec;
+}
+
+std::vector<Object> Level::getAllMapObjects() {
+    return staticObjects[currentObjectsLayer];
 };
+
+std::vector<Object> Level::getAllObjects() {
+    return dynamicObjects[currentObjectsLayer];
+};
+
+void Level::deleteObject(std::vector<Object>::const_iterator it) {
+//    dynamicObjects[currentObjectsLayer].erase(it);
+}
 
 sf::Vector2i Level::getTileSize() const {
     return sf::Vector2i(tileWidth, tileHeight);
@@ -349,10 +549,6 @@ void Level::goDown() {
         std::cout << "Current tiles layer is: " << currentTileLayer << std::endl;
         std::cout << "Current objects layer is: " << currentObjectsLayer << std::endl;
     }
-}
-
-int Level::getCountOfLayers() const {
-    return countOfLayers;
 }
 
 #endif
