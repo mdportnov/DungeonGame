@@ -1,23 +1,15 @@
-#ifndef _ITEM_H
-#define _ITEM_H
-
-#include "include/model/ObjectOnField.h"
+#include "ObjectOnField.h"
 #include "Level.h"
+
+#pragma once
 
 class Item : public ObjectOnField {
 public:
     string name, filename;
 
-    Item(Level level, std::string &fileName, std::string &name, float x, float y, float w, float h) : ObjectOnField(x,
-                                                                                                                    y,
-                                                                                                                    w,
-                                                                                                                    h,
-                                                                                                                    level) {
-        this->name = name;
-        this->filename = filename;
-    }
+    Item(Level level, std::string &fileName, std::string &name, float x, float y, float w, float h);
+
 //        this->image.loadFromFile("../res/img/" + fileName);
 
 };
 
-#endif //_ITEM_H

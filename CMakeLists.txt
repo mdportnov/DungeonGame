@@ -47,12 +47,12 @@ add_executable(DungeonGame
         include/model/table/TableOfCharacteristics.h
         include/model/Unit.h
         include/model/equip/Weapon.h
-        include/model/View.h
         include/model/Enemy.h
         include/model/Level.h
-        src/ObjectsParser.h
+        include/model/ObjectsParser.h
+        src/classes/Level.cpp include/model/Level.h
 
         ${TINY_SOURCES}
-        include/model/Animation.h)
+        src/classes/ObjectOnField.cpp include/model/MyView.h src/classes/Unit.cpp src/classes/Player.cpp src/classes/MyView.cpp src/classes/Enemy.cpp src/classes/Item.cpp)
 
 target_link_libraries(DungeonGame sfml-graphics sfml-audio)

@@ -1,21 +1,6 @@
-#include "include/main.h"
+#include "include/model/MyView.h"
 
-using namespace sf;
-
-sf::View view;
-
-void getPlayerCoordinateForView(float x, float y) {
-    float tempX = x;
-    float tempY = y;
-    if (x > 700) tempX = 700;
-    if (x < 300) tempX = 300;
-    if (y > 550) tempY = 550;
-    if (y < 200) tempY = 200;
-
-    view.setCenter(tempX, tempY);
-}
-
-void viewMap(float time) {
+void MyView::viewMap(float time) {
     if (Keyboard::isKeyPressed(Keyboard::Right)) {
         view.move(0.1 * time, 0);//скроллим карту вправо (см урок, когда мы двигали героя - всё тоже самое)
     }
@@ -32,7 +17,18 @@ void viewMap(float time) {
     }
 }
 
-void changeView() {
+void MyView::getPlayerCoordinateForView(float x, float y) {
+    float tempX = x;
+    float tempY = y;
+    if (x > 700) tempX = 700;
+    if (x < 300) tempX = 300;
+    if (y > 550) tempY = 550;
+    if (y < 200) tempY = 200;
+
+    view.setCenter(tempX, tempY);
+}
+
+void MyView::changeView() {
     if (Keyboard::isKeyPressed(Keyboard::LBracket)) {
         view.zoom(0.9994); //масштабируем, уменьшение
     }
@@ -52,11 +48,5 @@ void changeView() {
     if (Keyboard::isKeyPressed(Keyboard::P)) {
         view.setSize(540, 380);//например другой размер
     }
-
-
-//    if (Keyboard::isKeyPressed(Keyboard::Q)) {
-//        view.setViewport(sf::FloatRect(0, 0, 0.5f,1));
-    //таким образом делается раздельный экран для игры на двоих. нужно только создать ещё один объект
-    // View и привязывать к нему координаты игрока 2.
-//    }
 }
+

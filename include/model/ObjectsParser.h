@@ -57,7 +57,7 @@ public:
         auto equipment = new TiXmlElement("equipment");
         root->LinkEndChild(equipment);
 
-        doc.SaveFile("/home/mikhail/CLionProjects/DungeonGame/res/level1objects.xml");
+        doc.SaveFile("../res/level1objects.xml");
     }
 
     static void loadFromFileProgress(const Level &level, const Player &player, const std::list<Enemy *> &enemiesList) {
