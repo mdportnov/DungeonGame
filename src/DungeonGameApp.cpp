@@ -1,6 +1,6 @@
 #include <sstream>
 
-#pragma once
+//#pragma once
 
 #include <include/model/Level.h>
 #include "iostream"
@@ -11,6 +11,7 @@
 #include <vector>
 #include <list>
 #include "include/model/Enemy.h"
+#include "include/model/Door.h"
 
 using namespace sf;
 
@@ -36,20 +37,29 @@ namespace MyGame {
         level.loadMapFromFile("../res/level1.tmx");
         level.loadStateFromFile("../res/level1objects.xml");
 
-        Object player = level.getPlayer();
+        MapObject player = level.getPlayer();
         Player p(level, myView, player.imagePath, player.name, player.rect.left, player.rect.top, player.rect.width,
                  player.rect.height);
 
-        std::vector<Object> enemiesObjects = level.getEnemies();
-        std::list<Enemy *> e;
-        std::list<Enemy *>::iterator enemy_it;
+        vector<MapObject> enemiesObjects = level.getEnemies();
+        list<Enemy *> e;
+        list<Enemy *>::iterator enemy_it;
 
-        std::vector<Object> itemsObjects = level.getItems();
-        std::list<Item *> itemsList;
-        std::list<Item *>::iterator item_it;
+        vector<MapObject> itemsObjects = level.getItems();
+        list<Item *> itemsList;
+        list<Item *>::iterator item_it;
+
+        vector<MapObject> doorsObjects = level.getDoors();
+        list<Door *> doorsList;
+        list<Door *>::iterator door_it;
 
         for (auto &i : enemiesObjects) {
             e.push_back(new Enemy(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width, i.rect.height));
+        }
+
+        for (auto &i : doorsObjects) {
+            doorsList.push_back(
+                    new Door(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width, i.rect.height));
         }
 
 //        for (auto &i : itemsObjects) {
@@ -94,6 +104,15 @@ namespace MyGame {
                         it = e.erase(it);
                         delete b;
                     }
+                }
+
+                for (auto it = doorsList.begin(); it != doorsList.end(); it++) {
+                    Door *b = *it;
+                    b->update(time);
+//                    if (!b->isLocked) {
+//                        it = doorsList.erase(it);
+//                        delete b;
+//                    }
                 }
 
                 for (auto &it : e) {
@@ -148,6 +167,11 @@ namespace MyGame {
                 }
                 window->draw(enemy->sprite);
             }
+
+            for (auto door: doorsList) {
+                window->draw(door->sprite);
+            }
+
             window->display();
 //            ObjectsParser::saveToFileProgress(level, p, e);
         }

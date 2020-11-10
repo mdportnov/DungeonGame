@@ -1,3 +1,4 @@
+#pragma once
 #include <include/TinyXML/tinyxml.h>
 #include <include/model/Player.h>
 #include <list>

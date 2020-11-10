@@ -57,7 +57,7 @@
    <tile gid="1"/>
    <tile gid="1"/>
    <tile gid="1"/>
-   <tile gid="8"/>
+   <tile gid="7"/>
    <tile gid="1"/>
    <tile gid="1"/>
    <tile gid="1"/>
@@ -67,7 +67,7 @@
    <tile gid="1"/>
    <tile gid="1"/>
    <tile gid="1"/>
-   <tile gid="8"/>
+   <tile gid="7"/>
    <tile gid="9"/>
    <tile gid="1"/>
    <tile gid="1"/>
@@ -616,11 +616,11 @@
  </layer>
  <objectgroup id="4" name="solid">
   <object id="22" name="solid" x="0" y="-1.33333" width="1000" height="48"/>
-  <object id="23" name="solid" x="0" y="149.333" width="48" height="600"/>
+  <object id="23" name="solid" x="1.33333" y="153" width="48" height="600"/>
   <object id="24" name="solid" x="44" y="702.667" width="954.667" height="45.3333"/>
   <object id="25" name="solid" x="950.667" y="154.667" width="48" height="550.667"/>
-  <object id="26" name="solid" x="949.333" y="49.3333" width="50.6667" height="41.3333"/>
-  <object id="27" name="solid" x="0" y="42" width="49" height="54"/>
+  <object id="26" name="solid" x="950" y="45.3333" width="50.6667" height="51.6666"/>
+  <object id="27" name="solid" x="0.666667" y="41.3333" width="49" height="54"/>
   <object id="28" name="solid" x="148" y="43" width="52" height="154"/>
   <object id="30" name="solid" x="49" y="300" width="451" height="46"/>
   <object id="31" name="solid" x="248" y="450" width="451" height="50"/>
@@ -639,7 +639,6 @@
   <object id="51" name="ladder_up" x="100" y="52" width="45" height="48"/>
   <object id="62" name="portal_in" x="599.333" y="50" width="47.3333" height="50"/>
   <object id="65" name="portal_out" x="702" y="300.667" width="47.3333" height="49.3333"/>
-  <object id="72" name="player" x="58.6667" y="104.667" width="38.6667" height="38"/>
  </objectgroup>
  <objectgroup id="8" name="solid" visible="0">
   <object id="53" name="ladder_down" x="98" y="52" width="51" height="49"/>

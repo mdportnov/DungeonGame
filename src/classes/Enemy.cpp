@@ -1,11 +1,12 @@
 #include "include/model/Enemy.h"
+#include "include/model/Unit.h"
 
 Enemy::Enemy(Level &level, std::string fileName, std::string name,
              float x, float y, float w, float h) : Unit(level, fileName, name, x, y, w, h) {
     state = false;
     isAlive = true;
     health = 100;
-    objects = level.getAllObjects();
+    objects = level.getAllDynamicObjects();
     this->map = level.getAllMapObjects();
     start_x = x;
     start_y = y;
@@ -14,7 +15,6 @@ Enemy::Enemy(Level &level, std::string fileName, std::string name,
 
 void Enemy::update(float time) {
     Unit::update(time);
-
     dx = speed * dir;
 //        if (getRect().intersects(level.get)){
 //

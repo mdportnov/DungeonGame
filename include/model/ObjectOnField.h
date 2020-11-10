@@ -1,19 +1,20 @@
-#include "include/main.h"
-#include "Level.h"
 #pragma once
+
+#include "Level.h"
 
 using namespace sf;
 
 class ObjectOnField {
 public:
-    float x, y, w, h;
+    float x{}, y{}, w{}, h{};
     Texture texture;
     Sprite sprite;
     Level level;
+    Image image;
 
-    ObjectOnField(float x, float y, float w, float h, Level &level);
+    ObjectOnField(Level &level, float x, float y, float w, float h);
 
-    float getX() const { return x; }
+    float getX() const;
 
-    float getY() const { return y; }
+    float getY() const;
 };

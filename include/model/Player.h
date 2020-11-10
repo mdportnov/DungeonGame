@@ -1,22 +1,24 @@
 #pragma once
 
-#include <include/model/equip/Weapon.h>
-#include <include/model/equip/Equipment.h>
-#include <include/model/equip/Potion.h>
-#include <include/model/table/TableOfCharacteristics.h>
+#include "include/model/equip/Weapon.h"
+#include "include/model/equip/Equipment.h"
+#include "include/model/equip/Potion.h"
+#include "include/model/table/TableOfCharacteristics.h"
 #include "Unit.h"
 #include "list"
 #include "MyView.h"
+#include "Level.h"
 
+class Level;
 
 using namespace sf;
 
 class Player : public Unit {
 public:
     Weapon weapon; // удалять меньший по урону с карты
-    Equipment *equipment[3]; // helmet, breastplate, boots
-    int fullDamage;
-    int maxQuantityOfPotions;
+    Equipment *equipment[3]{}; // helmet, breastplate, boots
+    int fullDamage{};
+    int maxQuantityOfPotions{};
     vector<Item> inventory;
     TableOfCharacteristics attributes;
     MyView *view;

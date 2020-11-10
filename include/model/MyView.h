@@ -1,6 +1,6 @@
-#include "include/main.h"
-
 #pragma once
+
+#include "include/main.h"
 using namespace sf;
 
 class MyView {

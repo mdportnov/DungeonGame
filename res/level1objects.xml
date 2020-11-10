@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <map version="1.0">
-    <image source="img/tileset_items.png" width="300" height="300" tileWidth="50" tileHeight="50" />
+    <image source="img/tileset_items.png" width="300" height="300" tileWidth="50" tileHeight="50"/>
     <objectgroup>
-        <object name="python" type="enemy" x="100" y="100" width="50" height="50" />
-        <object name="egorov" type="enemy" x="200" y="200" width="30" height="50" />
-        <object name="egorov" type="enemy" x="500" y="200" width="30" height="50" />
-        <object name="python" type="enemy" x="250" y="150" width="50" height="50" />
-        <object name="python" type="enemy" x="250" y="250" width="50" height="50" />
-        <object name="temik" type="player" x="156.535" y="201.628" width="30" height="50" />
+        <object name="python" type="enemy" x="100" y="100" width="50" height="50"/>
+        <object name="egorov" type="enemy" x="200" y="200" width="30" height="50"/>
+        <object name="egorov" type="enemy" x="500" y="200" width="30" height="50"/>
+        <object name="python" type="enemy" x="250" y="150" width="50" height="50"/>
+        <object name="python" type="enemy" x="250" y="250" width="50" height="50"/>
+        <object name="temik" type="player" x="156.535" y="201.628" width="30" height="50"/>
+        <object name="door" type="door_closed" x="450" y="100" width="50" height="50"/>
+        <object name="door" type="door_closed" x="950" y="100" width="50" height="50"/>
     </objectgroup>
-    <characteristics />
-    <equipment />
+    <characteristics/>
+    <equipment/>
 </map>

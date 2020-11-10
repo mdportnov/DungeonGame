@@ -1,11 +1,11 @@
 #include "include/model/Unit.h"
+#include "include/model/ObjectOnField.h"
 
-Unit::Unit(Level &level, string &fileName, string &name, float x, float y, float w, float h) : ObjectOnField(x, y, w, h,
-                                                                                                             level) {
-    this->level = level;
+Unit::Unit(Level &level, string &fileName, string &name,
+           float x, float y, float w, float h) : ObjectOnField(level, x, y, w, h) {
     this->name = name;
     this->image.loadFromFile("../res/img/" + fileName);
-    objects = level.getAllObjects();
+    objects = level.getAllDynamicObjects();
     this->map = level.getAllMapObjects();
 
     isAlive = true;
@@ -17,7 +17,6 @@ Unit::Unit(Level &level, string &fileName, string &name, float x, float y, float
     texture.loadFromImage(image);
     sprite.setTexture(texture);
     sprite.setTextureRect(IntRect(0, 0, w, h));
-
 }
 
 void Unit::update(float time) {
@@ -50,4 +49,20 @@ void Unit::checkCollision(int num) {
                 if (dx < 0 && num == 0) { x = i.rect.left + i.rect.width; }
             }
         }
+    for (auto &i : objects) {
+        if (getRect().intersects(i.rect)) {
+            if (i.type == "door_closed") {
+                if (dy > 0 && num == 1) {
+                    y = i.rect.top - h;
+                    dy = 0;
+                }
+                if (dy < 0 && num == 1) {
+                    y = i.rect.top + i.rect.height;
+                    dy = 0;
+                }
+                if (dx > 0 && num == 0) { x = i.rect.left - w; }
+                if (dx < 0 && num == 0) { x = i.rect.left + i.rect.width; }
+            }
+        }
+    }
 }

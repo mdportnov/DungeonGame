@@ -1,45 +1,27 @@
+#pragma once
+#include "../main.h"
+
 #include <string>
 #include <vector>
 #include <map>
 #include <iostream>
-#include <SFML/Graphics.hpp>
 #include <include/TinyXML/tinyxml.h>
+#include "MapObject.h"
+#include "Layer.h"
 
-#pragma once
 using namespace std;
-
-struct Layer {
-    int opacity{};
-    vector<sf::Sprite> tiles;
-};
-
-struct Object {
-    int getPropertyInt(std::string name);
-
-    float getPropertyFloat(std::string name);
-
-    string getPropertyString(std::string name);
-
-    string name;
-    string type;
-    sf::Rect<float> rect;
-    map<std::string, std::string> properties;
-
-    sf::Sprite sprite;
-    std::string imagePath;
-};
 
 class Level {
 public:
-    bool loadMapFromFile(const std::string &filename);
+    bool loadMapFromFile(const string &filename);
 
-    bool loadStateFromFile(const std::string &filename);
+    bool loadStateFromFile(const string &filename);
 
-    Object getObject(std::string name);
+    MapObject getObject(string name);
 
-    vector<Object> getObjectsByName(std::string name);
+    vector<MapObject> getObjectsByName(string name);
 
-    vector<Object> getAllMapObjects();
+    vector<MapObject> getAllMapObjects();
 
     void draw(sf::RenderWindow &window);
 
@@ -51,18 +33,19 @@ public:
 
     int currentTileLayer = 0, currentObjectsLayer = 0;
 
-    vector<Object> getEnemies();
+    vector<MapObject> getEnemies();
 
-    Object getPlayer();
+    MapObject getPlayer();
 
-    vector<Object> getObjectsByType(const string &type);
+    vector<MapObject> getObjectsByType(const string &type);
 
-    vector<Object> getItems();
+    vector<MapObject> getItems();
 
-    vector<Object> getAllObjects();
+    vector<MapObject> getAllDynamicObjects();
 
-    void deleteObject(vector<Object>::const_iterator it);
+    void deleteObject(vector<MapObject>::const_iterator it);
 
+    vector<MapObject> getDoors();
 private:
     int countOfLayers;
     float width, height, tileWidth, tileHeight, objectsTileWidth, objectsTileHeight;
@@ -71,9 +54,9 @@ private:
     sf::Texture tileSetImage;
     sf::Texture itemsTileSetImage;
 
-    vector<std::vector<Object>> staticObjects; // стены, лестницы (object из objectgroup) из level.tmx
+    vector<std::vector<MapObject>> staticObjects; // стены, лестницы (object из objectgroup) из level.tmx
 
-    vector<std::vector<Object>> dynamicObjects; // предметы, юниты
+    vector<std::vector<MapObject>> dynamicObjects; // предметы, юниты
 
     vector<Layer> layers; // layers из level.tmx
 };

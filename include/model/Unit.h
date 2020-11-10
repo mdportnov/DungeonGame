@@ -1,25 +1,26 @@
+#pragma once
+
 #include "include/main.h"
 #include "Level.h"
 #include "ObjectOnField.h"
-
-#pragma once
+#include "MapObject.h"
 
 using namespace sf;
+using namespace std;
 
 class Unit : public ObjectOnField {
 public:
     float dx, dy, speed, health;
     int framesCount = 0;
     double currentFrame = 0;
-    Image image;
     bool isAlive;
-    std::vector<Object> map; //вектор тайлов карты
-    std::vector<Object> objects; //вектор персонажей, предметов карты
+    std::vector<MapObject> map; //вектор тайлов карты
+    std::vector<MapObject> objects; //вектор персонажей, предметов карты
 
     std::string name;
 
-    Unit(Level &level, std::string &fileName,
-         std::string &name, float x, float y, float w, float h);
+    Unit(Level &level, string &fileName,
+         string &name, float x, float y, float w, float h);
 
     // для проверки столкновений
     FloatRect getRect() { return {x, y, w, h}; }
