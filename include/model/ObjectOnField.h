@@ -11,10 +11,16 @@ public:
     Sprite sprite;
     Level level;
     Image image;
+    string fileName;
+    string type;
+    string subType;
+    string name;
 
-    ObjectOnField(Level &level, float x, float y, float w, float h);
+    ObjectOnField(Level &level, string &fileName, string &name, float x, float y, float w, float h);
 
     float getX() const;
 
     float getY() const;
+
+    void update(float time);
 };

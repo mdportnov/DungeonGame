@@ -36,7 +36,6 @@ void Player::keyboard() {
         dy = speed;
     }
 
-    /////////////////////если клавиша отпущена///////////////////////////
     if (!(key["D"] || key["A"])) {
         dx = 0;
         if (STATE == STATE::walk) STATE = STATE::stay;
@@ -110,5 +109,15 @@ void Player::checkCollision(int num) {
 //                    objects=level.getAllObjects();
 //                }
 //            }
+}
+
+void Player::takeItem(Item &item) {
+    if (item.subType == "weapon") {
+        weapon = new Weapon(item.name);
+    }
+
+    if (item.subType == "potion") {
+//        drinkPotion(Potion());
+    }
 }
 

@@ -15,7 +15,7 @@ using namespace sf;
 
 class Player : public Unit {
 public:
-    Weapon weapon; // удалять меньший по урону с карты
+    Weapon *weapon = nullptr; // удалять меньший по урону с карты
     Equipment *equipment[3]{}; // helmet, breastplate, boots
     int fullDamage{};
     int maxQuantityOfPotions{};
@@ -48,7 +48,7 @@ public:
 
     void checkCollision(int num) override;
 
-    void takeItem(Item item);
+    void takeItem(Item &item);
 
     void drinkPotion(Potion potion);
 

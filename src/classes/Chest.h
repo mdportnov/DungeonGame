@@ -1,12 +1,11 @@
 #ifndef _CHEST_H
 #define _CHEST_H
 
+#include <include/model/Player.h>
 #include "include/model/ObjectOnField.h"
 #include "include/model/Item.h"
-#include "BunchOfKeys.h"
-#include "Hero.h"
+#include "src/model/BunchOfKeys.h"
 #include "vector"
-#include "utility"
 #include "string"
 
 using namespace std;
@@ -14,16 +13,14 @@ using namespace std;
 class Chest : public ObjectOnField {
 public:
 
-/**
- * @param item
- */
+    bool isLocked = true;
+
+    Chest(Level &level, string &fileName, string &name, float x, float y, float w, float h);
+
     void setItem(Item item);
 
     Item getItem();
 
-/**
- * @param key
- */
     bool open(BunchOfKeys key);
 
     void setLockLevel();
@@ -33,18 +30,12 @@ public:
     pair<int, int> getInfo();
 
 private:
-    Item storedItem;
-    int lockLevel;
+//    Item storedItem;
+//    int lockLevel;
 
-/**
- * @param hero
- */
-    int getProbabilityOfOpen(Hero hero);
+    int getProbabilityOfOpen(Player hero);
 
-/**
- * @param hero
- */
-    int getProbabilityOfBroken(Hero hero);
+    int getProbabilityOfBroken(Player hero);
 };
 
 #endif //_CHEST_H

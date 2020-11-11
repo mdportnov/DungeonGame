@@ -8,8 +8,12 @@
         <object name="python" type="enemy" x="250" y="150" width="50" height="50"/>
         <object name="python" type="enemy" x="250" y="250" width="50" height="50"/>
         <object name="temik" type="player" x="156.535" y="201.628" width="30" height="50"/>
-        <object name="door" type="door_closed" x="450" y="100" width="50" height="50"/>
-        <object name="door" type="door_closed" x="950" y="100" width="50" height="50"/>
+        <object name="door_closed" type="door" x="450" y="100" width="50" height="50"/>
+        <object name="door_closed" type="door" x="950" y="100" width="50" height="50"/>
+        <object name="chest_closed" type="chest" x="300" y="250" width="50" height="50"/>
+        <object name="weapon_axe" type="item" subType="weapon" x="400" y="250" width="50" height="50"/>
+        <object name="weapon_gun" type="item" subType="weapon" x="500" y="250" width="50" height="50"/>
+        <object name="potion_power" type="item" subType="potion" x="200" y="250" width="50" height="50"/>
     </objectgroup>
     <characteristics/>
     <equipment/>

@@ -3,6 +3,7 @@
 
 Enemy::Enemy(Level &level, std::string fileName, std::string name,
              float x, float y, float w, float h) : Unit(level, fileName, name, x, y, w, h) {
+//    this->image.loadFromFile("../res/img/" + fileName);
     state = false;
     isAlive = true;
     health = 100;

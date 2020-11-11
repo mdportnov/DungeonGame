@@ -2,9 +2,7 @@
 #include "include/model/ObjectOnField.h"
 
 Unit::Unit(Level &level, string &fileName, string &name,
-           float x, float y, float w, float h) : ObjectOnField(level, x, y, w, h) {
-    this->name = name;
-    this->image.loadFromFile("../res/img/" + fileName);
+           float x, float y, float w, float h) : ObjectOnField(level, fileName, name, x, y, w, h)  {
     objects = level.getAllDynamicObjects();
     this->map = level.getAllMapObjects();
 
@@ -14,9 +12,6 @@ Unit::Unit(Level &level, string &fileName, string &name,
     dx = 0;
     dy = 0;
     speed = 0;
-    texture.loadFromImage(image);
-    sprite.setTexture(texture);
-    sprite.setTextureRect(IntRect(0, 0, w, h));
 }
 
 void Unit::update(float time) {
@@ -25,7 +20,8 @@ void Unit::update(float time) {
 
     y += dy * time;
     checkCollision(1);
-    sprite.setPosition(x, y);
+
+    ObjectOnField::update(time);
 
     if (health <= 0) {
         isAlive = false;
@@ -51,7 +47,7 @@ void Unit::checkCollision(int num) {
         }
     for (auto &i : objects) {
         if (getRect().intersects(i.rect)) {
-            if (i.type == "door_closed") {
+            if (i.name == "door_closed") {
                 if (dy > 0 && num == 1) {
                     y = i.rect.top - h;
                     dy = 0;

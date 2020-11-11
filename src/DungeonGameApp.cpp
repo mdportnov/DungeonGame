@@ -10,6 +10,7 @@
 #include "include/model/ObjectsParser.h"
 #include <vector>
 #include <list>
+#include <src/classes/Chest.h>
 #include "include/model/Enemy.h"
 #include "include/model/Door.h"
 
@@ -43,15 +44,15 @@ namespace MyGame {
 
         vector<MapObject> enemiesObjects = level.getEnemies();
         list<Enemy *> e;
-        list<Enemy *>::iterator enemy_it;
 
         vector<MapObject> itemsObjects = level.getItems();
         list<Item *> itemsList;
-        list<Item *>::iterator item_it;
 
         vector<MapObject> doorsObjects = level.getDoors();
         list<Door *> doorsList;
-        list<Door *>::iterator door_it;
+
+        vector<MapObject> chestsObjects = level.getChests();
+        list<Chest *> chestsList;
 
         for (auto &i : enemiesObjects) {
             e.push_back(new Enemy(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width, i.rect.height));
@@ -62,10 +63,16 @@ namespace MyGame {
                     new Door(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width, i.rect.height));
         }
 
-//        for (auto &i : itemsObjects) {
-//            itemsList.push_back(
-//                    new Item(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width, i.rect.height));
-//        }
+        for (auto &i : chestsObjects) {
+            chestsList.push_back(
+                    new Chest(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width, i.rect.height));
+        }
+
+        for (auto &i : itemsObjects) {
+            itemsList.push_back(
+                    new Item(level, i.imagePath, i.name, i.type, i.subType,
+                             i.rect.left, i.rect.top, i.rect.width, i.rect.height));
+        }
 
         while (window->isOpen()) {
             float time = clock.getElapsedTime().asMilliseconds();
@@ -109,8 +116,27 @@ namespace MyGame {
                 for (auto it = doorsList.begin(); it != doorsList.end(); it++) {
                     Door *b = *it;
                     b->update(time);
+                    if (!b->isLocked) {
+                        it = doorsList.erase(it);
+                        delete b;
+                    }
+                }
+
+                for (auto it = chestsList.begin(); it != chestsList.end(); it++) {
+                    Chest *b = *it;
+                    b->update(time);
+                    if (!b->isLocked) {
+                        it = chestsList.erase(it);
+                        delete b;
+                    }
+                }
+
+                for (auto it = itemsList.begin(); it != itemsList.end(); it++) {
+                    Item *b = *it;
+                    b->update(time);
+
 //                    if (!b->isLocked) {
-//                        it = doorsList.erase(it);
+//                        it = chestsList.erase(it);
 //                        delete b;
 //                    }
                 }
@@ -157,13 +183,13 @@ namespace MyGame {
 
             for (auto enemy : e) {
                 if ((*enemy).name == "egorov") {
-                    RectangleShape rect(Vector2f(enemy->getEnemyArea().width, enemy->getEnemyArea().height));
-                    rect.setPosition(enemy->x - enemy->getEnemyArea().width / 2 + enemy->w / 2,
-                                     enemy->y - enemy->getEnemyArea().height / 2 + enemy->h / 2);
-                    rect.setOutlineThickness(5);
-                    rect.setFillColor(Color::Transparent);
-                    rect.setOutlineColor(sf::Color(250, 150, 100));
-                    window->draw(rect);
+//                    RectangleShape rect(Vector2f(enemy->getEnemyArea().width, enemy->getEnemyArea().height));
+//                    rect.setPosition(enemy->x - enemy->getEnemyArea().width / 2 + enemy->w / 2,
+//                                     enemy->y - enemy->getEnemyArea().height / 2 + enemy->h / 2);
+//                    rect.setOutlineThickness(5);
+//                    rect.setFillColor(Color::Transparent);
+//                    rect.setOutlineColor(sf::Color(250, 150, 100));
+//                    window->draw(rect);
                 }
                 window->draw(enemy->sprite);
             }
@@ -171,7 +197,13 @@ namespace MyGame {
             for (auto door: doorsList) {
                 window->draw(door->sprite);
             }
+            for (auto chest: chestsList) {
+                window->draw(chest->sprite);
+            }
 
+            for (auto item: itemsList) {
+                window->draw(item->sprite);
+            }
             window->display();
 //            ObjectsParser::saveToFileProgress(level, p, e);
         }

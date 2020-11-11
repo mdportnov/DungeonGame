@@ -11,8 +11,8 @@ using namespace std;
 
 
 class ArtefactWeapon: public Artefact, public Weapon {
-public: 
-  
+public:
+
 vector<pair<string, int>> changesListA();
 };
 

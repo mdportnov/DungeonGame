@@ -46,6 +46,9 @@ public:
     void deleteObject(vector<MapObject>::const_iterator it);
 
     vector<MapObject> getDoors();
+
+    vector<MapObject> getChests();
+
 private:
     int countOfLayers;
     float width, height, tileWidth, tileHeight, objectsTileWidth, objectsTileHeight;

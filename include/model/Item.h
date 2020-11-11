@@ -4,10 +4,8 @@
 
 class Item : public ObjectOnField {
 public:
-    string name, filename;
-//    Level level;
+    Item(Level &level, string &fileName, string &name, string &type, string &subType,
+         float x, float y, float w, float h);
 
-    Item(Level &level, std::string &fileName, std::string &name, float x, float y, float w, float h);
-//        this->image.loadFromFile("../res/img/" + fileName);
 };
 

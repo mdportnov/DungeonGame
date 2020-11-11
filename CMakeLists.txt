@@ -30,7 +30,7 @@ add_executable(DungeonGame
         src/model/CellWithChest.h
         src/model/CellWithItem.h
         include/model/table/Characteristic.h
-        src/model/Chest.h
+        src/classes/Chest.h
         include/model/equip/EnchantedArtefactWeapon.h
         include/model/equip/EnchantedWeapon.h
         include/model/equip/Equipment.h
@@ -53,6 +53,6 @@ add_executable(DungeonGame
         src/classes/Level.cpp include/model/Level.h
 
         ${TINY_SOURCES}
-        src/classes/ObjectOnField.cpp include/model/MyView.h src/classes/Unit.cpp src/classes/Player.cpp src/classes/MyView.cpp src/classes/Enemy.cpp src/classes/Item.cpp include/model/MapObject.h src/classes/MapObject.cpp include/model/Layer.h src/classes/Layer.cpp src/classes/Door.cpp include/model/Door.h)
+        src/classes/ObjectOnField.cpp include/model/MyView.h src/classes/Unit.cpp src/classes/Player.cpp src/classes/MyView.cpp src/classes/Enemy.cpp src/classes/Item.cpp include/model/MapObject.h src/classes/MapObject.cpp include/model/Layer.h src/classes/Layer.cpp src/classes/Door.cpp include/model/Door.h src/classes/Chest.cpp src/classes/equip/Weapon.cpp src/classes/equip/Potion.cpp)
 
 target_link_libraries(DungeonGame sfml-graphics sfml-audio)

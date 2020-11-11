@@ -15,6 +15,7 @@ public:
 
     string name;
     string type;
+    string subType;
     sf::Rect<float> rect;
     map<std::string, std::string> properties;
 

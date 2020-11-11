@@ -284,15 +284,21 @@ bool Level::loadStateFromFile(const std::string &filename) {
             std::vector<MapObject> currLayerObjects; // список объектов текущего слоя
 
             while (objectElement) {
-                // Получаем все данные - тип, имя, позиция, etc
-                std::string objectType;
+                // Получаем все данные - тип, подтип, имя, позиция
+                string objectType;
                 if (objectElement->Attribute("type") != nullptr) {
                     objectType = objectElement->Attribute("type");
                 }
-                std::string objectName;
+                string objectSubType;
+                if (objectElement->Attribute("subType") != nullptr) {
+                    objectSubType = objectElement->Attribute("subType");
+                }
+                string objectName;
                 if (objectElement->Attribute("name") != nullptr) {
                     objectName = objectElement->Attribute("name");
                 }
+
+
                 int x = atoi(objectElement->Attribute("x"));
                 int y = atoi(objectElement->Attribute("y"));
 
@@ -316,18 +322,24 @@ bool Level::loadStateFromFile(const std::string &filename) {
                     image.loadFromFile("../res/img/enemies/" + objectName + ".png");
                     imagePath = "enemies/" + objectName + ".png";
                 }
-                if (objectType == "items") {
+                if (objectType == "item") {
                     image.loadFromFile("../res/img/items/" + objectName + ".png");
                     imagePath = "items/" + objectName + ".png";
                 }
+
                 if (objectType == "player") {
                     image.loadFromFile("../res/img/temik.png");
                     imagePath = objectName + ".png";
                 }
 
-                if (objectType == "door_closed") {
+                if (objectType == "door") {
                     image.loadFromFile("../res/img/door_closed.png");
-                    imagePath = objectType + ".png";
+                    imagePath = objectName + ".png";
+                }
+
+                if (objectType == "chest") {
+                    image.loadFromFile("../res/img/chest_opened.png");
+                    imagePath = objectName + ".png";
                 }
 
                 texture.loadFromImage(image);
@@ -340,6 +352,7 @@ bool Level::loadStateFromFile(const std::string &filename) {
                 object.type = objectType;
                 object.sprite = sprite;
                 object.imagePath = imagePath;
+                object.subType = objectSubType;
 
                 sf::Rect<float> objectRect;
                 objectRect.top = y;
@@ -414,7 +427,15 @@ std::vector<MapObject> Level::getItems() {
 std::vector<MapObject> Level::getDoors() {
     std::vector<MapObject> vec;
     for (auto &object : dynamicObjects[currentObjectsLayer])
-        if (object.type == "door_closed")
+        if (object.type == "door")
+            vec.push_back(object);
+    return vec;
+}
+
+std::vector<MapObject> Level::getChests() {
+    std::vector<MapObject> vec;
+    for (auto &object : dynamicObjects[currentObjectsLayer])
+        if (object.type == "chest")
             vec.push_back(object);
     return vec;
 }
