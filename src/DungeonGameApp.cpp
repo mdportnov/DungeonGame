@@ -10,7 +10,8 @@
 #include "include/model/ObjectsParser.h"
 #include <vector>
 #include <list>
-#include <src/classes/Chest.h>
+#include <include/model/Chest.h>
+#include <include/model/equip/Key.h>
 #include "include/model/Enemy.h"
 #include "include/model/Door.h"
 
@@ -65,13 +66,30 @@ namespace MyGame {
 
         for (auto &i : chestsObjects) {
             chestsList.push_back(
-                    new Chest(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width, i.rect.height));
+                    new Chest(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width,
+                              i.rect.height));
         }
 
         for (auto &i : itemsObjects) {
-            itemsList.push_back(
-                    new Item(level, i.imagePath, i.name, i.type, i.subType,
-                             i.rect.left, i.rect.top, i.rect.width, i.rect.height));
+            if (i.subType == "potion") {
+                vector<pair<string, int>> changesList;
+                for (auto &prop : i.properties) {
+                    changesList.emplace_back(prop.first, stoi(prop.second));
+                }
+                itemsList.push_back(
+                        new Potion(level, i.imagePath, i.name, i.type, i.subType,
+                                   i.rect.left, i.rect.top, i.rect.width, i.rect.height,
+                                   changesList));
+            }
+            if (i.subType == "weapon")
+                itemsList.push_back(
+                        new Weapon(level, i.imagePath, i.name, i.type, i.subType,
+                                   i.rect.left, i.rect.top, i.rect.width, i.rect.height,
+                                   std::stoi(i.properties["damage"])));
+            if (i.subType == "key")
+                itemsList.push_back(
+                        new Key(level, i.imagePath, i.name, i.type, i.subType,
+                                i.rect.left, i.rect.top, i.rect.width, i.rect.height));
         }
 
         while (window->isOpen()) {
@@ -133,12 +151,16 @@ namespace MyGame {
 
                 for (auto it = itemsList.begin(); it != itemsList.end(); it++) {
                     Item *b = *it;
-                    b->update(time);
 
-//                    if (!b->isLocked) {
-//                        it = chestsList.erase(it);
-//                        delete b;
-//                    }
+                    if (p.getRect().intersects(b->getRect())) {
+                        p.takeItem(b);
+                    }
+
+                    b->update(time);
+                    if (b->state == Item::STATE::nowhere) {
+                        it = itemsList.erase(it);
+                        delete b;
+                    }
                 }
 
                 for (auto &it : e) {
@@ -167,7 +189,7 @@ namespace MyGame {
                         it->update(time);
                         it->dx = 0;
                         it->dy = 0;
-//                        it->health -= 30;
+                        it->health -= p.calculateDamage();
                     }
                 }
             }

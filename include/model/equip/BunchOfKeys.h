@@ -10,16 +10,16 @@ using namespace std;
 #include "include/model/Item.h"
 
 
-class BunchOfKeys : public Item {
+class BunchOfKeys {
 public:
-    string name;
-
     void brokeKey();
 
     void addNewOne();
 
 private:
-    int quantity;
+    int size;
+    string name;
+    int maxSize = 5;
 };
 
 #endif //_BUNCHOFKEYS_H

@@ -1,3 +1,4 @@
+#include <include/model/equip/Key.h>
 #include "include/model/Player.h"
 
 Player::Player(Level &level, MyView &view, std::string fileName, std::string name, float x, float y, float w, float h)
@@ -5,6 +6,7 @@ Player::Player(Level &level, MyView &view, std::string fileName, std::string nam
     framesCount = 5;
     speed = 0.1;
     this->view = &view;
+    bunchOfKeys = BunchOfKeys();
 }
 
 void Player::update(float time) {
@@ -90,16 +92,15 @@ void Player::checkCollision(int num) {
     Unit::checkCollision(num);
     for (auto &i : map)
         if (getRect().intersects(i.rect)) {
-            if (i.name == "ladder_up" &&
-                Mouse::isButtonPressed(sf::Mouse::Left)
-                    ) {
-                STATE = STATE::onladderup;
+            if (Mouse::isButtonPressed(sf::Mouse::Left)) {
+                if (i.name == "ladder_up") {
+                    STATE = STATE::onladderup;
+                }
+                if (i.name == "ladder_down") {
+                    STATE = STATE::onladderdown;
+                }
             }
-            if (i.name == "ladder_down" &&
-                Mouse::isButtonPressed(sf::Mouse::Left)
-                    ) {
-                STATE = STATE::onladderdown;
-            }
+
         }
 
 //        for (it = objects.begin(); it != objects.end(); ++it)
@@ -111,13 +112,25 @@ void Player::checkCollision(int num) {
 //            }
 }
 
-void Player::takeItem(Item &item) {
-    if (item.subType == "weapon") {
-        weapon = new Weapon(item.name);
-    }
+void Player::takeItem(Item *item) {
+    item->state = Item::STATE::onMe;
 
-    if (item.subType == "potion") {
-//        drinkPotion(Potion());
+    if (dynamic_cast<Weapon *>(item) != nullptr)
+        weapon = dynamic_cast<Weapon *>(item);
+
+    if (dynamic_cast<Potion *>(item) != nullptr)
+        drinkPotion(dynamic_cast<Potion *>(item));
+
+    if (dynamic_cast<Key *>(item) != nullptr) {
+        bunchOfKeys.addNewOne();
     }
+}
+
+void Player::drinkPotion(const Potion *potion) {
+
+}
+
+int Player::calculateDamage() {
+    return defaultDamage + weapon->getDamage();
 }
 

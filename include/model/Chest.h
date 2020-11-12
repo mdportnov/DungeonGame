@@ -4,7 +4,7 @@
 #include <include/model/Player.h>
 #include "include/model/ObjectOnField.h"
 #include "include/model/Item.h"
-#include "src/model/BunchOfKeys.h"
+#include "include/model/equip/BunchOfKeys.h"
 #include "vector"
 #include "string"
 
@@ -21,7 +21,7 @@ public:
 
     Item getItem();
 
-    bool open(BunchOfKeys key);
+    bool open(BunchOfKeys &key);
 
     void setLockLevel();
 

@@ -4,15 +4,12 @@
 
 #pragma once
 
-class Weapon{
+class Weapon : public Item {
 public:
-    string name;
+    Weapon(Level &level, string &fileName, string &name, string &type, string &subType,
+           float x, float y, float w, float h, int damage);
 
-    explicit Weapon(string name);
-
-    void getDamage();
-
-    void setDamage();
+    int getDamage() const;
 
 private:
     int damage;

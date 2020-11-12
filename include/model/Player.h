@@ -1,5 +1,6 @@
 #pragma once
 
+#include <include/model/equip/BunchOfKeys.h>
 #include "include/model/equip/Weapon.h"
 #include "include/model/equip/Equipment.h"
 #include "include/model/equip/Potion.h"
@@ -14,13 +15,15 @@ class Level;
 using namespace sf;
 
 class Player : public Unit {
+private:
+    int defaultDamage = 10;
 public:
     Weapon *weapon = nullptr; // удалять меньший по урону с карты
     Equipment *equipment[3]{}; // helmet, breastplate, boots
-    int fullDamage{};
     int maxQuantityOfPotions{};
-    vector<Item> inventory;
+
     TableOfCharacteristics attributes;
+    BunchOfKeys bunchOfKeys;
     MyView *view;
 
     enum class STATE {
@@ -48,9 +51,9 @@ public:
 
     void checkCollision(int num) override;
 
-    void takeItem(Item &item);
+    void takeItem(Item *item);
 
-    void drinkPotion(Potion potion);
+    void drinkPotion(const Potion *potion);
 
     void openChest();
 

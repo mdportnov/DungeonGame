@@ -17,7 +17,7 @@ public:
     string type;
     string subType;
     sf::Rect<float> rect;
-    map<std::string, std::string> properties;
+    map<string, string> properties;
 
     sf::Sprite sprite;
     string imagePath;

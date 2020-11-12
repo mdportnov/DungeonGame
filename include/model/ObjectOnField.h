@@ -16,6 +16,9 @@ public:
     string subType;
     string name;
 
+    // для проверки столкновений
+    FloatRect getRect() { return {x, y, w, h}; }
+
     ObjectOnField(Level &level, string &fileName, string &name, float x, float y, float w, float h);
 
     float getX() const;

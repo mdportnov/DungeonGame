@@ -11,9 +11,35 @@
         <object name="door_closed" type="door" x="450" y="100" width="50" height="50"/>
         <object name="door_closed" type="door" x="950" y="100" width="50" height="50"/>
         <object name="chest_closed" type="chest" x="300" y="250" width="50" height="50"/>
-        <object name="weapon_axe" type="item" subType="weapon" x="400" y="250" width="50" height="50"/>
-        <object name="weapon_gun" type="item" subType="weapon" x="500" y="250" width="50" height="50"/>
-        <object name="potion_power" type="item" subType="potion" x="200" y="250" width="50" height="50"/>
+        <object name="weapon_axe" type="item" subType="weapon" x="400" y="250" width="50" height="50">
+            <properties>
+                <property name="damage" value="20"/>
+            </properties>
+        </object>
+        <object name="weapon_gun" type="item" subType="weapon" x="500" y="250" width="50" height="50">
+            <properties>
+                <property name="damage" value="40"/>
+            </properties>
+        </object>
+
+        <object name="weapon_sword" type="item" subType="weapon" x="600" y="250" width="50" height="50">
+            <properties>
+                <property name="damage" value="20"/>
+            </properties>
+        </object>
+        <object name="key" type="item" subType="key" x="300" y="100" width="50" height="50"/>
+
+        <object name="potion_power" type="item" subType="potion" x="200" y="250" width="50" height="50">
+            <properties>
+                <property name="damage" value="20"/>
+            </properties>
+        </object>
+
+        <object name="potion_health" type="item" subType="potion" x="250" y="250" width="50" height="50">
+            <properties>
+                <property name="health" value="20"/>
+            </properties>
+        </object>
     </objectgroup>
     <characteristics/>
     <equipment/>

@@ -22,9 +22,6 @@ public:
     Unit(Level &level, string &fileName,
          string &name, float x, float y, float w, float h);
 
-    // для проверки столкновений
-    FloatRect getRect() { return {x, y, w, h}; }
-
     virtual void update(float time);
 
     virtual void checkCollision(int num);
