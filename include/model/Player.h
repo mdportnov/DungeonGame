@@ -9,6 +9,7 @@
 #include "list"
 #include "MyView.h"
 #include "Level.h"
+#include "Door.h"
 
 class Level;
 
@@ -18,11 +19,11 @@ class Player : public Unit {
 private:
     int defaultDamage = 10;
 public:
-    Weapon *weapon = nullptr; // удалять меньший по урону с карты
     Equipment *equipment[3]{}; // helmet, breastplate, boots
     int maxQuantityOfPotions{};
 
-    TableOfCharacteristics attributes;
+//    TableOfCharacteristics attributes;
+    std::map<string, int> attributes;
     BunchOfKeys bunchOfKeys;
     MyView *view;
 
@@ -37,13 +38,9 @@ public:
     Player(Level &level, MyView &view, std::string fileName, std::string name,
            float x, float y, float w, float h);
 
-//    Player(Level level, sf::Sprite &sprite, std::string name,
-//           float x, float y, float w, float h) : Unit(level, sprite, name, x, y, w, h) {
-//        this->sprite = sprite;
-//        framesCount = 5;
-//    }
-
     void update(float time) override;
+
+    void init(std::map<string, int> attributes);
 
     void keyboard();
 
@@ -58,10 +55,6 @@ public:
     void openChest();
 
     void improveCharacteristicByXP(string shortname);
-
-    void kickEgorov();
-
-    int calculateDamage();
 
     int calculateProtection();
 

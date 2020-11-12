@@ -17,11 +17,13 @@ public:
 
     Chest(Level &level, string &fileName, string &name, float x, float y, float w, float h);
 
+    FloatRect getAreaRect();
+
     void setItem(Item item);
 
     Item getItem();
 
-    bool open(BunchOfKeys &key);
+    bool open(Player &player);
 
     void setLockLevel();
 

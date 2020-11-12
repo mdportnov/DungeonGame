@@ -9,7 +9,7 @@ public:
     Weapon(Level &level, string &fileName, string &name, string &type, string &subType,
            float x, float y, float w, float h, int damage);
 
-    int getDamage() const;
+    float getDamage() const;
 
 private:
     int damage;

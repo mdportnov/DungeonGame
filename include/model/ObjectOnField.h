@@ -17,7 +17,7 @@ public:
     string name;
 
     // для проверки столкновений
-    FloatRect getRect() { return {x, y, w, h}; }
+    virtual FloatRect getRect() { return {x, y, w, h}; }
 
     ObjectOnField(Level &level, string &fileName, string &name, float x, float y, float w, float h);
 
@@ -25,5 +25,5 @@ public:
 
     float getY() const;
 
-    void update(float time);
+    virtual void update(float time);
 };

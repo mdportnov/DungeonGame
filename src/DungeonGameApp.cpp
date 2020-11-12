@@ -1,5 +1,3 @@
-#include <sstream>
-
 //#pragma once
 
 #include <include/model/Level.h>
@@ -12,13 +10,13 @@
 #include <list>
 #include <include/model/Chest.h>
 #include <include/model/equip/Key.h>
+#include <include/model/InfoBar.h>
 #include "include/model/Enemy.h"
 #include "include/model/Door.h"
 
 using namespace sf;
 
 namespace MyGame {
-
     MyView myView;
 
     DungeonGameApp::DungeonGameApp() :
@@ -33,6 +31,13 @@ namespace MyGame {
     }
 
     void DungeonGameApp::Run() {
+        sf::SoundBuffer buffer;
+        if (!buffer.loadFromFile("../res/sound/main.ogg"))
+            std::cout << "Unable to load game sound";
+        sf::Sound mainSound;
+        mainSound.setBuffer(buffer);
+        mainSound.play();
+
         Clock clock;
 
         Level level;
@@ -43,8 +48,17 @@ namespace MyGame {
         Player p(level, myView, player.imagePath, player.name, player.rect.left, player.rect.top, player.rect.width,
                  player.rect.height);
 
+        std::map<string, int> tmpMap;
+        for (auto &a: player.properties) {
+            tmpMap.insert({a.first, std::stoi(a.second)});
+        }
+
+        p.init(tmpMap);
+
+        InfoBar infoBar;
+
         vector<MapObject> enemiesObjects = level.getEnemies();
-        list<Enemy *> e;
+        list<Enemy *> enemiesList;
 
         vector<MapObject> itemsObjects = level.getItems();
         list<Item *> itemsList;
@@ -56,7 +70,8 @@ namespace MyGame {
         list<Chest *> chestsList;
 
         for (auto &i : enemiesObjects) {
-            e.push_back(new Enemy(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width, i.rect.height));
+            enemiesList.push_back(
+                    new Enemy(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width, i.rect.height));
         }
 
         for (auto &i : doorsObjects) {
@@ -101,6 +116,7 @@ namespace MyGame {
 
             Event event;
             bool ladderUsed = false;
+            bool doorUsed = false;
             if (time > 50) {
                 clock.restart();
 
@@ -122,31 +138,53 @@ namespace MyGame {
                 }
                 p.update(time);
 
-                for (auto it = e.begin(); it != e.end(); it++) {
+                for (auto it = enemiesList.begin(); it != enemiesList.end(); it++) {
                     Enemy *b = *it;
                     b->update(time);
                     if (!b->isAlive) {
-                        it = e.erase(it);
+                        it = enemiesList.erase(it);
                         delete b;
                     }
                 }
 
-                for (auto it = doorsList.begin(); it != doorsList.end(); it++) {
-                    Door *b = *it;
-                    b->update(time);
-                    if (!b->isLocked) {
-                        it = doorsList.erase(it);
-                        delete b;
+                for (auto b : doorsList) {
+                    if (p.getRect().intersects(b->getRect()) && b->isLocked) {
+                        if (p.dy > 0) {
+                            p.y = b->getRect().top - p.h;
+                            p.dy = 0;
+                        }
+                        if (p.dy < 0) {
+                            p.y = b->getRect().top + b->getRect().height;
+                            p.dy = 0;
+                        }
+                        if (p.dx > 0) { p.x = b->getRect().left - p.w; }
+                        if (p.dx < 0) { p.x = b->getRect().left + b->getRect().width; }
                     }
+
+                    if (p.getRect().intersects(b->getAreaRect())) {
+                        if (Mouse::isButtonPressed(sf::Mouse::Left) && !doorUsed) {
+                            b->changeDoorState();
+
+                            doorUsed = true;
+                        }
+                    }
+                    b->update();
                 }
 
-                for (auto it = chestsList.begin(); it != chestsList.end(); it++) {
-                    Chest *b = *it;
-                    b->update(time);
-                    if (!b->isLocked) {
-                        it = chestsList.erase(it);
-                        delete b;
+                for (auto b : chestsList) {
+                    if (p.getRect().intersects(b->getAreaRect())) {
+                        if (Mouse::isButtonPressed(sf::Mouse::Left)) {
+                            b->open(p);
+//                            sf::SoundBuffer buffer;
+//                            if (!buffer.loadFromFile("../res/sound/chest.wav"))
+//                                std::cout << "Unable to load game sound";
+//                            sf::Sound mainSound;
+//                            mainSound.setBuffer(buffer);
+//                            mainSound.play();
+                        }
                     }
+
+                    b->update(time);
                 }
 
                 for (auto it = itemsList.begin(); it != itemsList.end(); it++) {
@@ -163,7 +201,7 @@ namespace MyGame {
                     }
                 }
 
-                for (auto &it : e) {
+                for (auto &it : enemiesList) {
                     float offset = 20;
 
                     if (p.getRect().intersects(it->getRect())) {
@@ -189,7 +227,8 @@ namespace MyGame {
                         it->update(time);
                         it->dx = 0;
                         it->dy = 0;
-                        it->health -= p.calculateDamage();
+                        it->acceptDamageFrom(p);
+                        p.acceptDamageFrom(*it);
                     }
                 }
             }
@@ -201,9 +240,7 @@ namespace MyGame {
 
             level.draw(*window);
 
-            window->draw(p.sprite);
-
-            for (auto enemy : e) {
+            for (auto enemy : enemiesList) {
                 if ((*enemy).name == "egorov") {
 //                    RectangleShape rect(Vector2f(enemy->getEnemyArea().width, enemy->getEnemyArea().height));
 //                    rect.setPosition(enemy->x - enemy->getEnemyArea().width / 2 + enemy->w / 2,
@@ -224,10 +261,16 @@ namespace MyGame {
             }
 
             for (auto item: itemsList) {
-                window->draw(item->sprite);
+                if (item->state == Item::onMap)
+                    window->draw(item->sprite);
             }
+
+            window->draw(p.sprite);
+
+            infoBar.update(p.health);
+            infoBar.draw(*window);
             window->display();
-//            ObjectsParser::saveToFileProgress(level, p, e);
+            ObjectsParser::saveToFileProgress(level, p, enemiesList, itemsList, doorsList);
         }
     }
 
@@ -236,5 +279,9 @@ namespace MyGame {
             delete window;
             window = nullptr;
         }
+    }
+
+    void DungeonGameApp::playSound(string name) {
+
     }
 }

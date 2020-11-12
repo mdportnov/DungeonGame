@@ -7,7 +7,17 @@
         <object name="egorov" type="enemy" x="500" y="200" width="30" height="50"/>
         <object name="python" type="enemy" x="250" y="150" width="50" height="50"/>
         <object name="python" type="enemy" x="250" y="250" width="50" height="50"/>
-        <object name="temik" type="player" x="156.535" y="201.628" width="30" height="50"/>
+        <object name="temik" type="player" x="156.535" y="201.628" width="30" height="50">
+            <properties>
+                <property name="health" value="200"/>
+                <property name="maxHealth" value="200"/>
+                <property name="power" value="10"/>
+                <property name="precision" value="10"/>
+                <property name="stamina" value="10"/>
+                <property name="levelPoints" value="0"/>
+            </properties>
+
+        </object>
         <object name="door_closed" type="door" x="450" y="100" width="50" height="50"/>
         <object name="door_closed" type="door" x="950" y="100" width="50" height="50"/>
         <object name="chest_closed" type="chest" x="300" y="250" width="50" height="50"/>
@@ -24,7 +34,7 @@
 
         <object name="weapon_sword" type="item" subType="weapon" x="600" y="250" width="50" height="50">
             <properties>
-                <property name="damage" value="20"/>
+                <property name="damage" value="30"/>
             </properties>
         </object>
         <object name="key" type="item" subType="key" x="300" y="100" width="50" height="50"/>
@@ -41,6 +51,4 @@
             </properties>
         </object>
     </objectgroup>
-    <characteristics/>
-    <equipment/>
 </map>

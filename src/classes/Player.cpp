@@ -1,4 +1,5 @@
 #include <include/model/equip/Key.h>
+#include <include/model/Door.h>
 #include "include/model/Player.h"
 
 Player::Player(Level &level, MyView &view, std::string fileName, std::string name, float x, float y, float w, float h)
@@ -100,7 +101,6 @@ void Player::checkCollision(int num) {
                     STATE = STATE::onladderdown;
                 }
             }
-
         }
 
 //        for (it = objects.begin(); it != objects.end(); ++it)
@@ -115,8 +115,18 @@ void Player::checkCollision(int num) {
 void Player::takeItem(Item *item) {
     item->state = Item::STATE::onMe;
 
-    if (dynamic_cast<Weapon *>(item) != nullptr)
-        weapon = dynamic_cast<Weapon *>(item);
+    if (dynamic_cast<Weapon *>(item) != nullptr) {
+        if (weapon == nullptr) {
+            weapon = dynamic_cast<Weapon *>(item);
+            dynamic_cast<Weapon *>(item)->state = Item::STATE::onMe;
+        } else {
+            if (dynamic_cast<Weapon *>(item)->getDamage() > weapon->getDamage()) {
+                weapon = dynamic_cast<Weapon *>(item);
+                dynamic_cast<Weapon *>(item)->state = Item::STATE::onMe;
+            } else
+                dynamic_cast<Weapon *>(item)->state = Item::STATE::nowhere;
+        }
+    }
 
     if (dynamic_cast<Potion *>(item) != nullptr)
         drinkPotion(dynamic_cast<Potion *>(item));
@@ -130,7 +140,8 @@ void Player::drinkPotion(const Potion *potion) {
 
 }
 
-int Player::calculateDamage() {
-    return defaultDamage + weapon->getDamage();
+void Player::init(std::map<string, int> attributes) {
+    this->attributes = attributes;
 }
+
 

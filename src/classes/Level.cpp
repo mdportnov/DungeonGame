@@ -233,7 +233,6 @@ bool Level::loadStateFromFile(const std::string &filename) {
     objectsTileWidth = atoi(image->Attribute("tileWidth"));
     objectsTileHeight = atoi(image->Attribute("tileHeight"));
 
-
     std::string imagePath = image->Attribute("source");
 
     // путь к тайлсету предметов, загрузка

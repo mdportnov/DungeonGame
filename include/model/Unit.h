@@ -1,5 +1,6 @@
 #pragma once
 
+#include <include/model/equip/Weapon.h>
 #include "include/main.h"
 #include "Level.h"
 #include "ObjectOnField.h"
@@ -9,8 +10,11 @@ using namespace sf;
 using namespace std;
 
 class Unit : public ObjectOnField {
+private:
 public:
-    float dx, dy, speed, health;
+    Weapon *weapon = nullptr; // удалять меньший по урону с карты
+    float dx, dy, speed;
+    float health, defaultDamage;
     int framesCount = 0;
     double currentFrame = 0;
     bool isAlive;
@@ -26,7 +30,9 @@ public:
 
     virtual void checkCollision(int num);
 
-    void acceptDamage(Unit from);
+    void acceptDamageFrom(Unit &unit);
+
+    float calculateDamage();
 
     void makeDamage(Unit to);
 };

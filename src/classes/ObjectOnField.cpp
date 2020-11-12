@@ -6,8 +6,8 @@ ObjectOnField::ObjectOnField(Level &level, string &fileName, string &name, float
     this->w = w;
     this->h = h;
     this->level = level;
-    this->image.loadFromFile("../res/img/" + fileName);
     this->name = name;
+    this->image.loadFromFile("../res/img/" + fileName);
     texture.loadFromImage(image);
     sprite.setTexture(texture);
     sprite.setTextureRect(IntRect(0, 0, w, h));
