@@ -9,32 +9,33 @@
         <object name="python" type="enemy" x="250" y="250" width="50" height="50"/>
         <object name="temik" type="player" x="156.535" y="201.628" width="30" height="50">
             <properties>
-                <property name="health" value="200"/>
-                <property name="maxHealth" value="200"/>
-                <property name="power" value="10"/>
-                <property name="precision" value="10"/>
-                <property name="stamina" value="10"/>
-                <property name="levelPoints" value="0"/>
+                <property name="hp" value="200"/>
+                <property name="mxhp" value="200"/>
+                <property name="pw" value="10"/>
+                <property name="pr" value="10"/>
+                <property name="st" value="10"/>
+                <property name="xp" value="0"/>
+                <property name="lvl" value="0"/>
             </properties>
 
         </object>
         <object name="door_closed" type="door" x="450" y="100" width="50" height="50"/>
         <object name="door_closed" type="door" x="950" y="100" width="50" height="50"/>
         <object name="chest_closed" type="chest" x="300" y="250" width="50" height="50"/>
-        <object name="weapon_axe" type="item" subType="weapon" x="400" y="250" width="50" height="50">
+        <object name="weapon_axe" type="item" subType="weapon" x="250" y="200" width="50" height="50">
             <properties>
-                <property name="damage" value="20"/>
+                <property name="damage" value="15"/>
             </properties>
         </object>
-        <object name="weapon_gun" type="item" subType="weapon" x="500" y="250" width="50" height="50">
+        <object name="weapon_gun" type="item" subType="weapon" x="400" y="250" width="50" height="50">
             <properties>
-                <property name="damage" value="40"/>
+                <property name="damage" value="30"/>
             </properties>
         </object>
 
-        <object name="weapon_sword" type="item" subType="weapon" x="600" y="250" width="50" height="50">
+        <object name="weapon_sword" type="item" subType="weapon" x="500" y="250" width="50" height="50">
             <properties>
-                <property name="damage" value="30"/>
+                <property name="damage" value="20"/>
             </properties>
         </object>
         <object name="key" type="item" subType="key" x="300" y="100" width="50" height="50"/>

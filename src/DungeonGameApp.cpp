@@ -56,6 +56,7 @@ namespace MyGame {
         p.init(tmpMap);
 
         InfoBar infoBar;
+        infoBar.observe(&p);
 
         vector<MapObject> enemiesObjects = level.getEnemies();
         list<Enemy *> enemiesList;
@@ -136,6 +137,7 @@ namespace MyGame {
                         ladderUsed = true;
                     }
                 }
+
                 p.update(time);
 
                 for (auto it = enemiesList.begin(); it != enemiesList.end(); it++) {
@@ -164,7 +166,6 @@ namespace MyGame {
                     if (p.getRect().intersects(b->getAreaRect())) {
                         if (Mouse::isButtonPressed(sf::Mouse::Left) && !doorUsed) {
                             b->changeDoorState();
-
                             doorUsed = true;
                         }
                     }
@@ -267,7 +268,6 @@ namespace MyGame {
 
             window->draw(p.sprite);
 
-            infoBar.update(p.health);
             infoBar.draw(*window);
             window->display();
             ObjectsParser::saveToFileProgress(level, p, enemiesList, itemsList, doorsList);

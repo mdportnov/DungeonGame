@@ -20,9 +20,9 @@ private:
     int defaultDamage = 10;
 public:
     Equipment *equipment[3]{}; // helmet, breastplate, boots
-    int maxQuantityOfPotions{};
+    Potion *potions[3];
 
-//    TableOfCharacteristics attributes;
+//    TableOfCharacteristics attributes; потом реализовать мапу самому
     std::map<string, int> attributes;
     BunchOfKeys bunchOfKeys;
     MyView *view;
@@ -50,7 +50,9 @@ public:
 
     void takeItem(Item *item);
 
-    void drinkPotion(const Potion *potion);
+    void drinkPotion(Potion *potion);
+
+    void acceptDamageFrom(Unit &unit) override;
 
     void openChest();
 

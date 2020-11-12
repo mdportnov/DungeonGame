@@ -10,11 +10,10 @@ using namespace sf;
 using namespace std;
 
 class Unit : public ObjectOnField {
-private:
 public:
     Weapon *weapon = nullptr; // удалять меньший по урону с карты
     float dx, dy, speed;
-    float health, defaultDamage;
+    float health, defaultDamage=5;
     int framesCount = 0;
     double currentFrame = 0;
     bool isAlive;
@@ -26,11 +25,11 @@ public:
     Unit(Level &level, string &fileName,
          string &name, float x, float y, float w, float h);
 
-    virtual void update(float time);
+    void update(float time) override;
 
     virtual void checkCollision(int num);
 
-    void acceptDamageFrom(Unit &unit);
+    virtual void acceptDamageFrom(Unit &unit);
 
     float calculateDamage();
 

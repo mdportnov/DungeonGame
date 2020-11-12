@@ -136,12 +136,16 @@ void Player::takeItem(Item *item) {
     }
 }
 
-void Player::drinkPotion(const Potion *potion) {
-
+void Player::drinkPotion(Potion *potion) {
+    potions[0] = potion;
 }
 
 void Player::init(std::map<string, int> attributes) {
     this->attributes = attributes;
+}
+
+void Player::acceptDamageFrom(Unit &unit) {
+    attributes["hp"] -= unit.calculateDamage();
 }
 
 

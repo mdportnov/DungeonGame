@@ -2,23 +2,26 @@
 #define DUNGEONGAME_INFOBAR_H
 
 #include "../main.h"
+#include "Player.h"
 
 using namespace sf;
 
 class InfoBar {
+private:
+    Player *player;
 public:
-    Image image;
-    Texture t;
-    Sprite s;
-    int max=200;
-    RectangleShape bar;
+    RectangleShape charsBar;
+    RectangleShape itemsBar;
+
+    Font font;
 
     InfoBar();
 
-    void update(float k);
+    void update();
 
     void draw(RenderWindow &window);
 
+    void observe(Player *p);
 };
 
 
