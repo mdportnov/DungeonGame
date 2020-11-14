@@ -7,11 +7,11 @@
 
 class Potion : public Item {
 public:
-    vector<pair<string, int>> changesList;
+    vector<pair<string, float>> changesList;
 
     Potion(Level &level, string &fileName, string &name, string &type, string &subType, float x, float y,
            float w,
-           float h, int state, const vector<pair<string, int>> &changesList);
+           float h, int state, const vector<pair<string, float>> &changesList);
 };
 
 #endif //_POTION_H

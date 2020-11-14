@@ -2,30 +2,56 @@
 <map version="1.0">
     <image source="img/tileset_items.png" width="300" height="300" tileWidth="50" tileHeight="50"/>
     <objectgroup>
-        <object name="python" type="enemy" x="100" y="100" width="50" height="50"/>
-        <object name="egorov" type="enemy" x="200" y="200" width="30" height="50"/>
-        <object name="egorov" type="enemy" x="500" y="200" width="30" height="50"/>
-        <object name="python" type="enemy" x="250" y="150" width="50" height="50"/>
-        <object name="python" type="enemy" x="250" y="250" width="50" height="50"/>
+        <object name="egorov" type="enemy" x="200" y="200" width="30" height="50">
+            <properties>
+                <property name="hp" value="250"/>
+            </properties>
+        </object>
+        <object name="egorov" type="enemy" x="500" y="200" width="30" height="50">
+            <properties>
+                <property name="hp" value="150"/>
+            </properties>
+        </object>
+        <object name="python" type="enemy" x="250" y="50" width="50" height="50">
+            <properties>
+                <property name="hp" value="150"/>
+            </properties>
+        </object>
         <object name="temik" type="player" x="156.535" y="201.628" width="30" height="50">
             <properties>
                 <property name="hp" value="200"/>
                 <property name="mxhp" value="200"/>
-                <property name="pw" value="10"/>
-                <property name="pr" value="10"/>
-                <property name="st" value="10"/>
+                <property name="sp" value="0.1"/>
+                <property name="pw" value="5"/>
+                <property name="dx" value="0.6"/>
+                <property name="st" value="5"/>
                 <property name="xp" value="0"/>
                 <property name="lvl" value="0"/>
             </properties>
 
         </object>
-        <object name="door_closed" type="door" x="450" y="100" width="50" height="50"/>
-        <object name="door_closed" type="door" x="950" y="100" width="50" height="50"/>
+
+        <object name="door_closed" type="door" x="0" y="100" width="50" height="50">
+            <properties>
+                <property name="isLocked" value="1"/>
+            </properties>
+        </object>
+        <object name="door_closed" type="door" x="450" y="100" width="50" height="50">
+            <properties>
+                <property name="isLocked" value="0"/>
+            </properties>
+        </object>
+        <object name="door_closed" type="door" x="950" y="100" width="50" height="50">
+            <properties>
+                <property name="isLocked" value="0"/>
+            </properties>
+        </object>
         <object name="chest_closed" type="chest" x="300" y="250" width="50" height="50">
             <properties>
                 <property name="lockLevel" value="1"/>
                 <property name="isLocked" value="1"/>
             </properties>
+            <!--            <object></object>-->
         </object>
         <object name="weapon_axe" type="item" subType="weapon" x="250" y="200" width="50" height="50">
             <properties>
@@ -46,6 +72,7 @@
                 <property name="state" value="0"/>
             </properties>
         </object>
+
         <object name="key" type="item" subType="key" x="300" y="100" width="50" height="50">
             <properties>
                 <property name="state" value="0"/>
@@ -54,46 +81,69 @@
 
         <object name="potion_power" type="item" subType="potion" x="200" y="250" width="50" height="50">
             <properties>
-                <property name="power" value="20"/>
+                <property name="pw" value="20"/>
                 <property name="state" value="0"/>
             </properties>
         </object>
 
         <object name="potion_health" type="item" subType="potion" x="250" y="250" width="50" height="50">
             <properties>
-                <property name="health" value="20"/>
+                <property name="hp" value="20"/>
                 <property name="state" value="0"/>
             </properties>
         </object>
-
-        <object name="potion_precision" type="item" subType="potion" x="250" y="50" width="50" height="50">
+        <object name="potion_dexterity" type="item" subType="potion" x="400" y="100" width="50" height="50">
             <properties>
-                <property name="precision" value="20"/>
+                <property name="dx" value="0.2"/>
                 <property name="state" value="0"/>
             </properties>
         </object>
-
-        <object name="potion_precision" type="item" subType="potion" x="300" y="50" width="50" height="50">
+        <object name="potion_speed" type="item" subType="potion" x="200" y="100" width="50" height="50">
             <properties>
-                <property name="precision" value="20"/>
+                <property name="sp" value="0.1"/>
                 <property name="state" value="0"/>
             </properties>
         </object>
-
-        <object name="potion_speed" type="item" subType="potion" x="350" y="50" width="50" height="50">
+        <object name="potion_stamina" type="item" subType="potion" x="250" y="100" width="50" height="50">
             <properties>
-                <property name="speed" value="20"/>
+                <property name="st" value="10"/>
                 <property name="state" value="0"/>
             </properties>
         </object>
 
-        <object name="potion_stamina" type="item" subType="potion" x="400" y="50" width="50" height="50">
+        <object name="armor_helmet_diamond" type="item" subType="equipment" x="300" y="150" width="50" height="50">
             <properties>
-                <property name="stamina" value="20"/>
+                <property name="protection" value="10"/>
+                <property name="eqType" value="0"/>
+                <property name="materialType" value="2"/>
                 <property name="state" value="0"/>
             </properties>
         </object>
 
+        <object name="armor_shield_gold" type="item" subType="equipment" x="250" y="150" width="50" height="50">
+            <properties>
+                <property name="protection" value="20"/>
+                <property name="eqType" value="1"/>
+                <property name="materialType" value="1"/>
+                <property name="state" value="0"/>
+            </properties>
+        </object>
 
+        <object name="armor_breastplate_bronze" type="item" subType="equipment" x="350" y="150" width="50" height="50">
+            <properties>
+                <property name="protection" value="30"/>
+                <property name="eqType" value="2"/>
+                <property name="materialType" value="0"/>
+                <property name="state" value="0"/>
+            </properties>
+        </object>
+        <object name="armor_breastplate_diamond" type="item" subType="equipment" x="350" y="50" width="50" height="50">
+            <properties>
+                <property name="protection" value="50"/>
+                <property name="eqType" value="2"/>
+                <property name="materialType" value="2"/>
+                <property name="state" value="0"/>
+            </properties>
+        </object>
     </objectgroup>
 </map>

@@ -32,7 +32,6 @@ bool Level::loadMapFromFile(const std::string &filename) {
     TiXmlElement *image;
     image = tilesetElement->FirstChildElement("image");
     std::string imagePath = image->Attribute("source");
-
     // ПУТЬ К ТАЙЛСЕТУ, загрузка
     sf::Image img;
     if (!img.loadFromFile("../res/" + imagePath)) {
@@ -296,7 +295,6 @@ bool Level::loadStateFromFile(const std::string &filename) {
                 if (objectElement->Attribute("name") != nullptr) {
                     objectName = objectElement->Attribute("name");
                 }
-
 
                 int x = atoi(objectElement->Attribute("x"));
                 int y = atoi(objectElement->Attribute("y"));

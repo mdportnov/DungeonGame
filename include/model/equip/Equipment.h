@@ -1,19 +1,22 @@
 #pragma once
+
 #include "include/model/Item.h"
 
-enum class EquipmentTypes {
-    HELMET, BREASTPLATE, BOOTS
+enum EquipmentTypes {
+    HELMET, SHIELD, BREASTPLATE
+};
+enum EquipmentMaterials {
+    BRONZE, GOLD, DIAMOND
 };
 
 class Equipment : public Item {
 public:
-//    Equipment(Level &level, string &fileName, string &name, float x, float y, float w, float h, const string &type,
-//              int protection, const string &material) : Item(level, fileName, name, x, y, w, h), type(type),
-//                                                        protection(protection), material(material) {};
-
+    Equipment(Level &level, string &fileName, string &name, string &type, string &subType,
+              float x, float y, float w, float h, int state, float protection, int eqType,
+              int materialType);
 
 public:
-    string type;
-    int protection{};
-    string material;
+    float protection;
+    int eqType;
+    int materialType;
 };

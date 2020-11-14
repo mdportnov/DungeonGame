@@ -20,18 +20,17 @@ class Player : public Unit {
 private:
     int defaultDamage = 10;
 public:
-    Equipment *equipment[3]{}; // helmet, breastplate, boots
-//    std::list<Potion> potions;
-    std::vector<Potion> potions;
-    int currentPotion=0;
-//    vector<Potion>::iterator currentPotion;
+    Equipment *equipment[3] = {nullptr, nullptr, nullptr}; // helmet, breastplate, boots
+    std::vector<Potion *> potions;
+    int currentPotion = 0;
+    bool isPotionUsingNow = false;
 //    TableOfCharacteristics attributes; потом реализовать мапу самому
-    std::map<string, int> attributes;
+    std::map<string, float> attributes;
     BunchOfKeys bunchOfKeys;
     MyView *view;
 
     enum class STATE {
-        stay, onladderup, onladderdown, walk
+        stay, onladderup, onladderdown
     };
 
     STATE STATE = STATE::stay;
@@ -43,7 +42,7 @@ public:
 
     void update(float time) override;
 
-    void init(std::map<string, int> attributes);
+    void init(std::map<string, float> attributes);
 
     void keyboard();
 
@@ -53,9 +52,11 @@ public:
 
     void takeItem(Item *item);
 
-    void drinkPotion(Potion &potion);
+    vector<pair<string, float>> drinkPotion();
 
     void acceptDamageFrom(Unit &unit) override;
+
+    float calculateProtection();
 
     void draw(RenderWindow &window) override;
 
@@ -63,7 +64,7 @@ public:
 
     void improveCharacteristicByXP(string shortname);
 
-    int calculateProtection();
+    bool isHit(double prob);
 
-    bool updateWearings();
+    void deletePotion();
 };

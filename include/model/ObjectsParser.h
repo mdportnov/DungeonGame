@@ -75,6 +75,15 @@ public:
             object->SetDoubleAttribute("y", it->y);
             object->SetDoubleAttribute("width", it->w);
             object->SetDoubleAttribute("height", it->h);
+            properties = new TiXmlElement("properties");
+            auto *property = new TiXmlElement("property");
+            property = new TiXmlElement("property");
+            property->SetAttribute("name", "isLocked");
+            property->SetAttribute("value", to_string(it->isLocked).c_str());
+            properties->LinkEndChild(property);
+
+            object->LinkEndChild(properties);
+
             objects->LinkEndChild(object);
         }
 
@@ -99,16 +108,14 @@ public:
             properties->LinkEndChild(property);
 
             object->LinkEndChild(properties);
+            objects->LinkEndChild(object);
         }
-        objects->LinkEndChild(object);
 
         // Оружие, зелья, ключи
         for (auto &it: itemsList) {
             object = new TiXmlElement("object");
 
             properties = new TiXmlElement("properties");
-            string name;
-            string value;
 
             object->SetAttribute("name", it->name.c_str());
             object->SetAttribute("type", "item");
@@ -118,36 +125,46 @@ public:
             object->SetDoubleAttribute("width", it->w);
             object->SetDoubleAttribute("height", it->h);
 
+            auto *property = new TiXmlElement("property");
+
             if (dynamic_cast<Weapon *>(it) != nullptr) {
-                auto *property = new TiXmlElement("property");
-
-                property->SetAttribute("name", "damage");
-                property->SetAttribute("value", to_string((int)dynamic_cast<Weapon *>(it)->getDamage()).c_str());
-                properties->LinkEndChild(property);
-
                 property = new TiXmlElement("property");
-                property->SetAttribute("name", "state");
-                property->SetAttribute("value", it->state);
+                property->SetAttribute("name", "damage");
+                property->SetAttribute("value", to_string((int) dynamic_cast<Weapon *>(it)->getDamage()).c_str());
                 properties->LinkEndChild(property);
             }
             if (dynamic_cast<Potion *>(it) != nullptr)
                 for (auto &i:  dynamic_cast<Potion *>(it)->changesList) {
-                    auto *property = new TiXmlElement("property");
+                    property = new TiXmlElement("property");
                     property->SetAttribute("name", (i.first).c_str());
                     property->SetAttribute("value", to_string(i.second).c_str());
                     properties->LinkEndChild(property);
-
-                    property = new TiXmlElement("property");
-                    property->SetAttribute("name", "state");
-                    property->SetAttribute("value", it->state);
-                    properties->LinkEndChild(property);
                 }
-            if (dynamic_cast<Key *>(it) != nullptr) {
-                auto *property = new TiXmlElement("property");
-                property->SetAttribute("name", "state");
-                property->SetAttribute("value", it->state);
+            if (dynamic_cast<Equipment *>(it) != nullptr) {
+                auto i = dynamic_cast<Equipment *>(it);
+                property = new TiXmlElement("property");
+                property->SetAttribute("name", "protection");
+                property->SetAttribute("value", to_string(i->protection).c_str());
+                properties->LinkEndChild(property);
+
+                property = new TiXmlElement("property");
+                property->SetAttribute("name", "eqType");
+                property->SetAttribute("value", i->eqType);
+                properties->LinkEndChild(property);
+
+                property = new TiXmlElement("property");
+                property->SetAttribute("name", "materialType");
+                property->SetAttribute("value", i->materialType);
                 properties->LinkEndChild(property);
             }
+
+//            if (dynamic_cast<Key *>(it) != nullptr) {
+//            }
+            property = new TiXmlElement("property");
+
+            property->SetAttribute("name", "state");
+            property->SetAttribute("value", it->state);
+            properties->LinkEndChild(property);
 
             object->LinkEndChild(properties);
             objects->LinkEndChild(object);

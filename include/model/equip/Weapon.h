@@ -7,12 +7,12 @@
 class Weapon : public Item {
 public:
     Weapon(Level &level, string &fileName, string &name, string &type, string &subType,
-           float x, float y, float w, float h, int damage, int state);
+           float x, float y, float w, float h, int state, float damage);
 
     float getDamage() const;
 
 private:
-    int damage;
+    float damage;
 
     void calculateDamage();
 };

@@ -23,7 +23,7 @@ namespace MyGame {
             window(nullptr) {
     }
 
-    DungeonGameApp::~DungeonGameApp() = default;;
+    DungeonGameApp::~DungeonGameApp() = default;
 
     void DungeonGameApp::Init() {
         window = new sf::RenderWindow(sf::VideoMode(600, 400), "DungeonGame");
@@ -50,19 +50,19 @@ namespace MyGame {
         sf::Sound doorSound;
         doorSound.setBuffer(buffer3);
 
-        Clock clock, attackClock, doorClock, chestClock;
+        Clock clock, attackClock, doorClock, chestClock, potionsClock, ladderClock, usingPotionClock;
 
         Level level;
         level.loadMapFromFile("../res/level1.tmx");
-        level.loadStateFromFile("../res/level1objectss.xml");
+        level.loadStateFromFile("../res/level1objects.xml");
 
         MapObject player = level.getPlayer();
         Player p(level, myView, player.imagePath, player.name, player.rect.left, player.rect.top, player.rect.width,
                  player.rect.height);
 
-        std::map<string, int> tmpMap;
+        std::map<string, float> tmpMap;
         for (auto &a: player.properties) {
-            tmpMap.insert({a.first, std::stoi(a.second)});
+            tmpMap.insert({a.first, std::stof(a.second)});
         }
 
         p.init(tmpMap);
@@ -82,47 +82,73 @@ namespace MyGame {
         vector<MapObject> chestsObjects = level.getChests();
         list<Chest *> chestsList;
 
-        for (auto &i : enemiesObjects) {
+        vector<pair<string, float>> changesList;
+
+        for (auto i : enemiesObjects) {
             enemiesList.push_back(
                     new Enemy(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width, i.rect.height));
         }
 
-        for (auto &i : doorsObjects) {
+        for (auto i : doorsObjects) {
             doorsList.push_back(
-                    new Door(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width, i.rect.height));
+                    new Door(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width, i.rect.height,
+                             (bool) std::stoi(i.properties["isLocked"])));
         }
 
-        for (auto &i : chestsObjects) {
+        for (auto i : chestsObjects) {
             chestsList.push_back(
                     new Chest(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width,
                               i.rect.height, std::stoi(i.properties["lockLevel"]),
                               (bool) std::stoi(i.properties["isLocked"])));
         }
 
-        for (auto &i : itemsObjects) {
+        for (auto i : itemsObjects) {
             if (i.subType == "potion") {
-                vector<pair<string, int>> changesList;
+                vector<pair<string, float>> changesList;
                 for (auto &prop : i.properties) {
-                    changesList.emplace_back(prop.first, stoi(prop.second));
+                    if (prop.first != "state")
+                        changesList.emplace_back(prop.first, stof(prop.second));
                 }
                 itemsList.push_back(
                         new Potion(level, i.imagePath, i.name, i.type, i.subType,
                                    i.rect.left, i.rect.top, i.rect.width, i.rect.height,
-                                   std::stoi(i.properties["state"]),
-                                   changesList));
+                                   std::stoi(i.properties["state"]), changesList));
             }
             if (i.subType == "weapon")
                 itemsList.push_back(
                         new Weapon(level, i.imagePath, i.name, i.type, i.subType,
                                    i.rect.left, i.rect.top, i.rect.width, i.rect.height,
                                    std::stoi(i.properties["state"]),
-                                   std::stoi(i.properties["damage"])));
+                                   std::stof(i.properties["damage"])));
             if (i.subType == "key")
                 itemsList.push_back(
                         new Key(level, i.imagePath, i.name, i.type, i.subType,
                                 i.rect.left, i.rect.top, i.rect.width, i.rect.height,
-                                std::stoi(i.properties["state"])
+                                std::stoi(i.properties["state"])));
+
+            if (i.subType == "equipment")
+                itemsList.push_back(
+                        new Equipment(level, i.imagePath, i.name, i.type, i.subType,
+                                      i.rect.left, i.rect.top, i.rect.width, i.rect.height,
+                                      std::stoi(i.properties["state"]),
+                                      std::stof(i.properties["protection"]),
+                                      std::stoi(i.properties["eqType"]),
+                                      std::stoi(i.properties["materialType"])
                         ));
+        }
+
+        for (auto item: itemsList) {
+            if (item->state == Item::STATE::onMe) {
+                if (dynamic_cast<Weapon *>(item) != nullptr) {
+                    p.weapon = dynamic_cast<Weapon *>(item);
+                }
+                if (dynamic_cast<Potion *>(item) != nullptr) {
+                    p.potions.emplace_back(dynamic_cast<Potion *>(item));
+                }
+                if (dynamic_cast<Equipment *>(item) != nullptr) {
+                    p.equipment[dynamic_cast<Equipment *>(item)->eqType] = dynamic_cast<Equipment *>(item);
+                }
+            }
         }
 
         while (window->isOpen()) {
@@ -132,38 +158,63 @@ namespace MyGame {
             if (Keyboard::isKeyPressed(Keyboard::W)) p.key["W"] = true;
             if (Keyboard::isKeyPressed(Keyboard::S)) p.key["S"] = true;
 
-            Event event;
-            bool ladderUsed = false;
+            Event event{};
             if (time > 60) {
                 clock.restart();
 
                 while (window->pollEvent(event)) {
                     if (event.type == sf::Event::Closed)
                         window->close();
-                    if (p.STATE == Player::STATE::onladderup && !ladderUsed) {
-                        level.goUp();
-                        p.STATE = Player::STATE::stay;
-                        p.map = level.getAllMapObjects();
-                        ladderUsed = true;
-                    }
-                    if (p.STATE == Player::STATE::onladderdown && !ladderUsed) {
-                        level.goDown();
-                        p.STATE = Player::STATE::stay;
-                        p.map = level.getAllMapObjects();
-                        ladderUsed = true;
-                    }
-                    if (Keyboard::isKeyPressed(Keyboard::P)) {
-                        if (p.currentPotion == 3) {
-                            p.currentPotion = 0;
-                            break;
-                        } else {
-                            p.currentPotion++;
-                            break;
+                    if (ladderClock.getElapsedTime().asMilliseconds() > 60) {
+                        ladderClock.restart();
+                        if (p.STATE == Player::STATE::onladderup) {
+                            level.goUp();
+                            p.STATE = Player::STATE::stay;
+                            p.map = level.getAllMapObjects();
                         }
+                        if (p.STATE == Player::STATE::onladderdown) {
+                            level.goDown();
+                            p.STATE = Player::STATE::stay;
+                            p.map = level.getAllMapObjects();
+                        }
+                    }
+
+                    if (potionsClock.getElapsedTime().asMilliseconds() > 100) {
+                        if (Keyboard::isKeyPressed(Keyboard::O)) {
+                            potionsClock.restart();
+                            if (p.currentPotion == p.potions.size() - 1) {
+                                p.currentPotion = 0;
+                                break;
+                            } else {
+                                p.currentPotion++;
+                                break;
+                            }
+                        }
+                        if (Keyboard::isKeyPressed(Keyboard::P) && !p.isPotionUsingNow) {
+                            potionsClock.restart();
+                            usingPotionClock.restart();
+
+                            changesList = p.drinkPotion();
+                            p.isPotionUsingNow = true;
+                            if (!p.potions.empty()) {
+                                p.attributes[changesList[0].first] += changesList[0].second;
+                            }
+                        }
+
                     }
                 }
 
                 p.update(time);
+
+                if (usingPotionClock.getElapsedTime().asSeconds() > 5 &&
+                    !changesList.empty()) {
+                    p.isPotionUsingNow = false;
+                    if (changesList[0].first != "hp") {
+                        p.attributes[changesList[0].first] -= changesList[0].second;
+                    }
+                    p.deletePotion();
+                    changesList.clear();
+                }
 
                 for (auto it = enemiesList.begin(); it != enemiesList.end(); it++) {
                     Enemy *b = *it;
@@ -297,9 +348,5 @@ namespace MyGame {
             delete window;
             window = nullptr;
         }
-    }
-
-    void DungeonGameApp::playSound(string name) {
-
     }
 }

@@ -1,8 +1,15 @@
 #include "include/model/Door.h"
 
-Door::Door(Level &level, string &fileName, string &name,
-           float x, float y, float w, float h) : ObjectOnField(level, fileName, name, x, y, w, h) {
-    isLocked = true;
+Door::Door(Level &level, string &fileName, string &name, float x, float y, float w, float h, bool isLocked)
+        : ObjectOnField(level, fileName, name, x, y, w, h) {
+    this->isLocked = isLocked;
+
+    if(!isLocked){
+        this->image.loadFromFile("../res/img/door_opened.png");
+        texture.loadFromImage(image);
+        sprite.setTexture(texture);
+        sprite.setTextureRect(IntRect(0, 0, w, h));
+    }
 }
 
 void Door::update() {

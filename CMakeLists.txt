@@ -43,6 +43,6 @@ add_executable(DungeonGame
         src/classes/Level.cpp include/model/Level.h
 
         ${TINY_SOURCES}
-        src/classes/ObjectOnField.cpp include/model/MyView.h src/classes/Unit.cpp src/classes/Player.cpp src/classes/MyView.cpp src/classes/Enemy.cpp src/classes/Item.cpp include/model/MapObject.h src/classes/MapObject.cpp include/model/Layer.h src/classes/Layer.cpp src/classes/Door.cpp include/model/Door.h src/classes/Chest.cpp src/classes/equip/Weapon.cpp src/classes/equip/Potion.cpp src/classes/equip/BunchOfKeys.cpp src/classes/equip/Key.cpp include/model/equip/Key.h src/classes/InfoBar.cpp include/model/InfoBar.h)
+        src/classes/ObjectOnField.cpp include/model/MyView.h src/classes/Unit.cpp src/classes/Player.cpp src/classes/MyView.cpp src/classes/Enemy.cpp src/classes/Item.cpp include/model/MapObject.h src/classes/MapObject.cpp include/model/Layer.h src/classes/Layer.cpp src/classes/Door.cpp include/model/Door.h src/classes/Chest.cpp src/classes/equip/Weapon.cpp src/classes/equip/Potion.cpp src/classes/equip/BunchOfKeys.cpp src/classes/equip/Key.cpp include/model/equip/Key.h src/classes/InfoBar.cpp include/model/InfoBar.h src/classes/equip/Equipment.cpp)
 
 target_link_libraries(DungeonGame sfml-graphics sfml-audio)

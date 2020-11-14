@@ -11,7 +11,6 @@ public:
         onMap, onMe, nowhere
     };
 
-//    bool onMap = true;
-    STATE state = onMap;
+    STATE state;
 };
 

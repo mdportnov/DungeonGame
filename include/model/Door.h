@@ -8,7 +8,7 @@ public:
 
     FloatRect getAreaRect();
 
-    Door(Level &level, string &fileName, string &name, float x, float y, float w, float h);
+    Door(Level &level, string &fileName, string &name, float x, float y, float w, float h, bool b);
 
     void update();
 
