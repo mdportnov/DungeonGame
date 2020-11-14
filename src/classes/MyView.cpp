@@ -42,11 +42,11 @@ void MyView::changeView() {
 //    }
 
     if (Keyboard::isKeyPressed(Keyboard::I)) {
-        view.setSize(640, 480);//устанавливает размер камеры (наш исходный)
+        view.setSize(600, 400);//устанавливает размер камеры (наш исходный)
     }
 
-    if (Keyboard::isKeyPressed(Keyboard::P)) {
-        view.setSize(540, 380);//например другой размер
-    }
+//    if (Keyboard::isKeyPressed(Keyboard::P)) {
+//        view.setSize(540, 380);//например другой размер
+//    }
 }
 

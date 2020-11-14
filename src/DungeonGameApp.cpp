@@ -38,11 +38,23 @@ namespace MyGame {
         mainSound.setBuffer(buffer);
         mainSound.play();
 
-        Clock clock;
+        sf::SoundBuffer buffer1;
+        if (!buffer1.loadFromFile("../res/sound/chest.wav"))
+            std::cout << "Unable to load game sound";
+        sf::Sound chestSound;
+        chestSound.setBuffer(buffer1);
+
+        sf::SoundBuffer buffer3;
+        if (!buffer3.loadFromFile("../res/sound/door.ogg"))
+            std::cout << "Unable to load game sound";
+        sf::Sound doorSound;
+        doorSound.setBuffer(buffer3);
+
+        Clock clock, attackClock, doorClock, chestClock;
 
         Level level;
         level.loadMapFromFile("../res/level1.tmx");
-        level.loadStateFromFile("../res/level1objects.xml");
+        level.loadStateFromFile("../res/level1objectss.xml");
 
         MapObject player = level.getPlayer();
         Player p(level, myView, player.imagePath, player.name, player.rect.left, player.rect.top, player.rect.width,
@@ -83,7 +95,8 @@ namespace MyGame {
         for (auto &i : chestsObjects) {
             chestsList.push_back(
                     new Chest(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width,
-                              i.rect.height));
+                              i.rect.height, std::stoi(i.properties["lockLevel"]),
+                              (bool) std::stoi(i.properties["isLocked"])));
         }
 
         for (auto &i : itemsObjects) {
@@ -95,17 +108,21 @@ namespace MyGame {
                 itemsList.push_back(
                         new Potion(level, i.imagePath, i.name, i.type, i.subType,
                                    i.rect.left, i.rect.top, i.rect.width, i.rect.height,
+                                   std::stoi(i.properties["state"]),
                                    changesList));
             }
             if (i.subType == "weapon")
                 itemsList.push_back(
                         new Weapon(level, i.imagePath, i.name, i.type, i.subType,
                                    i.rect.left, i.rect.top, i.rect.width, i.rect.height,
+                                   std::stoi(i.properties["state"]),
                                    std::stoi(i.properties["damage"])));
             if (i.subType == "key")
                 itemsList.push_back(
                         new Key(level, i.imagePath, i.name, i.type, i.subType,
-                                i.rect.left, i.rect.top, i.rect.width, i.rect.height));
+                                i.rect.left, i.rect.top, i.rect.width, i.rect.height,
+                                std::stoi(i.properties["state"])
+                        ));
         }
 
         while (window->isOpen()) {
@@ -117,8 +134,7 @@ namespace MyGame {
 
             Event event;
             bool ladderUsed = false;
-            bool doorUsed = false;
-            if (time > 50) {
+            if (time > 60) {
                 clock.restart();
 
                 while (window->pollEvent(event)) {
@@ -136,6 +152,15 @@ namespace MyGame {
                         p.map = level.getAllMapObjects();
                         ladderUsed = true;
                     }
+                    if (Keyboard::isKeyPressed(Keyboard::P)) {
+                        if (p.currentPotion == 3) {
+                            p.currentPotion = 0;
+                            break;
+                        } else {
+                            p.currentPotion++;
+                            break;
+                        }
+                    }
                 }
 
                 p.update(time);
@@ -149,49 +174,49 @@ namespace MyGame {
                     }
                 }
 
-                for (auto b : doorsList) {
-                    if (p.getRect().intersects(b->getRect()) && b->isLocked) {
-                        if (p.dy > 0) {
-                            p.y = b->getRect().top - p.h;
-                            p.dy = 0;
+                if (doorClock.getElapsedTime().asMilliseconds() > 200) {
+                    for (auto b : doorsList) {
+                        if (p.getRect().intersects(b->getRect()) && b->isLocked) {
+                            if (p.dy > 0) {
+                                p.y = b->getRect().top - p.h;
+                                p.dy = 0;
+                            }
+                            if (p.dy < 0) {
+                                p.y = b->getRect().top + b->getRect().height;
+                                p.dy = 0;
+                            }
+                            if (p.dx > 0) { p.x = b->getRect().left - p.w; }
+                            if (p.dx < 0) { p.x = b->getRect().left + b->getRect().width; }
                         }
-                        if (p.dy < 0) {
-                            p.y = b->getRect().top + b->getRect().height;
-                            p.dy = 0;
-                        }
-                        if (p.dx > 0) { p.x = b->getRect().left - p.w; }
-                        if (p.dx < 0) { p.x = b->getRect().left + b->getRect().width; }
-                    }
 
-                    if (p.getRect().intersects(b->getAreaRect())) {
-                        if (Mouse::isButtonPressed(sf::Mouse::Left) && !doorUsed) {
-                            b->changeDoorState();
-                            doorUsed = true;
+                        if (p.getRect().intersects(b->getAreaRect())) {
+                            if (Mouse::isButtonPressed(sf::Mouse::Left)) {
+                                b->changeDoorState();
+                                doorSound.play();
+                                doorClock.restart();
+                            }
                         }
+                        b->update();
                     }
-                    b->update();
                 }
 
-                for (auto b : chestsList) {
-                    if (p.getRect().intersects(b->getAreaRect())) {
-                        if (Mouse::isButtonPressed(sf::Mouse::Left)) {
-                            b->open(p);
-//                            sf::SoundBuffer buffer;
-//                            if (!buffer.loadFromFile("../res/sound/chest.wav"))
-//                                std::cout << "Unable to load game sound";
-//                            sf::Sound mainSound;
-//                            mainSound.setBuffer(buffer);
-//                            mainSound.play();
+                if (chestClock.getElapsedTime().asMilliseconds() > 50) {
+                    for (auto b : chestsList) {
+                        if (p.getRect().intersects(b->getAreaRect())) {
+                            if (Mouse::isButtonPressed(sf::Mouse::Left) && b->isLocked) {
+                                b->open(p);
+                                chestSound.play();
+                                chestClock.restart();
+                            }
                         }
+                        b->update(time);
                     }
-
-                    b->update(time);
                 }
 
                 for (auto it = itemsList.begin(); it != itemsList.end(); it++) {
                     Item *b = *it;
 
-                    if (p.getRect().intersects(b->getRect())) {
+                    if (p.getRect().intersects(b->getRect()) && b->state != Item::STATE::onMe) {
                         p.takeItem(b);
                     }
 
@@ -202,36 +227,32 @@ namespace MyGame {
                     }
                 }
 
-                for (auto &it : enemiesList) {
-                    float offset = 20;
+                if (attackClock.getElapsedTime().asMilliseconds() > 100)
+                    for (auto &it : enemiesList) {
+                        if (p.getRect().intersects(it->getRect())) {
+                            if (p.dx > 0) {
+                                it->dx = 0.1;
+                            }
 
-                    if (p.getRect().intersects(it->getRect())) {
-                        if (p.dx > 0) {
-                            it->x = p.x + p.w + offset; //отталкиваем его от игрока вправо
-                            it->dx = 0.1;
-                        }
+                            if (p.dx < 0) {
+                                it->dx = -0.1;
+                            }
 
-                        if (p.dx < 0) {
-                            it->x = p.x - it->w - offset; //отталкиваем его от игрока влево
-                            it->dx = -0.1;
-                        }
+                            if (p.dy > 0) {
+                                it->dy = 0.1;
+                            }
 
-                        if (p.dy > 0) {
-                            it->y = p.y + p.h + offset;
-                            it->dy = 0.1;
+                            if (p.dy < 0) {
+                                it->dy = -0.1;
+                            }
+                            it->update(time);
+                            it->dx = 0;
+                            it->dy = 0;
+                            it->acceptDamageFrom(p);
+                            p.acceptDamageFrom(*it);
+                            attackClock.restart();
                         }
-
-                        if (p.dy < 0) {
-                            it->y = p.y - it->h - offset;
-                            it->dy = -0.1;
-                        }
-                        it->update(time);
-                        it->dx = 0;
-                        it->dy = 0;
-                        it->acceptDamageFrom(p);
-                        p.acceptDamageFrom(*it);
                     }
-                }
             }
 
             myView.viewMap(time);
@@ -242,7 +263,7 @@ namespace MyGame {
             level.draw(*window);
 
             for (auto enemy : enemiesList) {
-                if ((*enemy).name == "egorov") {
+//                if ((*enemy).name == "egorov") {
 //                    RectangleShape rect(Vector2f(enemy->getEnemyArea().width, enemy->getEnemyArea().height));
 //                    rect.setPosition(enemy->x - enemy->getEnemyArea().width / 2 + enemy->w / 2,
 //                                     enemy->y - enemy->getEnemyArea().height / 2 + enemy->h / 2);
@@ -250,27 +271,24 @@ namespace MyGame {
 //                    rect.setFillColor(Color::Transparent);
 //                    rect.setOutlineColor(sf::Color(250, 150, 100));
 //                    window->draw(rect);
-                }
-                window->draw(enemy->sprite);
+//                }
+                enemy->draw(*window);
             }
-
             for (auto door: doorsList) {
-                window->draw(door->sprite);
+                door->draw(*window);
             }
             for (auto chest: chestsList) {
-                window->draw(chest->sprite);
+                chest->draw(*window);
             }
-
             for (auto item: itemsList) {
                 if (item->state == Item::onMap)
-                    window->draw(item->sprite);
+                    item->draw(*window);
             }
 
-            window->draw(p.sprite);
-
             infoBar.draw(*window);
+            p.draw(*window);
             window->display();
-            ObjectsParser::saveToFileProgress(level, p, enemiesList, itemsList, doorsList);
+            ObjectsParser::saveToFileProgress(level, p, enemiesList, itemsList, doorsList, chestsList);
         }
     }
 

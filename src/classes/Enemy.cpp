@@ -21,6 +21,8 @@ void Enemy::update(float time) {
 //        }
 }
 
+
+
 void Enemy::checkCollision(int num) {
     for (auto &i : map)
         if (getRect().intersects(i.rect)) {

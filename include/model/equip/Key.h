@@ -7,7 +7,7 @@
 class Key : public Item {
 public:
     Key(Level &level, string &fileName, string &name, string &type, string &subType, float x, float y, float w,
-        float h);
+        float h, int state);
 };
 
 

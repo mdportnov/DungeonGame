@@ -10,6 +10,7 @@
 #include "MyView.h"
 #include "Level.h"
 #include "Door.h"
+#include "list"
 
 class Level;
 
@@ -20,8 +21,10 @@ private:
     int defaultDamage = 10;
 public:
     Equipment *equipment[3]{}; // helmet, breastplate, boots
-    Potion *potions[3];
-
+//    std::list<Potion> potions;
+    std::vector<Potion> potions;
+    int currentPotion=0;
+//    vector<Potion>::iterator currentPotion;
 //    TableOfCharacteristics attributes; потом реализовать мапу самому
     std::map<string, int> attributes;
     BunchOfKeys bunchOfKeys;
@@ -50,9 +53,11 @@ public:
 
     void takeItem(Item *item);
 
-    void drinkPotion(Potion *potion);
+    void drinkPotion(Potion &potion);
 
     void acceptDamageFrom(Unit &unit) override;
+
+    void draw(RenderWindow &window) override;
 
     void openChest();
 

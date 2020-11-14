@@ -1,8 +1,16 @@
 #include "include/model/Chest.h"
 
 Chest::Chest(Level &level, string &fileName, string &name,
-             float x, float y, float w, float h) : ObjectOnField(level, fileName, name, x, y, w, h) {
-
+             float x, float y, float w, float h, int lockLevel, bool isLocked) : ObjectOnField(level, fileName, name, x,
+                                                                                               y, w, h) {
+    this->lockLevel = lockLevel;
+    this->isLocked = isLocked;
+    if(!isLocked){
+        this->image.loadFromFile("../res/img/chest_opened.png");
+        texture.loadFromImage(image);
+        sprite.setTexture(texture);
+        sprite.setTextureRect(IntRect(0, 0, w, h));
+    }
 }
 
 FloatRect Chest::getAreaRect() {

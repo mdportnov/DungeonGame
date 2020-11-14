@@ -25,3 +25,7 @@ void ObjectOnField::update(float time) {
     sprite.setPosition(x, y);
 }
 
+void ObjectOnField::draw(RenderWindow &window) {
+    window.draw(sprite);
+}
+

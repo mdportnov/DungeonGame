@@ -6,11 +6,12 @@
 #include <include/model/Enemy.h>
 #include <include/model/equip/Key.h>
 #include "Door.h"
+#include "Chest.h"
 
 class ObjectsParser {
 public:
     static void saveToFileProgress(const Level &level, const Player &player, const list<Enemy *> &enemiesList,
-                                   const list<Item *> &itemsList, list<Door *> &doorsList) {
+                                   const list<Item *> &itemsList, list<Door *> &doorsList, list<Chest *> chestsList) {
         TiXmlDocument doc;
         auto *decl = new TiXmlDeclaration("1.0", "utf-8", "");
         doc.LinkEndChild(decl);
@@ -77,6 +78,30 @@ public:
             objects->LinkEndChild(object);
         }
 
+        for (auto &it: chestsList) {
+            object = new TiXmlElement("object");
+            object->SetAttribute("name", it->name.c_str());
+            object->SetAttribute("type", "chest");
+            object->SetDoubleAttribute("x", it->x);
+            object->SetDoubleAttribute("y", it->y);
+            object->SetDoubleAttribute("width", it->w);
+            object->SetDoubleAttribute("height", it->h);
+
+            properties = new TiXmlElement("properties");
+            auto *property = new TiXmlElement("property");
+            property->SetAttribute("name", "lockLevel");
+            property->SetAttribute("value", to_string(it->lockLevel).c_str());
+            properties->LinkEndChild(property);
+
+            property = new TiXmlElement("property");
+            property->SetAttribute("name", "isLocked");
+            property->SetAttribute("value", to_string(it->isLocked).c_str());
+            properties->LinkEndChild(property);
+
+            object->LinkEndChild(properties);
+        }
+        objects->LinkEndChild(object);
+
         // Оружие, зелья, ключи
         for (auto &it: itemsList) {
             object = new TiXmlElement("object");
@@ -97,7 +122,12 @@ public:
                 auto *property = new TiXmlElement("property");
 
                 property->SetAttribute("name", "damage");
-                property->SetAttribute("value", to_string(dynamic_cast<Weapon *>(it)->getDamage()).c_str());
+                property->SetAttribute("value", to_string((int)dynamic_cast<Weapon *>(it)->getDamage()).c_str());
+                properties->LinkEndChild(property);
+
+                property = new TiXmlElement("property");
+                property->SetAttribute("name", "state");
+                property->SetAttribute("value", it->state);
                 properties->LinkEndChild(property);
             }
             if (dynamic_cast<Potion *>(it) != nullptr)
@@ -106,18 +136,28 @@ public:
                     property->SetAttribute("name", (i.first).c_str());
                     property->SetAttribute("value", to_string(i.second).c_str());
                     properties->LinkEndChild(property);
+
+                    property = new TiXmlElement("property");
+                    property->SetAttribute("name", "state");
+                    property->SetAttribute("value", it->state);
+                    properties->LinkEndChild(property);
                 }
+            if (dynamic_cast<Key *>(it) != nullptr) {
+                auto *property = new TiXmlElement("property");
+                property->SetAttribute("name", "state");
+                property->SetAttribute("value", it->state);
+                properties->LinkEndChild(property);
+            }
+
             object->LinkEndChild(properties);
             objects->LinkEndChild(object);
         }
 
-//        auto equipment = new TiXmlElement("equipment");
-//        root->LinkEndChild(equipment);
-
         doc.SaveFile("../res/level1objectss.xml");
     }
 
-    static void loadFromFileProgress(const Level &level, const Player &player, const std::list<Enemy *> &enemiesList) {
+    void loadFromFileProgress(const Level &level, const Player &player, const std::list<Enemy *> &enemiesList) {
 
     }
+
 };

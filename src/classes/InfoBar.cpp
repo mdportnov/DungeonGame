@@ -1,4 +1,13 @@
+#include <iomanip>
 #include "include/model/InfoBar.h"
+#include "math.h"
+
+template<typename T>
+std::string to_string_with_precision(const T a_value, const int n = 1) {
+    std::ostringstream out;
+    out << std::setprecision(n) << a_value;
+    return out.str();
+}
 
 void InfoBar::draw(RenderWindow &window) {
     Vector2f center = window.getView().getCenter();
@@ -36,27 +45,41 @@ void InfoBar::draw(RenderWindow &window) {
     window.draw(itemsBar);
 
     if (player->weapon != nullptr) {
-        player->weapon->sprite.setScale(0.7, 0.7);
-        player->weapon->sprite.setPosition(itemsBarOriginX + 10, itemsBarOriginY + 20);
-        Texture texture;
-        Image image;
-        image.loadFromFile("../res/img/items/weapon_axe.png");
-        texture.loadFromImage(image);
-        player->weapon->sprite.setTexture(texture);
-        player->weapon->sprite.setTextureRect(IntRect(0, 0, 50, 50));
-//        window.draw(player->weapon->sprite);
+        player->weapon->sprite.setScale(0.6, 0.6);
+        player->weapon->sprite.setPosition(itemsBarOriginX - 1, itemsBarOriginY);
+        window.draw(player->weapon->sprite);
+
+        Text text;
+        text.setFont(font);
+        text.setPosition(itemsBarOriginX + 13, itemsBarOriginY + 25);
+
+        text.setString(to_string_with_precision(player->weapon->getDamage(), 2));
+        text.setFillColor(Color::Black);
+        text.setCharacterSize(13);
+        window.draw(text);
     }
-//    if (player->potions[0] != nullptr) {
-//        player->potions[0]->sprite.setScale(0.7, 0.7);
-//        player->potions[0]->sprite.setPosition(itemsBarOriginX + 10, itemsBarOriginY + 20);
-//        Texture texture;
-//        Image image;
-//        image.loadFromFile("../res/img/items/weapon_axe.png");
-//        texture.loadFromImage(image);
-//        player->potions[0]->sprite.setTexture(texture);
-//        player->potions[0]->sprite.setTextureRect(IntRect(0, 0, 50, 50));
-//        window.draw(player->potions[0]->sprite);
-//    }
+
+    float potionsOriginY = itemsBarOriginY;
+
+    int index = 0;
+    for (auto &potion : player->potions) {
+        potionsOriginY += 30;
+        potion.sprite.setScale(0.7, 0.7);
+        potion.x = itemsBarOriginX - 3;
+        potion.y = potionsOriginY + 10;
+        potion.sprite.setPosition(potion.x, potion.y);
+
+        window.draw(potion.sprite);
+
+        if (index == player->currentPotion) {
+            RectangleShape usingPotion;
+            usingPotion.setPosition(potion.x, potion.y + 10);
+            usingPotion.setSize({size.x - size.x + 11, 2});
+            usingPotion.setFillColor(Color::Red);
+            window.draw(usingPotion);
+        }
+        index++;
+    }
 
 }
 

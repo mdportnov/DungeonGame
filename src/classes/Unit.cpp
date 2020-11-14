@@ -57,3 +57,6 @@ void Unit::acceptDamageFrom(Unit &unit) {
     health -= unit.calculateDamage();
 }
 
+void Unit::draw(RenderWindow &window) {
+    window.draw(sprite);
+}

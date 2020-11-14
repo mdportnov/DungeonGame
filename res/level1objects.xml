@@ -21,35 +21,79 @@
         </object>
         <object name="door_closed" type="door" x="450" y="100" width="50" height="50"/>
         <object name="door_closed" type="door" x="950" y="100" width="50" height="50"/>
-        <object name="chest_closed" type="chest" x="300" y="250" width="50" height="50"/>
+        <object name="chest_closed" type="chest" x="300" y="250" width="50" height="50">
+            <properties>
+                <property name="lockLevel" value="1"/>
+                <property name="isLocked" value="1"/>
+            </properties>
+        </object>
         <object name="weapon_axe" type="item" subType="weapon" x="250" y="200" width="50" height="50">
             <properties>
                 <property name="damage" value="15"/>
+                <property name="state" value="0"/>
             </properties>
         </object>
         <object name="weapon_gun" type="item" subType="weapon" x="400" y="250" width="50" height="50">
             <properties>
-                <property name="damage" value="30"/>
+                <property name="damage" value="20"/>
+                <property name="state" value="0"/>
             </properties>
         </object>
 
         <object name="weapon_sword" type="item" subType="weapon" x="500" y="250" width="50" height="50">
             <properties>
-                <property name="damage" value="20"/>
+                <property name="damage" value="30"/>
+                <property name="state" value="0"/>
             </properties>
         </object>
-        <object name="key" type="item" subType="key" x="300" y="100" width="50" height="50"/>
+        <object name="key" type="item" subType="key" x="300" y="100" width="50" height="50">
+            <properties>
+                <property name="state" value="0"/>
+            </properties>
+        </object>
 
         <object name="potion_power" type="item" subType="potion" x="200" y="250" width="50" height="50">
             <properties>
-                <property name="damage" value="20"/>
+                <property name="power" value="20"/>
+                <property name="state" value="0"/>
             </properties>
         </object>
 
         <object name="potion_health" type="item" subType="potion" x="250" y="250" width="50" height="50">
             <properties>
                 <property name="health" value="20"/>
+                <property name="state" value="0"/>
             </properties>
         </object>
+
+        <object name="potion_precision" type="item" subType="potion" x="250" y="50" width="50" height="50">
+            <properties>
+                <property name="precision" value="20"/>
+                <property name="state" value="0"/>
+            </properties>
+        </object>
+
+        <object name="potion_precision" type="item" subType="potion" x="300" y="50" width="50" height="50">
+            <properties>
+                <property name="precision" value="20"/>
+                <property name="state" value="0"/>
+            </properties>
+        </object>
+
+        <object name="potion_speed" type="item" subType="potion" x="350" y="50" width="50" height="50">
+            <properties>
+                <property name="speed" value="20"/>
+                <property name="state" value="0"/>
+            </properties>
+        </object>
+
+        <object name="potion_stamina" type="item" subType="potion" x="400" y="50" width="50" height="50">
+            <properties>
+                <property name="stamina" value="20"/>
+                <property name="state" value="0"/>
+            </properties>
+        </object>
+
+
     </objectgroup>
 </map>

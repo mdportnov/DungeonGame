@@ -11,7 +11,7 @@ public:
 
     Potion(Level &level, string &fileName, string &name, string &type, string &subType, float x, float y,
            float w,
-           float h, const vector<pair<string, int>> &changesList);
+           float h, int state, const vector<pair<string, int>> &changesList);
 };
 
 #endif //_POTION_H

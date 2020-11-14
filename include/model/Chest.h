@@ -13,9 +13,10 @@ using namespace std;
 class Chest : public ObjectOnField {
 public:
 
-    bool isLocked = true;
+    bool isLocked;
+    int lockLevel;
 
-    Chest(Level &level, string &fileName, string &name, float x, float y, float w, float h);
+    Chest(Level &level, string &fileName, string &name, float x, float y, float w, float h, int lockLevel, bool isLocked);
 
     FloatRect getAreaRect();
 
@@ -25,15 +26,10 @@ public:
 
     bool open(Player &player);
 
-    void setLockLevel();
-
-    void getLockLevel();
-
     pair<int, int> getInfo();
 
 private:
 //    Item storedItem;
-//    int lockLevel;
 
     int getProbabilityOfOpen(Player hero);
 

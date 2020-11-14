@@ -21,6 +21,8 @@ public:
 
     ObjectOnField(Level &level, string &fileName, string &name, float x, float y, float w, float h);
 
+    virtual void draw(RenderWindow &window);
+
     float getX() const;
 
     float getY() const;

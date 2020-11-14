@@ -31,6 +31,8 @@ public:
 
     virtual void acceptDamageFrom(Unit &unit);
 
+    virtual void draw(RenderWindow &window);
+
     float calculateDamage();
 
     void makeDamage(Unit to);
