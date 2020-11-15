@@ -8,7 +8,7 @@ using namespace std;
 
 #include "Equipment.h"
 
-class ArtefactEquipment : public Equipme#pragma oncent {
+class ArtefactEquipment : public Equipment {
 public:
     vector<pair<string, float>> changesListA;
 
