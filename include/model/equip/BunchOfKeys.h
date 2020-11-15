@@ -16,9 +16,10 @@ public:
 
     void addNewOne();
 
+    int getSize();
+
 private:
-    int size;
-    string name;
+    int size = 0;
     int maxSize = 5;
 };
 

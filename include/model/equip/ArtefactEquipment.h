@@ -1,20 +1,18 @@
+#pragma once
+
 #include "vector"
 #include "utility"
 #include "string"
+
 using namespace std;
 
-
-#ifndef _ARTEFACTEQUIPMENT_H
-#define _ARTEFACTEQUIPMENT_H
-
-#include "Artefact.h"
 #include "Equipment.h"
 
-
-class ArtefactEquipment: public Artefact, public Equipment {
+class ArtefactEquipment : public Equipme#pragma oncent {
 public:
+    vector<pair<string, float>> changesListA;
 
-    ArtefactEquipment() {}
+    ArtefactEquipment(Level &level, string &fileName, string &name, string &type, string &subType, float x, float y,
+                      float w, float h, int state, float protection, int eqType, int materialType,
+                      const vector<pair<string, float>> &changesListA);
 };
-
-#endif //_ARTEFACTEQUIPMENT_H

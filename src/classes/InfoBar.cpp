@@ -25,7 +25,7 @@ void InfoBar::draw(RenderWindow &window) {
     window.draw(charsBar);
     barOriginX += 5;
 
-    for (auto ch: player->attributes) {
+    for (const auto &ch: player->attributes) {
         Text text;
         text.setFont(font);
         text.setPosition(barOriginX, barOriginY + 2);
@@ -115,6 +115,26 @@ void InfoBar::draw(RenderWindow &window) {
         }
         equipOriginY += 30;
     }
+
+    float keyOriginX = center.x + size.x / 2 - 40;
+    float keyOriginY = center.y + size.y / 2 - 90;
+
+    Sprite keySprite;
+    Image keyImage;
+    keyImage.loadFromFile("../res/img/items/key.png");
+    Texture texture;
+    texture.loadFromImage(keyImage);
+    keySprite.setTexture(texture);
+
+    keySprite.setPosition(keyOriginX, keyOriginY);
+    keySprite.setScale(0.5, 0.5);
+    text.setPosition(keyOriginX+15, keyOriginY+10);
+
+    text.setString(to_string(player->bunchOfKeys.getSize()));
+    text.setFillColor(Color::Black);
+    text.setCharacterSize(13);
+    window.draw(keySprite);
+    window.draw(text);
 
 }
 

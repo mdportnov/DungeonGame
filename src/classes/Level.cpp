@@ -296,8 +296,8 @@ bool Level::loadStateFromFile(const std::string &filename) {
                     objectName = objectElement->Attribute("name");
                 }
 
-                int x = atoi(objectElement->Attribute("x"));
-                int y = atoi(objectElement->Attribute("y"));
+                int x = stoi(objectElement->Attribute("x"));
+                int y = stoi(objectElement->Attribute("y"));
 
                 int width, height;
                 sf::Sprite sprite;

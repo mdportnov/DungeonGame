@@ -5,6 +5,9 @@ namespace MyGame {
     protected:
         sf::RenderWindow *window;
     public:
+        sf::SoundBuffer buffer1, buffer2, buffer3;
+        sf::Sound doorSound, chestSound, mainSound;
+
         DungeonGameApp();
 
         ~DungeonGameApp();
@@ -14,6 +17,8 @@ namespace MyGame {
         void Run();
 
         void End();
+
+        void MusicInit();
 
         void playSound(std::string name);
     };

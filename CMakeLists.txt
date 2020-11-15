@@ -21,7 +21,6 @@ add_executable(DungeonGame
         src/DungeonGameApp.cpp
         include/DungeonGameApp.h
         include/model/Player.h
-        include/model/equip/Artefact.h
         include/model/equip/ArtefactEquipment.h
         include/model/equip/ArtefactWeapon.h
         include/model/equip/BunchOfKeys.h
@@ -30,7 +29,6 @@ add_executable(DungeonGame
         include/model/equip/EnchantedArtefactWeapon.h
         include/model/equip/EnchantedWeapon.h
         include/model/equip/Equipment.h
-        include/model/equip/EquipmentMaterials.h
         include/model/Item.h
         include/model/ObjectOnField.h
         include/model/equip/Potion.h
@@ -43,6 +41,6 @@ add_executable(DungeonGame
         src/classes/Level.cpp include/model/Level.h
 
         ${TINY_SOURCES}
-        src/classes/ObjectOnField.cpp include/model/MyView.h src/classes/Unit.cpp src/classes/Player.cpp src/classes/MyView.cpp src/classes/Enemy.cpp src/classes/Item.cpp include/model/MapObject.h src/classes/MapObject.cpp include/model/Layer.h src/classes/Layer.cpp src/classes/Door.cpp include/model/Door.h src/classes/Chest.cpp src/classes/equip/Weapon.cpp src/classes/equip/Potion.cpp src/classes/equip/BunchOfKeys.cpp src/classes/equip/Key.cpp include/model/equip/Key.h src/classes/InfoBar.cpp include/model/InfoBar.h src/classes/equip/Equipment.cpp)
+        src/classes/ObjectOnField.cpp include/model/MyView.h src/classes/Unit.cpp src/classes/Player.cpp src/classes/MyView.cpp src/classes/Enemy.cpp src/classes/Item.cpp include/model/MapObject.h src/classes/MapObject.cpp include/model/Layer.h src/classes/Layer.cpp src/classes/Door.cpp include/model/Door.h src/classes/Chest.cpp src/classes/equip/Weapon.cpp src/classes/equip/Potion.cpp src/classes/equip/BunchOfKeys.cpp src/classes/equip/Key.cpp include/model/equip/Key.h src/classes/InfoBar.cpp include/model/InfoBar.h src/classes/equip/Equipment.cpp src/classes/equip/EnchantedWeapon.cpp src/classes/equip/ArtefactEquipment.cpp include/model/equip/ArtefactWeapon.cpp)
 
 target_link_libraries(DungeonGame sfml-graphics sfml-audio)

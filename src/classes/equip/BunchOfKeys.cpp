@@ -10,3 +10,7 @@ void BunchOfKeys::brokeKey() {
     if (size > 0)
         size--;
 }
+
+int BunchOfKeys::getSize() {
+    return size;
+}

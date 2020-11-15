@@ -1,19 +1,14 @@
+#pragma once
+
 #include "vector"
 #include "utility"
 #include "string"
-using namespace std;
-
-#ifndef _ARTEFACTWEAPON_H
-#define _ARTEFACTWEAPON_H
-
-#include "Artefact.h"
 #include "Weapon.h"
 
+using namespace std;
 
-class ArtefactWeapon: public Artefact, public Weapon {
+class ArtefactWeapon : public Weapon {
 public:
 
-vector<pair<string, int>> changesListA();
+    vector<pair<string, float>> changesListA();
 };
-
-#endif //_ARTEFACTWEAPON_H

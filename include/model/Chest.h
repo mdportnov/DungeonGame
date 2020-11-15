@@ -12,28 +12,26 @@ using namespace std;
 
 class Chest : public ObjectOnField {
 public:
-
     bool isLocked;
     int lockLevel;
 
-    Chest(Level &level, string &fileName, string &name, float x, float y, float w, float h, int lockLevel, bool isLocked);
+    Chest(Level &level, string &fileName, string &name, float x, float y, float w, float h, int lockLevel,
+          bool isLocked);
 
     FloatRect getAreaRect();
 
-    void setItem(Item item);
-
-    Item getItem();
+    void setItem(Item *item);
 
     bool open(Player &player);
+
+    bool canOpen(double prob);
 
     pair<int, int> getInfo();
 
 private:
-//    Item storedItem;
+    Item *storedItem;
 
-    int getProbabilityOfOpen(Player hero);
-
-    int getProbabilityOfBroken(Player hero);
+    float getProbabilityOfOpen(Player &player);
 };
 
 #endif //_CHEST_H

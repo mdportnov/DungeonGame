@@ -1,3 +1,4 @@
+#include <random>
 #include "include/model/Chest.h"
 
 Chest::Chest(Level &level, string &fileName, string &name,
@@ -5,11 +6,12 @@ Chest::Chest(Level &level, string &fileName, string &name,
                                                                                                y, w, h) {
     this->lockLevel = lockLevel;
     this->isLocked = isLocked;
-    if(!isLocked){
+    if (!isLocked) {
         this->image.loadFromFile("../res/img/chest_opened.png");
         texture.loadFromImage(image);
         sprite.setTexture(texture);
         sprite.setTextureRect(IntRect(0, 0, w, h));
+        storedItem = nullptr;
     }
 }
 
@@ -18,13 +20,33 @@ FloatRect Chest::getAreaRect() {
 }
 
 bool Chest::open(Player &player) {
-    if (true) {
-        this->image.loadFromFile("../res/img/chest_opened.png");
-        texture.loadFromImage(image);
-        sprite.setTexture(texture);
-        sprite.setTextureRect(IntRect(0, 0, w, h));
-        isLocked = false;
-        return true;
+    if (player.bunchOfKeys.getSize() != 0) {
+        if (canOpen(getProbabilityOfOpen(player))) {
+            this->image.loadFromFile("../res/img/chest_opened.png");
+            texture.loadFromImage(image);
+            sprite.setTexture(texture);
+            sprite.setTextureRect(IntRect(0, 0, w, h));
+            storedItem->state = Item::STATE::onMap;
+            isLocked = false;
+            return true;
+        }
     }
+    player.bunchOfKeys.brokeKey();
     return false;
+}
+
+void Chest::setItem(Item *item) {
+    storedItem = item;
+}
+
+float Chest::getProbabilityOfOpen(Player &player) {
+    float prob = player.attributes["dx"] / 100 + player.attributes["st"] / 100 + player.attributes["lvl"] / 100;
+    cout << prob << endl;
+    return prob;
+}
+
+bool Chest::canOpen(double prob) {
+    std::mt19937 rand_engine(std::random_device{}());
+    std::bernoulli_distribution d(prob);
+    return d(rand_engine);
 }

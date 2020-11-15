@@ -1,5 +1,3 @@
-//#pragma once
-
 #include <include/model/Level.h>
 #include "iostream"
 #include "include/DungeonGameApp.h"
@@ -25,30 +23,28 @@ namespace MyGame {
 
     DungeonGameApp::~DungeonGameApp() = default;
 
+    void DungeonGameApp::MusicInit() {
+        if (!buffer1.loadFromFile("../res/sound/main.ogg"))
+            std::cout << "Unable to load game sound";
+        mainSound.setBuffer(buffer1);
+        mainSound.play();
+
+        if (!buffer2.loadFromFile("../res/sound/chest.wav"))
+            std::cout << "Unable to load game sound";
+        chestSound.setBuffer(buffer2);
+
+        if (!buffer3.loadFromFile("../res/sound/door.ogg"))
+            std::cout << "Unable to load game sound";
+        doorSound.setBuffer(buffer3);
+    }
+
     void DungeonGameApp::Init() {
         window = new sf::RenderWindow(sf::VideoMode(600, 400), "DungeonGame");
         myView.view.reset(sf::FloatRect(0, 0, 600, 400));
     }
 
     void DungeonGameApp::Run() {
-        sf::SoundBuffer buffer;
-        if (!buffer.loadFromFile("../res/sound/main.ogg"))
-            std::cout << "Unable to load game sound";
-        sf::Sound mainSound;
-        mainSound.setBuffer(buffer);
-        mainSound.play();
-
-        sf::SoundBuffer buffer1;
-        if (!buffer1.loadFromFile("../res/sound/chest.wav"))
-            std::cout << "Unable to load game sound";
-        sf::Sound chestSound;
-        chestSound.setBuffer(buffer1);
-
-        sf::SoundBuffer buffer3;
-        if (!buffer3.loadFromFile("../res/sound/door.ogg"))
-            std::cout << "Unable to load game sound";
-        sf::Sound doorSound;
-        doorSound.setBuffer(buffer3);
+        MusicInit();
 
         Clock clock, attackClock, doorClock, chestClock, potionsClock, ladderClock, usingPotionClock;
 
@@ -57,11 +53,12 @@ namespace MyGame {
         level.loadStateFromFile("../res/level1objects.xml");
 
         MapObject player = level.getPlayer();
+
         Player p(level, myView, player.imagePath, player.name, player.rect.left, player.rect.top, player.rect.width,
                  player.rect.height);
 
         std::map<string, float> tmpMap;
-        for (auto &a: player.properties) {
+        for (auto a: player.properties) {
             tmpMap.insert({a.first, std::stof(a.second)});
         }
 
@@ -84,7 +81,7 @@ namespace MyGame {
 
         vector<pair<string, float>> changesList;
 
-        for (auto i : enemiesObjects) {
+        for (const auto &i : enemiesObjects) {
             enemiesList.push_back(
                     new Enemy(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width, i.rect.height));
         }
@@ -104,15 +101,15 @@ namespace MyGame {
 
         for (auto i : itemsObjects) {
             if (i.subType == "potion") {
-                vector<pair<string, float>> changesList;
+                vector<pair<string, float>> chList;
                 for (auto &prop : i.properties) {
                     if (prop.first != "state")
-                        changesList.emplace_back(prop.first, stof(prop.second));
+                        chList.emplace_back(prop.first, stof(prop.second));
                 }
                 itemsList.push_back(
                         new Potion(level, i.imagePath, i.name, i.type, i.subType,
                                    i.rect.left, i.rect.top, i.rect.width, i.rect.height,
-                                   std::stoi(i.properties["state"]), changesList));
+                                   std::stoi(i.properties["state"]), chList));
             }
             if (i.subType == "weapon")
                 itemsList.push_back(
@@ -120,11 +117,6 @@ namespace MyGame {
                                    i.rect.left, i.rect.top, i.rect.width, i.rect.height,
                                    std::stoi(i.properties["state"]),
                                    std::stof(i.properties["damage"])));
-            if (i.subType == "key")
-                itemsList.push_back(
-                        new Key(level, i.imagePath, i.name, i.type, i.subType,
-                                i.rect.left, i.rect.top, i.rect.width, i.rect.height,
-                                std::stoi(i.properties["state"])));
 
             if (i.subType == "equipment")
                 itemsList.push_back(
@@ -135,6 +127,13 @@ namespace MyGame {
                                       std::stoi(i.properties["eqType"]),
                                       std::stoi(i.properties["materialType"])
                         ));
+
+            if (i.subType == "key")
+                itemsList.push_back(
+                        new Key(level, i.imagePath, i.name, i.type, i.subType,
+                                i.rect.left, i.rect.top, i.rect.width, i.rect.height,
+                                std::stoi(i.properties["state"])));
+
         }
 
         for (auto item: itemsList) {
@@ -147,6 +146,13 @@ namespace MyGame {
                 }
                 if (dynamic_cast<Equipment *>(item) != nullptr) {
                     p.equipment[dynamic_cast<Equipment *>(item)->eqType] = dynamic_cast<Equipment *>(item);
+                }
+            }
+            if (item->state == Item::STATE::inChest) {
+                for (auto chest : chestsList) {
+                    if (chest->x == item->x && chest->y == item->y) {
+                        chest->setItem(item);
+                    }
                 }
             }
         }
@@ -179,7 +185,7 @@ namespace MyGame {
                         }
                     }
 
-                    if (potionsClock.getElapsedTime().asMilliseconds() > 100) {
+                    if (potionsClock.getElapsedTime().asMilliseconds() > 60) {
                         if (Keyboard::isKeyPressed(Keyboard::O)) {
                             potionsClock.restart();
                             if (p.currentPotion == p.potions.size() - 1) {
@@ -239,7 +245,6 @@ namespace MyGame {
                             if (p.dx > 0) { p.x = b->getRect().left - p.w; }
                             if (p.dx < 0) { p.x = b->getRect().left + b->getRect().width; }
                         }
-
                         if (p.getRect().intersects(b->getAreaRect())) {
                             if (Mouse::isButtonPressed(sf::Mouse::Left)) {
                                 b->changeDoorState();
@@ -251,12 +256,12 @@ namespace MyGame {
                     }
                 }
 
-                if (chestClock.getElapsedTime().asMilliseconds() > 50) {
+                if (chestClock.getElapsedTime().asMilliseconds() > 70) {
                     for (auto b : chestsList) {
                         if (p.getRect().intersects(b->getAreaRect())) {
                             if (Mouse::isButtonPressed(sf::Mouse::Left) && b->isLocked) {
-                                b->open(p);
-                                chestSound.play();
+                                if (b->open(p))
+                                    chestSound.play();
                                 chestClock.restart();
                             }
                         }
@@ -267,7 +272,7 @@ namespace MyGame {
                 for (auto it = itemsList.begin(); it != itemsList.end(); it++) {
                     Item *b = *it;
 
-                    if (p.getRect().intersects(b->getRect()) && b->state != Item::STATE::onMe) {
+                    if (p.getRect().intersects(b->getRect()) && b->state == Item::STATE::onMap) {
                         p.takeItem(b);
                     }
 

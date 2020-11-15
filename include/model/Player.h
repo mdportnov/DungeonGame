@@ -12,13 +12,9 @@
 #include "Door.h"
 #include "list"
 
-class Level;
-
 using namespace sf;
 
 class Player : public Unit {
-private:
-    int defaultDamage = 10;
 public:
     Equipment *equipment[3] = {nullptr, nullptr, nullptr}; // helmet, breastplate, boots
     std::vector<Potion *> potions;
@@ -42,7 +38,7 @@ public:
 
     void update(float time) override;
 
-    void init(std::map<string, float> attributes);
+    void init(std::map<string, float> t);
 
     void keyboard();
 

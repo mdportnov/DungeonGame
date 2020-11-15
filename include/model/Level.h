@@ -53,7 +53,6 @@ private:
     int countOfLayers;
     float width, height, tileWidth, tileHeight, objectsTileWidth, objectsTileHeight;
     int firstTileID;
-    sf::Rect<float> drawingBounds;
     sf::Texture tileSetImage;
     sf::Texture itemsTileSetImage;
 

@@ -1,8 +1,7 @@
+#pragma once
+
 #include <include/model/Item.h>
 #include "EnchantedWeapon.h"
-#include "Artefact.h"
-
-#pragma once
 
 class Weapon : public Item {
 public:

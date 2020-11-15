@@ -141,6 +141,7 @@ void Player::takeItem(Item *item) {
 
     if (dynamic_cast<Key *>(item) != nullptr) {
         bunchOfKeys.addNewOne();
+        dynamic_cast<Key *>(item)->state = Item::STATE::nowhere;
     }
 }
 
@@ -160,8 +161,8 @@ void Player::deletePotion() {
     }
 }
 
-void Player::init(std::map<string, float> attributes) {
-    this->attributes = std::move(attributes);
+void Player::init(std::map<string, float> t) {
+    this->attributes = std::move(t);
 }
 
 void Player::acceptDamageFrom(Unit &unit) {

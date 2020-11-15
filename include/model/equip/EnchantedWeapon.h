@@ -1,7 +1,10 @@
 #ifndef _ENCHANTEDWEAPON_H
 #define _ENCHANTEDWEAPON_H
 
-class EnchantedWeapon {
+#include "Weapon.h"
+
+class EnchantedWeapon : public Weapon {
+
 };
 
-#endif //_ENCHANTEDWEAPON_H
+#endif
