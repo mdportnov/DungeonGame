@@ -11,9 +11,8 @@ using namespace std;
 
 class Unit : public ObjectOnField {
 public:
-    Weapon *weapon = nullptr; // удалять меньший по урону с карты
     float dx, dy, speed;
-    float health, defaultDamage=5;
+    float health, defaultDamage;
     int framesCount = 0;
     double currentFrame = 0;
     bool isAlive;
@@ -29,11 +28,9 @@ public:
 
     virtual void checkCollision(int num);
 
-    virtual void acceptDamageFrom(Unit &unit);
+    virtual void acceptDamageFrom(Unit *unit);
 
     virtual void draw(RenderWindow &window);
 
-    float calculateDamage();
-
-    void makeDamage(Unit to);
+    virtual float calculateDamage();
 };

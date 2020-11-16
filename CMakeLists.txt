@@ -22,25 +22,48 @@ add_executable(DungeonGame
         include/DungeonGameApp.h
         include/model/Player.h
         include/model/equip/ArtefactEquipment.h
+        include/model/equip/Weapon.h
         include/model/equip/ArtefactWeapon.h
-        include/model/equip/BunchOfKeys.h
-        include/model/table/Characteristic.h
-        include/model/Chest.h
-        include/model/equip/EnchantedArtefactWeapon.h
         include/model/equip/EnchantedWeapon.h
+#        include/model/equip/EnchantedArtefactWeapon.h
+        include/model/equip/BunchOfKeys.h
+        include/model/Chest.h
         include/model/equip/Equipment.h
         include/model/Item.h
         include/model/ObjectOnField.h
         include/model/equip/Potion.h
-        include/model/table/TableOfCharacteristics.h
         include/model/Unit.h
-        include/model/equip/Weapon.h
         include/model/Enemy.h
         include/model/Level.h
         include/model/ObjectsParser.h
+        include/model/Layer.h
+        include/model/equip/Key.h
+        include/model/MyView.h
+        include/model/InfoBar.h
+        include/model/Door.h
+        include/model/MapObject.h
         src/classes/Level.cpp include/model/Level.h
-
+        src/classes/ObjectOnField.cpp
+        src/classes/Unit.cpp
+        src/classes/Player.cpp
+        src/classes/MyView.cpp
+        src/classes/Enemy.cpp
+        src/classes/Item.cpp
+        src/classes/MapObject.cpp
+        src/classes/Layer.cpp
+        src/classes/Door.cpp
+        src/classes/Chest.cpp
+        src/classes/equip/Weapon.cpp
+        src/classes/equip/Potion.cpp
+        src/classes/equip/BunchOfKeys.cpp
+        src/classes/equip/Key.cpp
+        src/classes/InfoBar.cpp
+        src/classes/equip/Equipment.cpp
+        src/classes/equip/EnchantedWeapon.cpp
+        src/classes/equip/ArtefactEquipment.cpp
+        src/classes/equip/ArtefactWeapon.cpp
+#        src/classes/equip/EnchantedArtefactWeapon.cpp
         ${TINY_SOURCES}
-        src/classes/ObjectOnField.cpp include/model/MyView.h src/classes/Unit.cpp src/classes/Player.cpp src/classes/MyView.cpp src/classes/Enemy.cpp src/classes/Item.cpp include/model/MapObject.h src/classes/MapObject.cpp include/model/Layer.h src/classes/Layer.cpp src/classes/Door.cpp include/model/Door.h src/classes/Chest.cpp src/classes/equip/Weapon.cpp src/classes/equip/Potion.cpp src/classes/equip/BunchOfKeys.cpp src/classes/equip/Key.cpp include/model/equip/Key.h src/classes/InfoBar.cpp include/model/InfoBar.h src/classes/equip/Equipment.cpp src/classes/equip/EnchantedWeapon.cpp src/classes/equip/ArtefactEquipment.cpp include/model/equip/ArtefactWeapon.cpp)
+        )
 
 target_link_libraries(DungeonGame sfml-graphics sfml-audio)

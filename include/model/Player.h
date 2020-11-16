@@ -4,7 +4,6 @@
 #include "include/model/equip/Weapon.h"
 #include "include/model/equip/Equipment.h"
 #include "include/model/equip/Potion.h"
-#include "include/model/table/TableOfCharacteristics.h"
 #include "Unit.h"
 #include "list"
 #include "MyView.h"
@@ -18,6 +17,8 @@ class Player : public Unit {
 public:
     Equipment *equipment[3] = {nullptr, nullptr, nullptr}; // helmet, breastplate, boots
     std::vector<Potion *> potions;
+    Weapon *weapon = nullptr; // удалять меньший по урону с карты
+
     int currentPotion = 0;
     bool isPotionUsingNow = false;
 //    TableOfCharacteristics attributes; потом реализовать мапу самому
@@ -50,17 +51,21 @@ public:
 
     vector<pair<string, float>> drinkPotion();
 
-    void acceptDamageFrom(Unit &unit) override;
+    void acceptDamageFrom(Unit *unit) override;
 
     float calculateProtection();
 
     void draw(RenderWindow &window) override;
 
-    void openChest();
+    float getSkillValue(const string &shortname);
+
+    void changeSkillValue(const string &shortname, float diff);
 
     void improveCharacteristicByXP(string shortname);
 
     bool isHit(double prob);
 
     void deletePotion();
+
+    float calculateDamage() override;
 };

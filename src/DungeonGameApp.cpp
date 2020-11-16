@@ -9,6 +9,9 @@
 #include <include/model/Chest.h>
 #include <include/model/equip/Key.h>
 #include <include/model/InfoBar.h>
+#include <include/model/equip/ArtefactWeapon.h>
+#include <include/model/equip/ArtefactEquipment.h>
+#include <include/model/equip/EnchantedWeapon.h>
 #include "include/model/Enemy.h"
 #include "include/model/Door.h"
 
@@ -27,7 +30,7 @@ namespace MyGame {
         if (!buffer1.loadFromFile("../res/sound/main.ogg"))
             std::cout << "Unable to load game sound";
         mainSound.setBuffer(buffer1);
-        mainSound.play();
+//        mainSound.play();
 
         if (!buffer2.loadFromFile("../res/sound/chest.wav"))
             std::cout << "Unable to load game sound";
@@ -117,7 +120,22 @@ namespace MyGame {
                                    i.rect.left, i.rect.top, i.rect.width, i.rect.height,
                                    std::stoi(i.properties["state"]),
                                    std::stof(i.properties["damage"])));
-
+            if (i.subType == "aweapon")
+                itemsList.push_back(
+                        new ArtefactWeapon(level, i.imagePath, i.name, i.type, i.subType,
+                                           i.rect.left, i.rect.top, i.rect.width, i.rect.height,
+                                           std::stoi(i.properties["state"]),
+                                           std::stof(i.properties["damage"]),
+                                           i.properties
+                        ));
+            if (i.subType == "eweapon")
+                itemsList.push_back(
+                        new EnchantedWeapon(level, i.imagePath, i.name, i.type, i.subType,
+                                            i.rect.left, i.rect.top, i.rect.width, i.rect.height,
+                                            std::stoi(i.properties["state"]),
+                                            std::stof(i.properties["damage"]),
+                                            i.properties
+                        ));
             if (i.subType == "equipment")
                 itemsList.push_back(
                         new Equipment(level, i.imagePath, i.name, i.type, i.subType,
@@ -126,6 +144,16 @@ namespace MyGame {
                                       std::stof(i.properties["protection"]),
                                       std::stoi(i.properties["eqType"]),
                                       std::stoi(i.properties["materialType"])
+                        ));
+            if (i.subType == "aequipment")
+                itemsList.push_back(
+                        new ArtefactEquipment(level, i.imagePath, i.name, i.type, i.subType,
+                                              i.rect.left, i.rect.top, i.rect.width, i.rect.height,
+                                              std::stoi(i.properties["state"]),
+                                              std::stof(i.properties["protection"]),
+                                              std::stoi(i.properties["eqType"]),
+                                              std::stoi(i.properties["materialType"]),
+                                              i.properties
                         ));
 
             if (i.subType == "key")
@@ -289,23 +317,20 @@ namespace MyGame {
                             if (p.dx > 0) {
                                 it->dx = 0.1;
                             }
-
                             if (p.dx < 0) {
                                 it->dx = -0.1;
                             }
-
                             if (p.dy > 0) {
                                 it->dy = 0.1;
                             }
-
                             if (p.dy < 0) {
                                 it->dy = -0.1;
                             }
                             it->update(time);
                             it->dx = 0;
                             it->dy = 0;
-                            it->acceptDamageFrom(p);
-                            p.acceptDamageFrom(*it);
+                            it->acceptDamageFrom(&p);
+                            p.acceptDamageFrom(it);
                             attackClock.restart();
                         }
                     }

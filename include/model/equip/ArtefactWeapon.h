@@ -9,6 +9,9 @@ using namespace std;
 
 class ArtefactWeapon : public Weapon {
 public:
+    ArtefactWeapon(Level &level, string &fileName, string &name, string &type, string &subType, float x, float y,
+                   float w, float h, int state, float damage, map<string, string> properties);
 
-    vector<pair<string, float>> changesListA();
+    map<string, string> changesMapFromXML;
+    vector<pair<string, float>> changesListA;
 };

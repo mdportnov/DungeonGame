@@ -11,8 +11,9 @@ using namespace std;
 class ArtefactEquipment : public Equipment {
 public:
     vector<pair<string, float>> changesListA;
+    map<string, string> changesMapFromXML;
 
     ArtefactEquipment(Level &level, string &fileName, string &name, string &type, string &subType, float x, float y,
                       float w, float h, int state, float protection, int eqType, int materialType,
-                      const vector<pair<string, float>> &changesListA);
+                      map<string, string> properties);
 };

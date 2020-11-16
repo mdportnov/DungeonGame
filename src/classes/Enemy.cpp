@@ -1,3 +1,5 @@
+#include <include/model/Player.h>
+#include <include/model/equip/EnchantedWeapon.h>
 #include "include/model/Enemy.h"
 #include "include/model/Unit.h"
 
@@ -6,22 +8,16 @@ Enemy::Enemy(Level &level, std::string fileName, std::string name,
     state = false;
     isAlive = true;
     health = 100;
+    defaultDamage = 10;
     objects = level.getAllDynamicObjects();
     this->map = level.getAllMapObjects();
-    start_x = x;
-    start_y = y;
-    speed = 0.05;
+    speed = 0.1;
 }
 
 void Enemy::update(float time) {
     Unit::update(time);
     dx = speed * dir;
-//        if (getRect().intersects(level.get)){
-//
-//        }
 }
-
-
 
 void Enemy::checkCollision(int num) {
     for (auto &i : map)
@@ -51,5 +47,14 @@ void Enemy::checkCollision(int num) {
             }
         }
 
+}
+
+void Enemy::acceptDamageFrom(Unit *unit) {
+    auto *enchantedWeapon = dynamic_cast<EnchantedWeapon *>(dynamic_cast<Player * >(unit)->weapon);
+    if (enchantedWeapon != nullptr) {
+        health -= unit->calculateDamage() * enchantedWeapon->changesListE[name];
+    } else {
+        health -= unit->calculateDamage();
+    }
 }
 

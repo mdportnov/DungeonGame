@@ -12,6 +12,19 @@
                 <property name="hp" value="150"/>
             </properties>
         </object>
+
+        <object name="egorov" type="enemy" x="800" y="500" width="30" height="50">
+            <properties>
+                <property name="hp" value="150"/>
+            </properties>
+        </object>
+
+        <object name="egorov" type="enemy" x="900" y="500" width="30" height="50">
+            <properties>
+                <property name="hp" value="150"/>
+            </properties>
+        </object>
+
         <object name="python" type="enemy" x="250" y="50" width="50" height="50">
             <properties>
                 <property name="hp" value="150"/>
@@ -22,9 +35,9 @@
                 <property name="hp" value="200"/>
                 <property name="mxhp" value="200"/>
                 <property name="sp" value="0.1"/>
-                <property name="pw" value="5"/>
+                <property name="pw" value="30"/>
                 <property name="dx" value="0.6"/>
-                <property name="st" value="10"/>
+                <property name="st" value="1.1"/>
                 <property name="xp" value="0"/>
                 <property name="lvl" value="0"/>
             </properties>
@@ -63,26 +76,43 @@
             </properties>
         </object>
 
-        <object name="weapon_axe" type="item" subType="weapon" x="250" y="200" width="50" height="50">
-            <properties>
-                <property name="damage" value="15"/>
-                <property name="state" value="0"/>
-            </properties>
-        </object>
-
-        <object name="weapon_gun" type="item" subType="weapon" x="400" y="250" width="50" height="50">
+        <!--        Артефакт-->
+        <object name="weapon_gun" type="item" subType="aweapon" x="100" y="200" width="50" height="50">
             <properties>
                 <property name="damage" value="20"/>
                 <property name="state" value="0"/>
+                <property name="dx" value="0.2"/>
             </properties>
         </object>
 
-        <object name="weapon_sword" type="item" subType="weapon" x="500" y="250" width="50" height="50">
+        <object name="armor_helmet_gold" type="item" subType="aequipment" x="100" y="150" width="50" height="50">
             <properties>
-                <property name="damage" value="30"/>
+                <property name="protection" value="10"/>
+                <property name="eqType" value="0"/>
+                <property name="materialType" value="2"/>
                 <property name="state" value="0"/>
+                <property name="sp" value="0.1"/>
             </properties>
         </object>
+
+        <!--        Зачарованный-->
+        <object name="weapon_axe" type="item" subType="eweapon" x="100" y="100" width="50" height="50">
+            <properties>
+                <property name="damage" value="20"/>
+                <property name="state" value="0"/>
+                <property name="egorov" value="100"/>
+            </properties>
+        </object>
+
+        <!--        Зачарованный Артефакт-->
+<!--        <object name="weapon_sword" type="item" subType="weapon" x="500" y="250" width="50" height="50">-->
+<!--            <properties>-->
+<!--                <property name="damage" value="20"/>-->
+<!--                <property name="state" value="0"/>-->
+<!--                <property name="egorov" value="1.1"/>-->
+<!--                <property name="sp" value="0.1"/>-->
+<!--            </properties>-->
+<!--        </object>-->
 
         <object name="key" type="item" subType="key" x="300" y="100" width="50" height="50">
             <properties>

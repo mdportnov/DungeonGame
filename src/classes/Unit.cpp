@@ -15,9 +15,7 @@ Unit::Unit(Level &level, string &fileName, string &name,
 }
 
 float Unit::calculateDamage() {
-    if (weapon != nullptr)
-        return defaultDamage + weapon->getDamage();
-    else return defaultDamage;
+    return defaultDamage;
 }
 
 void Unit::update(float time) {
@@ -53,8 +51,8 @@ void Unit::checkCollision(int num) {
         }
 }
 
-void Unit::acceptDamageFrom(Unit &unit) {
-    health -= unit.calculateDamage();
+void Unit::acceptDamageFrom(Unit *unit) {
+    health -= unit->calculateDamage();
 }
 
 void Unit::draw(RenderWindow &window) {

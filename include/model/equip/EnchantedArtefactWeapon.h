@@ -1,10 +1,11 @@
-#ifndef _ENCHANTEDARTEFACTWEAPON_H
-#define _ENCHANTEDARTEFACTWEAPON_H
+#pragma once
 
 #include "EnchantedWeapon.h"
 #include "ArtefactWeapon.h"
 
-class EnchantedArtefactWeapon: public EnchantedWeapon, public ArtefactWeapon {
-};
-
-#endif //_ENCHANTEDARTEFACTWEAPON_H
+//class EnchantedArtefactWeapon : public EnchantedWeapon, public ArtefactWeapon {
+//public:
+//    EnchantedArtefactWeapon(Level &level, string &fileName, string &name, string &type,
+//                            string &subType, float x, float y, float w, float h, int state,
+//                            float damage, map<string, string> properties);
+//};

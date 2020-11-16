@@ -1,7 +1,6 @@
 #pragma once
 
 #include <include/model/Item.h>
-#include "EnchantedWeapon.h"
 
 class Weapon : public Item {
 public:
@@ -9,9 +8,7 @@ public:
            float x, float y, float w, float h, int state, float damage);
 
     float getDamage() const;
-
 private:
     float damage;
 
-    void calculateDamage();
 };

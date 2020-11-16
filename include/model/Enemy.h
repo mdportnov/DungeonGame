@@ -10,7 +10,6 @@ using namespace sf;
 class Enemy : public Unit {
 public:
     bool state;
-    float start_x, start_y;
     int dir = 1;
 
     //ф-ция получения поля зрения врага
@@ -23,7 +22,5 @@ public:
 
     void checkCollision(int num) override;
 
-    void pursueHero();
-
-    void kickStudent();
+    void acceptDamageFrom(Unit *unit) override;
 };

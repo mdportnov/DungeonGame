@@ -3,18 +3,22 @@
 
 #include <utility>
 #include <random>
+#include <include/model/equip/ArtefactEquipment.h>
+#include <include/model/equip/ArtefactWeapon.h>
+#include <include/model/equip/EnchantedWeapon.h>
 #include "include/model/Player.h"
 
 Player::Player(Level &level, MyView &view, std::string fileName, std::string name, float x, float y, float w, float h)
         : Unit(level, fileName, name, x, y, w, h) {
-    framesCount = 5;
-    speed = 0.1;
     this->view = &view;
+    framesCount = 5;
+    speed = getSkillValue("sp");
+    defaultDamage = getSkillValue("pw");
     bunchOfKeys = BunchOfKeys();
 }
 
 void Player::update(float time) {
-    speed = attributes["sp"];
+    speed = getSkillValue("sp");
     control(time);
     keyboard();
     Unit::update(time);
@@ -108,6 +112,12 @@ void Player::takeItem(Item *item) {
         if (weapon == nullptr) {
             weapon = dynamic_cast<Weapon *>(item);
             dynamic_cast<Weapon *>(item)->state = Item::STATE::onMe;
+
+            if (dynamic_cast<ArtefactWeapon *>(item) != nullptr) {
+                for (const auto &prop: dynamic_cast<ArtefactWeapon *>(item)->changesListA) {
+                    attributes[prop.first] += prop.second;
+                }
+            }
         } else {
             if (dynamic_cast<Weapon *>(item)->getDamage() > weapon->getDamage()) {
                 weapon = dynamic_cast<Weapon *>(item);
@@ -130,10 +140,22 @@ void Player::takeItem(Item *item) {
         if (equipment[equip->eqType] == nullptr) {
             dynamic_cast<Equipment *>(item)->state = Item::STATE::onMe;
             equipment[equip->eqType] = equip;
+
+            if (dynamic_cast<ArtefactEquipment *>(item) != nullptr) {
+                for (const auto &prop: dynamic_cast<ArtefactEquipment *>(item)->changesListA) {
+                    attributes[prop.first] += prop.second;
+                }
+            }
         } else {
             if (dynamic_cast<Equipment *>(item)->protection > equipment[equip->eqType]->protection) {
                 equipment[equip->eqType] = dynamic_cast<Equipment *>(item);
                 dynamic_cast<Equipment *>(item)->state = Item::STATE::onMe;
+
+                if (dynamic_cast<ArtefactEquipment *>(item) != nullptr) {
+                    for (const auto &prop: dynamic_cast<ArtefactEquipment *>(item)->changesListA) {
+                        attributes[prop.first] += prop.second;
+                    }
+                }
             } else
                 dynamic_cast<Equipment *>(item)->state = Item::STATE::nowhere;
         }
@@ -165,11 +187,28 @@ void Player::init(std::map<string, float> t) {
     this->attributes = std::move(t);
 }
 
-void Player::acceptDamageFrom(Unit &unit) {
-    if (isHit(attributes["dx"]))
-        attributes["hp"] -= calculateProtection() + unit.calculateDamage();
+void Player::acceptDamageFrom(Unit *unit) {
+    if (isHit(getSkillValue("dx")))
+        changeSkillValue("hp", (calculateProtection() - unit->calculateDamage()));
 }
 
+float Player::calculateProtection() {
+    float protection = 0;
+    for (auto &equip : equipment) {
+        if (equip != nullptr) {
+            protection += equip->protection;
+        }
+    }
+    protection += getSkillValue("st");
+    return protection;
+}
+
+float Player::calculateDamage() {
+    if (weapon != nullptr)
+        return defaultDamage * getSkillValue("st") + weapon->getDamage();
+    else
+        return defaultDamage * getSkillValue("st");
+}
 
 void Player::draw(RenderWindow &window) {
     Unit::draw(window);
@@ -180,20 +219,17 @@ void Player::draw(RenderWindow &window) {
     }
 }
 
-float Player::calculateProtection() {
-    float protection = 0;
-    for (auto &equip : equipment) {
-        if (equip != nullptr) {
-            protection += equip->protection;
-        }
-    }
-    protection += attributes["st"];
-    return protection;
-}
-
 bool Player::isHit(double prob) {
     std::mt19937 rand_engine(std::random_device{}());
     std::bernoulli_distribution d(prob);
     return d(rand_engine);
+}
+
+float Player::getSkillValue(const string &shortname) {
+    return attributes[shortname];
+}
+
+void Player::changeSkillValue(const string &shortname, float diff) {
+    attributes[shortname] += diff;
 }
 

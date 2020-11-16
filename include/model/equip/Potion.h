@@ -14,4 +14,4 @@ public:
            float h, int state, const vector<pair<string, float>> &changesList);
 };
 
-#endif //_POTION_H
+#endif
