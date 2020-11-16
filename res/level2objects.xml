@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<map version="1.0">
+    <image source="img/tileset_items.png" width="300" height="300" tileWidth="50" tileHeight="50"/>
+    <objectgroup>
+        <!--        <object name="egorov" type="enemy" x="200" y="200" width="30" height="50">-->
+        <!--            <properties>-->
+        <!--                <property name="hp" value="250"/>-->
+        <!--            </properties>-->
+        <!--        </object>-->
+        <!--        <object name="egorov" type="enemy" x="500" y="200" width="30" height="50">-->
+        <!--            <properties>-->
+        <!--                <property name="hp" value="150"/>-->
+        <!--            </properties>-->
+        <!--        </object>-->
+
+        <!--        <object name="python" type="enemy" x="250" y="50" width="50" height="50">-->
+        <!--            <properties>-->
+        <!--                <property name="hp" value="150"/>-->
+        <!--            </properties>-->
+        <!--        </object>-->
+
+        <object name="temik" type="player" x="300" y="300" width="30" height="50">
+            <properties>
+                <property name="hp" value="200"/>
+                <property name="mxhp" value="200"/>
+                <property name="sp" value="0.1"/>
+                <property name="pw" value="20"/>
+                <property name="dx" value="0.4"/>
+                <property name="st" value="0.1"/>
+                <property name="xp" value="0"/>
+                <property name="lvl" value="0"/>
+            </properties>
+        </object>
+
+        <object name="door_closed" type="door" x="350" y="300" width="50" height="50">
+            <properties>
+                <property name="isLocked" value="1"/>
+            </properties>
+        </object>
+        <object name="door_closed" type="door" x="100" y="150" width="50" height="50">
+            <properties>
+                <property name="isLocked" value="1"/>
+            </properties>
+        </object>
+        <object name="door_closed" type="door" x="650" y="650" width="50" height="50">
+            <properties>
+                <property name="isLocked" value="1"/>
+            </properties>
+        </object>
+        <object name="door_closed" type="door" x="950" y="50" width="50" height="50">
+            <properties>
+                <property name="isLocked" value="1"/>
+            </properties>
+        </object>
+
+        <object name="chest_closed" type="chest" x="300" y="250" width="50" height="50">
+            <properties>
+                <property name="lockLevel" value="1"/>
+                <property name="isLocked" value="1"/>
+            </properties>
+        </object>
+
+
+        <object name="armor_breastplate_diamond" type="item" subType="equipment" x="300" y="250" width="50"
+                height="50">
+            <properties>
+                <property name="protection" value="50"/>
+                <property name="eqType" value="2"/>
+                <property name="materialType" value="2"/>
+                <property name="state" value="3"/>
+            </properties>
+        </object>
+
+    </objectgroup>
+</map>

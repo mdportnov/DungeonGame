@@ -25,7 +25,7 @@ add_executable(DungeonGame
         include/model/equip/Weapon.h
         include/model/equip/ArtefactWeapon.h
         include/model/equip/EnchantedWeapon.h
-#        include/model/equip/EnchantedArtefactWeapon.h
+        include/model/equip/EnchantedArtefactWeapon.h
         include/model/equip/BunchOfKeys.h
         include/model/Chest.h
         include/model/equip/Equipment.h
@@ -62,7 +62,7 @@ add_executable(DungeonGame
         src/classes/equip/EnchantedWeapon.cpp
         src/classes/equip/ArtefactEquipment.cpp
         src/classes/equip/ArtefactWeapon.cpp
-#        src/classes/equip/EnchantedArtefactWeapon.cpp
+        src/classes/equip/EnchantedArtefactWeapon.cpp
         ${TINY_SOURCES}
         )
 

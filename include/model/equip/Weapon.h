@@ -8,6 +8,9 @@ public:
            float x, float y, float w, float h, int state, float damage);
 
     float getDamage() const;
+
+    void draw(RenderWindow &window) override;
+
 private:
     float damage;
 

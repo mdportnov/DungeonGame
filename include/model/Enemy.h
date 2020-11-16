@@ -16,7 +16,7 @@ public:
     FloatRect getEnemyArea() { return {x - 100, y - 100, w + 100, h + 100}; }
 
     Enemy(Level &level, std::string fileName, std::string name,
-          float x, float y, float w, float h);
+          float x, float y, float w, float h, float hp);
 
     void update(float time) override;
 

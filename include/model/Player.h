@@ -5,7 +5,6 @@
 #include "include/model/equip/Equipment.h"
 #include "include/model/equip/Potion.h"
 #include "Unit.h"
-#include "list"
 #include "MyView.h"
 #include "Level.h"
 #include "Door.h"
@@ -23,6 +22,7 @@ public:
     bool isPotionUsingNow = false;
 //    TableOfCharacteristics attributes; потом реализовать мапу самому
     std::map<string, float> attributes;
+    std::map<string, float> attributesDiff;
     BunchOfKeys bunchOfKeys;
     MyView *view;
 
@@ -67,5 +67,5 @@ public:
 
     void deletePotion();
 
-    float calculateDamage() override;
+    float calculateDamage(Unit* unit) override;
 };

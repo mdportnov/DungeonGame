@@ -40,7 +40,7 @@ void Chest::setItem(Item *item) {
 }
 
 float Chest::getProbabilityOfOpen(Player &player) {
-    float prob = player.attributes["dx"] / 100 + player.attributes["st"] / 100 + player.attributes["lvl"] / 100;
+    float prob = player.getSkillValue("dx") + player.getSkillValue("st");
     cout << prob << endl;
     return prob;
 }

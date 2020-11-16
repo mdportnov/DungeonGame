@@ -7,13 +7,14 @@
 
 using namespace std;
 
-class EnchantedWeapon : public Weapon {
+class EnchantedWeapon : virtual public Weapon {
 public:
     EnchantedWeapon(Level &level, string &fileName, string &name, string &type, string &subType, float x, float y,
-                    float w, float h, int state, float damage, map<string, string> properties);
+                    float w, float h, int state, float damage, const map<string, string> &properties);
 
-    map<string, string> changesMapFromXML;
     map<string, float> changesListE;
 
     float calculateDamage(string &enemyType);
+
+    void draw(RenderWindow &window);
 };

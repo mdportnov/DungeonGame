@@ -11,6 +11,8 @@ ObjectOnField::ObjectOnField(Level &level, string &fileName, string &name, float
     texture.loadFromImage(image);
     sprite.setTexture(texture);
     sprite.setTextureRect(IntRect(0, 0, w, h));
+    if (!font.loadFromFile("../res/font/karmafuture.ttf"))
+        cout << "Font cannot be downloaded";
 }
 
 float ObjectOnField::getX() const {

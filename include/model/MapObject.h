@@ -7,12 +7,6 @@ using namespace std;
 
 class MapObject {
 public:
-    int getPropertyInt(string name);
-
-    float getPropertyFloat(string name);
-
-    string getPropertyString(string name);
-
     string name;
     string type;
     string subType;

@@ -7,3 +7,7 @@ Equipment::Equipment(Level &level, string &fileName, string &name, string &type,
     this->eqType = eqType;
     this->materialType = materialType;
 }
+
+void Equipment::draw(RenderWindow &window) {
+    ObjectOnField::draw(window);
+}

@@ -5,6 +5,9 @@
 #include <list>
 #include <include/model/Enemy.h>
 #include <include/model/equip/Key.h>
+#include <include/model/equip/ArtefactEquipment.h>
+#include <include/model/equip/ArtefactWeapon.h>
+#include <include/model/equip/EnchantedWeapon.h>
 #include "Door.h"
 #include "Chest.h"
 
@@ -132,6 +135,24 @@ public:
                 property->SetAttribute("name", "damage");
                 property->SetAttribute("value", to_string((int) dynamic_cast<Weapon *>(it)->getDamage()).c_str());
                 properties->LinkEndChild(property);
+
+//                if (dynamic_cast<ArtefactWeapon *>(it) != nullptr) {
+//                    for (auto a : dynamic_cast<ArtefactEquipment *>(it)->changesListA) {
+//                        property = new TiXmlElement("property");
+//                        property->SetAttribute("name", (a.first).c_str());
+//                        property->SetAttribute("value", to_string(a.second).c_str());
+//                        properties->LinkEndChild(property);
+//                    }
+//                }
+
+//                if (dynamic_cast<EnchantedWeapon *>(it) != nullptr) {
+//                    for (auto a : dynamic_cast<EnchantedWeapon *>(it)->changesListE) {
+//                        property = new TiXmlElement("property");
+//                        property->SetAttribute("name", (a.first).c_str());
+//                        property->SetAttribute("value", to_string(a.second).c_str());
+//                        properties->LinkEndChild(property);
+//                    }
+//                }
             }
             if (dynamic_cast<Potion *>(it) != nullptr)
                 for (auto &i:  dynamic_cast<Potion *>(it)->changesList) {
@@ -140,6 +161,7 @@ public:
                     property->SetAttribute("value", to_string(i.second).c_str());
                     properties->LinkEndChild(property);
                 }
+
             if (dynamic_cast<Equipment *>(it) != nullptr) {
                 auto i = dynamic_cast<Equipment *>(it);
                 property = new TiXmlElement("property");
@@ -156,10 +178,17 @@ public:
                 property->SetAttribute("name", "materialType");
                 property->SetAttribute("value", i->materialType);
                 properties->LinkEndChild(property);
+
+                if (dynamic_cast<ArtefactEquipment *>(it) != nullptr) {
+                    for (auto a : dynamic_cast<ArtefactEquipment *>(it)->changesListA) {
+                        property = new TiXmlElement("property");
+                        property->SetAttribute("name", a.first.c_str());
+                        property->SetAttribute("value", to_string(a.second).c_str());
+                        properties->LinkEndChild(property);
+                    }
+                }
             }
 
-//            if (dynamic_cast<Key *>(it) != nullptr) {
-//            }
             property = new TiXmlElement("property");
 
             property->SetAttribute("name", "state");

@@ -32,5 +32,5 @@ public:
 
     virtual void draw(RenderWindow &window);
 
-    virtual float calculateDamage();
+    virtual float calculateDamage(Unit *unit);
 };

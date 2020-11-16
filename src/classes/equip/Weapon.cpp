@@ -8,3 +8,10 @@ Weapon::Weapon(Level &level, string &fileName, string &name, string &type, strin
 float Weapon::getDamage() const {
     return damage;
 }
+
+void Weapon::draw(RenderWindow &window) {
+    ObjectOnField::draw(window);
+}
+
+
+

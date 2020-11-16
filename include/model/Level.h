@@ -17,15 +17,11 @@ public:
 
     bool loadStateFromFile(const string &filename);
 
-    MapObject getObject(string name);
+    vector<MapObject> getAllStaticObjects();
 
-    vector<MapObject> getObjectsByName(string name);
-
-    vector<MapObject> getAllMapObjects();
+    vector<MapObject> getAllDynamicObjects();
 
     void draw(sf::RenderWindow &window);
-
-    sf::Vector2i getTileSize() const;
 
     void goUp();
 
@@ -33,21 +29,11 @@ public:
 
     int currentTileLayer = 0, currentObjectsLayer = 0;
 
-    vector<MapObject> getEnemies();
-
     MapObject getPlayer();
 
     vector<MapObject> getObjectsByType(const string &type);
 
-    vector<MapObject> getItems();
-
-    vector<MapObject> getAllDynamicObjects();
-
     void deleteObject(vector<MapObject>::const_iterator it);
-
-    vector<MapObject> getDoors();
-
-    vector<MapObject> getChests();
 
 private:
     int countOfLayers;

@@ -12,6 +12,7 @@
 #include <include/model/equip/ArtefactWeapon.h>
 #include <include/model/equip/ArtefactEquipment.h>
 #include <include/model/equip/EnchantedWeapon.h>
+#include <include/model/equip/EnchantedArtefactWeapon.h>
 #include "include/model/Enemy.h"
 #include "include/model/Door.h"
 
@@ -61,7 +62,7 @@ namespace MyGame {
                  player.rect.height);
 
         std::map<string, float> tmpMap;
-        for (auto a: player.properties) {
+        for (auto &a: player.properties) {
             tmpMap.insert({a.first, std::stof(a.second)});
         }
 
@@ -70,39 +71,35 @@ namespace MyGame {
         InfoBar infoBar;
         infoBar.observe(&p);
 
-        vector<MapObject> enemiesObjects = level.getEnemies();
         list<Enemy *> enemiesList;
 
-        vector<MapObject> itemsObjects = level.getItems();
         list<Item *> itemsList;
 
-        vector<MapObject> doorsObjects = level.getDoors();
         list<Door *> doorsList;
 
-        vector<MapObject> chestsObjects = level.getChests();
         list<Chest *> chestsList;
 
         vector<pair<string, float>> changesList;
 
-        for (const auto &i : enemiesObjects) {
+        for (auto i : level.getObjectsByType("enemy")) {
             enemiesList.push_back(
-                    new Enemy(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width, i.rect.height));
+                    new Enemy(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width, i.rect.height, stof(i.properties["hp"])));
         }
 
-        for (auto i : doorsObjects) {
+        for (auto i : level.getObjectsByType("door")) {
             doorsList.push_back(
                     new Door(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width, i.rect.height,
                              (bool) std::stoi(i.properties["isLocked"])));
         }
 
-        for (auto i : chestsObjects) {
+        for (auto i : level.getObjectsByType("chest")) {
             chestsList.push_back(
                     new Chest(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width,
                               i.rect.height, std::stoi(i.properties["lockLevel"]),
                               (bool) std::stoi(i.properties["isLocked"])));
         }
 
-        for (auto i : itemsObjects) {
+        for (auto i : level.getObjectsByType("item")) {
             if (i.subType == "potion") {
                 vector<pair<string, float>> chList;
                 for (auto &prop : i.properties) {
@@ -155,6 +152,14 @@ namespace MyGame {
                                               std::stoi(i.properties["materialType"]),
                                               i.properties
                         ));
+//            if (i.subType == "aeweapon")
+//                itemsList.push_back(
+//                        new EnchantedArtefactWeapon(level, i.imagePath, i.name, i.type, i.subType,
+//                                                    i.rect.left, i.rect.top, i.rect.width, i.rect.height,
+//                                                    std::stoi(i.properties["state"]),
+//                                                    std::stof(i.properties["damage"]),
+//                                                    i.properties
+//                        ));
 
             if (i.subType == "key")
                 itemsList.push_back(
@@ -164,22 +169,22 @@ namespace MyGame {
 
         }
 
-        for (auto item: itemsList) {
-            if (item->state == Item::STATE::onMe) {
-                if (dynamic_cast<Weapon *>(item) != nullptr) {
-                    p.weapon = dynamic_cast<Weapon *>(item);
+        for (auto i: itemsList) {
+            if (i->state == Item::STATE::onMe) {
+                if (dynamic_cast<Weapon *>(i) != nullptr) {
+                    p.weapon = dynamic_cast<Weapon *>(i);
                 }
-                if (dynamic_cast<Potion *>(item) != nullptr) {
-                    p.potions.emplace_back(dynamic_cast<Potion *>(item));
+                if (dynamic_cast<Potion *>(i) != nullptr) {
+                    p.potions.emplace_back(dynamic_cast<Potion *>(i));
                 }
-                if (dynamic_cast<Equipment *>(item) != nullptr) {
-                    p.equipment[dynamic_cast<Equipment *>(item)->eqType] = dynamic_cast<Equipment *>(item);
+                if (dynamic_cast<Equipment *>(i) != nullptr) {
+                    p.equipment[dynamic_cast<Equipment *>(i)->eqType] = dynamic_cast<Equipment *>(i);
                 }
             }
-            if (item->state == Item::STATE::inChest) {
+            if (i->state == Item::STATE::inChest) {
                 for (auto chest : chestsList) {
-                    if (chest->x == item->x && chest->y == item->y) {
-                        chest->setItem(item);
+                    if (chest->x == i->x && chest->y == i->y) {
+                        chest->setItem(i);
                     }
                 }
             }
@@ -193,7 +198,7 @@ namespace MyGame {
             if (Keyboard::isKeyPressed(Keyboard::S)) p.key["S"] = true;
 
             Event event{};
-            if (time > 60) {
+            if (time > 50) {
                 clock.restart();
 
                 while (window->pollEvent(event)) {
@@ -204,12 +209,12 @@ namespace MyGame {
                         if (p.STATE == Player::STATE::onladderup) {
                             level.goUp();
                             p.STATE = Player::STATE::stay;
-                            p.map = level.getAllMapObjects();
+                            p.map = level.getAllStaticObjects();
                         }
                         if (p.STATE == Player::STATE::onladderdown) {
                             level.goDown();
                             p.STATE = Player::STATE::stay;
-                            p.map = level.getAllMapObjects();
+                            p.map = level.getAllStaticObjects();
                         }
                     }
 
@@ -224,12 +229,11 @@ namespace MyGame {
                                 break;
                             }
                         }
-                        if (Keyboard::isKeyPressed(Keyboard::P) && !p.isPotionUsingNow) {
+                        if (Keyboard::isKeyPressed(Keyboard::P)) {
                             potionsClock.restart();
-                            usingPotionClock.restart();
 
                             changesList = p.drinkPotion();
-                            p.isPotionUsingNow = true;
+
                             if (!p.potions.empty()) {
                                 p.attributes[changesList[0].first] += changesList[0].second;
                             }
@@ -240,15 +244,17 @@ namespace MyGame {
 
                 p.update(time);
 
-                if (usingPotionClock.getElapsedTime().asSeconds() > 5 &&
-                    !changesList.empty()) {
-                    p.isPotionUsingNow = false;
-                    if (changesList[0].first != "hp") {
-                        p.attributes[changesList[0].first] -= changesList[0].second;
-                    }
-                    p.deletePotion();
-                    changesList.clear();
-                }
+                /// по всем зельям
+//                if (time >
+//                &&!changesList.empty()
+//                        ) {
+//                    p.isPotionUsingNow = false;
+//                    if (changesList[0].first != "hp") {
+//                        p.attributes[changesList[0].first] -= changesList[0].second;
+//                    }
+//                    p.deletePotion();
+//                    changesList.clear();
+//                }
 
                 for (auto it = enemiesList.begin(); it != enemiesList.end(); it++) {
                     Enemy *b = *it;
@@ -307,6 +313,7 @@ namespace MyGame {
                     b->update(time);
                     if (b->state == Item::STATE::nowhere) {
                         it = itemsList.erase(it);
+                        delete dynamic_cast<Item *>(b);
                         delete b;
                     }
                 }

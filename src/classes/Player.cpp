@@ -15,6 +15,15 @@ Player::Player(Level &level, MyView &view, std::string fileName, std::string nam
     speed = getSkillValue("sp");
     defaultDamage = getSkillValue("pw");
     bunchOfKeys = BunchOfKeys();
+
+    attributesDiff = {
+            {"mxhp", 20},
+            {"xp",   20},
+            {"sp",   0.01},
+            {"pw",   3},
+            {"dx",   0.05},
+            {"st",   0.05}
+    };
 }
 
 void Player::update(float time) {
@@ -122,8 +131,9 @@ void Player::takeItem(Item *item) {
             if (dynamic_cast<Weapon *>(item)->getDamage() > weapon->getDamage()) {
                 weapon = dynamic_cast<Weapon *>(item);
                 dynamic_cast<Weapon *>(item)->state = Item::STATE::onMe;
-            } else
+            } else{
                 dynamic_cast<Weapon *>(item)->state = Item::STATE::nowhere;
+            }
         }
     }
 
@@ -134,6 +144,7 @@ void Player::takeItem(Item *item) {
             currentPotion = (int) potions.size() - 1;
         }
     }
+
     if (dynamic_cast<Equipment *>(item) != nullptr) {
         auto *equip = dynamic_cast<Equipment *>(item);
 
@@ -189,12 +200,12 @@ void Player::init(std::map<string, float> t) {
 
 void Player::acceptDamageFrom(Unit *unit) {
     if (isHit(getSkillValue("dx")))
-        changeSkillValue("hp", (calculateProtection() - unit->calculateDamage()));
+        changeSkillValue("hp", (calculateProtection() - unit->calculateDamage(this)));
 }
 
 float Player::calculateProtection() {
     float protection = 0;
-    for (auto &equip : equipment) {
+    for (auto equip : equipment) {
         if (equip != nullptr) {
             protection += equip->protection;
         }
@@ -203,10 +214,15 @@ float Player::calculateProtection() {
     return protection;
 }
 
-float Player::calculateDamage() {
-    if (weapon != nullptr)
+float Player::calculateDamage(Unit *unit) {
+    if (weapon != nullptr) {
+        auto *enchantedWeapon = dynamic_cast<EnchantedWeapon *>(weapon);
+        if (enchantedWeapon != nullptr) {
+            return defaultDamage * getSkillValue("st") +
+                   weapon->getDamage() * enchantedWeapon->calculateDamage(unit->name);
+        }
         return defaultDamage * getSkillValue("st") + weapon->getDamage();
-    else
+    } else
         return defaultDamage * getSkillValue("st");
 }
 
@@ -226,7 +242,8 @@ bool Player::isHit(double prob) {
 }
 
 float Player::getSkillValue(const string &shortname) {
-    return attributes[shortname];
+    // НА ХОДУ РАСЧЕТ НОВЫХ ЗНАЧЕНИЙ
+    return attributes[shortname] + attributes["lvl"] * attributesDiff[shortname];
 }
 
 void Player::changeSkillValue(const string &shortname, float diff) {

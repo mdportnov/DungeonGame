@@ -4,7 +4,7 @@
 Unit::Unit(Level &level, string &fileName, string &name,
            float x, float y, float w, float h) : ObjectOnField(level, fileName, name, x, y, w, h) {
     objects = level.getAllDynamicObjects();
-    this->map = level.getAllMapObjects();
+    this->map = level.getAllStaticObjects();
     this->name = name;
     isAlive = true;
     health = 100;
@@ -14,7 +14,7 @@ Unit::Unit(Level &level, string &fileName, string &name,
     speed = 0;
 }
 
-float Unit::calculateDamage() {
+float Unit::calculateDamage(Unit *unit) {
     return defaultDamage;
 }
 
@@ -52,7 +52,7 @@ void Unit::checkCollision(int num) {
 }
 
 void Unit::acceptDamageFrom(Unit *unit) {
-    health -= unit->calculateDamage();
+    health -= unit->calculateDamage(this);
 }
 
 void Unit::draw(RenderWindow &window) {

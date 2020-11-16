@@ -389,56 +389,13 @@ bool Level::loadStateFromFile(const std::string &filename) {
     return true;
 }
 
-MapObject Level::getObject(std::string name) {
-    // Только первый объект с заданным именем
-    for (auto &object : staticObjects[currentObjectsLayer])
-        if (object.name == name)
-            return object;
-}
-
 MapObject Level::getPlayer() {
-    // Только первый объект с заданным именем
     for (auto &object : dynamicObjects[currentObjectsLayer])
         if (object.type == "player")
             return object;
 }
 
-std::vector<MapObject> Level::getEnemies() {
-    std::vector<MapObject> vec;
-    for (auto &object : dynamicObjects[currentObjectsLayer])
-        if (object.type == "enemy")
-            vec.push_back(object);
-
-    return vec;
-}
-
-std::vector<MapObject> Level::getItems() {
-    std::vector<MapObject> vec;
-    for (auto &object : dynamicObjects[currentObjectsLayer])
-        if (object.type == "item")
-            vec.push_back(object);
-
-    return vec;
-}
-
-std::vector<MapObject> Level::getDoors() {
-    std::vector<MapObject> vec;
-    for (auto &object : dynamicObjects[currentObjectsLayer])
-        if (object.type == "door")
-            vec.push_back(object);
-    return vec;
-}
-
-std::vector<MapObject> Level::getChests() {
-    std::vector<MapObject> vec;
-    for (auto &object : dynamicObjects[currentObjectsLayer])
-        if (object.type == "chest")
-            vec.push_back(object);
-    return vec;
-}
-
 std::vector<MapObject> Level::getObjectsByType(const std::string &type) {
-    // Все объекты с заданным типом
     std::vector<MapObject> vec;
     for (auto &object : dynamicObjects[currentObjectsLayer])
         if (object.type == type)
@@ -446,7 +403,7 @@ std::vector<MapObject> Level::getObjectsByType(const std::string &type) {
     return vec;
 }
 
-std::vector<MapObject> Level::getAllMapObjects() {
+std::vector<MapObject> Level::getAllStaticObjects() {
     return staticObjects[currentObjectsLayer];
 };
 
@@ -456,10 +413,6 @@ std::vector<MapObject> Level::getAllDynamicObjects() {
 
 void Level::deleteObject(std::vector<MapObject>::const_iterator it) {
 //    dynamicObjects[currentObjectsLayer].erase(it);
-}
-
-sf::Vector2i Level::getTileSize() const {
-    return sf::Vector2i(tileWidth, tileHeight);
 }
 
 void Level::draw(sf::RenderWindow &window) {
@@ -485,8 +438,4 @@ void Level::goDown() {
         std::cout << "Current tiles layer is: " << currentTileLayer << std::endl;
         std::cout << "Current objects layer is: " << currentObjectsLayer << std::endl;
     }
-}
-
-vector<MapObject> Level::getObjectsByName(string name) {
-    return vector<MapObject>();
 }

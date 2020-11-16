@@ -15,7 +15,8 @@ public:
               float x, float y, float w, float h, int state, float protection, int eqType,
               int materialType);
 
-public:
+    void draw(RenderWindow &window) override;
+
     float protection;
     int eqType;
     int materialType;

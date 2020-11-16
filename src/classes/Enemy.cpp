@@ -4,13 +4,13 @@
 #include "include/model/Unit.h"
 
 Enemy::Enemy(Level &level, std::string fileName, std::string name,
-             float x, float y, float w, float h) : Unit(level, fileName, name, x, y, w, h) {
+             float x, float y, float w, float h, float xp) : Unit(level, fileName, name, x, y, w, h) {
     state = false;
     isAlive = true;
-    health = 100;
+    health = xp;
     defaultDamage = 10;
     objects = level.getAllDynamicObjects();
-    this->map = level.getAllMapObjects();
+    this->map = level.getAllStaticObjects();
     speed = 0.1;
 }
 
@@ -50,11 +50,6 @@ void Enemy::checkCollision(int num) {
 }
 
 void Enemy::acceptDamageFrom(Unit *unit) {
-    auto *enchantedWeapon = dynamic_cast<EnchantedWeapon *>(dynamic_cast<Player * >(unit)->weapon);
-    if (enchantedWeapon != nullptr) {
-        health -= unit->calculateDamage() * enchantedWeapon->changesListE[name];
-    } else {
-        health -= unit->calculateDamage();
-    }
+    health -= unit->calculateDamage(this);
 }
 

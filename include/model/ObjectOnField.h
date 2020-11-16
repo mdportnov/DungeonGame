@@ -15,7 +15,7 @@ public:
     string type;
     string subType;
     string name;
-
+    Font font;
     // для проверки столкновений
     virtual FloatRect getRect() { return {x, y, w, h}; }
 
