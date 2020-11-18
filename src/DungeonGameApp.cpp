@@ -53,8 +53,8 @@ namespace MyGame {
         Clock clock, attackClock, doorClock, chestClock, potionsClock, ladderClock, usingPotionClock, itemsClock;
 
         Level level;
-        level.loadStaticMapFromFile("../res/level1.tmx");
-        level.loadDynamicObjectsFromFile("../res/level1objects.xml");
+        level.loadStaticMapFromFile("../res/level2.tmx");
+        level.loadDynamicObjectsFromFile("../res/level2objects.xml");
 
         MapObject player = level.getPlayer();
 
