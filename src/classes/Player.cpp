@@ -116,23 +116,22 @@ void Player::checkCollision(int num) {
         }
 }
 
-void Player::takeItem(Item *item) {
+void Player::takeItem(Item *&item) {
     if (dynamic_cast<Weapon *>(item) != nullptr) {
-        if (weapon == nullptr) {
-            weapon = dynamic_cast<Weapon *>(item);
-            dynamic_cast<Weapon *>(item)->state = Item::STATE::onMe;
+        dynamic_cast<Weapon *>(item)->state = Item::STATE::onMe;
 
-            if (dynamic_cast<ArtefactWeapon *>(item) != nullptr) {
-                for (const auto &prop: dynamic_cast<ArtefactWeapon *>(item)->changesListA) {
-                    attributes[prop.first] += prop.second;
-                }
-            }
-        } else {
-            if (dynamic_cast<Weapon *>(item)->getDamage() > weapon->getDamage()) {
-                weapon = dynamic_cast<Weapon *>(item);
-                dynamic_cast<Weapon *>(item)->state = Item::STATE::onMe;
-            } else{
-                dynamic_cast<Weapon *>(item)->state = Item::STATE::nowhere;
+        if (weapon != nullptr) {
+            weapon->sprite.setScale(1.0, 1.0);
+            weapon->x = x;
+            weapon->y = y;
+            weapon->state = Item::STATE::onMap;
+        }
+
+        weapon = dynamic_cast<Weapon *>(item);
+
+        if (dynamic_cast<ArtefactWeapon *>(item) != nullptr) {
+            for (const auto &prop: dynamic_cast<ArtefactWeapon *>(item)->changesListA) {
+                attributes[prop.first] += prop.second;
             }
         }
     }
@@ -141,7 +140,7 @@ void Player::takeItem(Item *item) {
         if (potions.size() < 4) {
             item->state = Item::STATE::onMe;
             potions.push_back(dynamic_cast<Potion *>(item));
-            currentPotion = (int) potions.size() - 1;
+            currPotion = (int) potions.size() - 1;
         }
     }
 
@@ -167,8 +166,9 @@ void Player::takeItem(Item *item) {
                         attributes[prop.first] += prop.second;
                     }
                 }
-            } else
-                dynamic_cast<Equipment *>(item)->state = Item::STATE::nowhere;
+            }
+//            else
+//                dynamic_cast<Equipment *>(item)->state = Item::STATE::nowhere;
         }
     }
 
@@ -181,17 +181,25 @@ void Player::takeItem(Item *item) {
 vector<pair<string, float>> Player::drinkPotion() {
     vector<pair<string, float>> changesList;
     if (!potions.empty()) {
-        changesList = (*(potions.begin() + currentPotion))->changesList;
+        changesList = (*(potions.begin() + currPotion))->changesList;
     }
     return changesList;
 }
 
 void Player::deletePotion() {
-    if (!potions.empty()) {
-        (*(potions.begin() + currentPotion))->state = Item::STATE::nowhere;
-        potions.erase(potions.begin() + currentPotion);
-        currentPotion = 0;
+    int index = 0;
+    for (auto potion: potions) {
+        if(potion->timer==0){
+            potions.erase(potions.begin() + index);
+            currPotion = 0;
+        }
+        index++;
     }
+//    if (!potions.empty()) {
+//        (*(potions.begin() + currentPotion))->state = Item::STATE::nowhere;
+//        potions.erase(potions.begin() + currentPotion);
+//        currentPotion = 0;
+//    }
 }
 
 void Player::init(std::map<string, float> t) {

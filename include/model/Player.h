@@ -18,8 +18,7 @@ public:
     std::vector<Potion *> potions;
     Weapon *weapon = nullptr; // удалять меньший по урону с карты
 
-    int currentPotion = 0;
-    bool isPotionUsingNow = false;
+    int currPotion = 0;
 //    TableOfCharacteristics attributes; потом реализовать мапу самому
     std::map<string, float> attributes;
     std::map<string, float> attributesDiff;
@@ -47,7 +46,7 @@ public:
 
     void checkCollision(int num) override;
 
-    void takeItem(Item *item);
+    void takeItem(Item *&item);
 
     vector<pair<string, float>> drinkPotion();
 

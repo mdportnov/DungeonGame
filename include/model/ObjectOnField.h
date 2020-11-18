@@ -6,7 +6,7 @@ using namespace sf;
 
 class ObjectOnField {
 public:
-    float x{}, y{}, w{}, h{};
+    float x, y, w, h;
     Texture texture;
     Sprite sprite;
     Level level;
@@ -16,7 +16,6 @@ public:
     string subType;
     string name;
     Font font;
-    // для проверки столкновений
     virtual FloatRect getRect() { return {x, y, w, h}; }
 
     ObjectOnField(Level &level, string &fileName, string &name, float x, float y, float w, float h);

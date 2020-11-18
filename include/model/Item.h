@@ -8,9 +8,11 @@ public:
          float x, float y, float w, float h, int state);
 
     enum STATE {
-        onMap, onMe, nowhere, inChest
+        onMap, onMe, inChest, nowhere
     };
 
     STATE state;
+
+    FloatRect getRect() override;
 };
 

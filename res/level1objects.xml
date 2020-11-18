@@ -73,14 +73,14 @@
                 <property name="protection" value="50"/>
                 <property name="eqType" value="2"/>
                 <property name="materialType" value="2"/>
-                <property name="state" value="3"/>
+                <property name="state" value="2"/>
             </properties>
         </object>
 
         <!--        Артефакт-->
         <object name="weapon_gun" type="item" subType="aweapon" x="100" y="200" width="50" height="50">
             <properties>
-                <property name="damage" value="20"/>
+                <property name="damage" value="30"/>
                 <property name="state" value="0"/>
                 <property name="dx" value="0.2"/>
             </properties>
@@ -88,7 +88,13 @@
         <!--           Обычный-->
         <object name="weapon_sword" type="item" subType="weapon" x="100" y="250" width="50" height="50">
             <properties>
-                <property name="damage" value="30"/>
+                <property name="damage" value="40"/>
+                <property name="state" value="0"/>
+            </properties>
+        </object>
+        <object name="weapon_axe" type="item" subType="weapon" x="200" y="250" width="50" height="50">
+            <properties>
+                <property name="damage" value="20"/>
                 <property name="state" value="0"/>
             </properties>
         </object>
@@ -114,15 +120,15 @@
         </object>
 
 <!--        Зачарованный Артефакт-->
-<!--        <object name="weapon_sword" type="item" subType="aeweapon" x="500" y="250" width="50" height="50">-->
-<!--            <properties>-->
-<!--                <property name="damage" value="20"/>-->
-<!--                <property name="state" value="0"/>-->
-<!--                <property name="egorov" value="100"/>-->
-<!--                &lt;!&ndash;                поправить урон другим персам&ndash;&gt;-->
-<!--                <property name="sp" value="0.1"/>-->
-<!--            </properties>-->
-<!--        </object>-->
+        <object name="weapon_sword" type="item" subType="aeweapon" x="500" y="250" width="50" height="50">
+            <properties>
+                <property name="damage" value="30"/>
+                <property name="state" value="0"/>
+                <property name="egorov" value="100"/>
+                <!--                поправить урон другим персам-->
+                <property name="sp" value="0.1"/>
+            </properties>
+        </object>
 
         <object name="key" type="item" subType="key" x="300" y="100" width="50" height="50">
             <properties>
@@ -130,12 +136,12 @@
             </properties>
         </object>
 
-        <object name="potion_power" type="item" subType="potion" x="200" y="250" width="50" height="50">
-            <properties>
-                <property name="pw" value="20"/>
-                <property name="state" value="0"/>
-            </properties>
-        </object>
+<!--        <object name="potion_power" type="item" subType="potion" x="200" y="250" width="50" height="50">-->
+<!--            <properties>-->
+<!--                <property name="pw" value="20"/>-->
+<!--                <property name="state" value="0"/>-->
+<!--            </properties>-->
+<!--        </object>-->
 
         <object name="potion_health" type="item" subType="potion" x="250" y="250" width="50" height="50">
             <properties>

@@ -13,5 +13,6 @@ void Weapon::draw(RenderWindow &window) {
     ObjectOnField::draw(window);
 }
 
+Weapon::~Weapon()= default;
 
 

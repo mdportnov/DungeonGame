@@ -74,7 +74,7 @@ void InfoBar::draw(RenderWindow &window) {
 
         window.draw(potion->sprite);
 
-        if (index == player->currentPotion) {
+        if (index == player->currPotion) {
             RectangleShape usingPotion;
             usingPotion.setPosition(potion->x, potion->y + 10);
             usingPotion.setSize({size.x - size.x + 11, 2});

@@ -6,3 +6,7 @@ Item::Item(Level &level, string &fileName, string &name, string &type, string &s
     this->type = type;
     this->state = static_cast<STATE>(state);
 }
+
+FloatRect Item::getRect()
+    { return {x+w/4, y+h/4, w-w/4, h-h/4}; }
+

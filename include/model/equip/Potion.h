@@ -8,7 +8,8 @@
 class Potion : public Item {
 public:
     vector<pair<string, float>> changesList;
-    int timer;
+    int timer=10;
+    bool isUsingNow = false;
 
     Potion(Level &level, string &fileName, string &name, string &type, string &subType, float x, float y,
            float w,

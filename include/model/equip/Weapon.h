@@ -11,7 +11,8 @@ public:
 
     void draw(RenderWindow &window) override;
 
+    virtual ~Weapon();
+
 private:
     float damage;
-
 };

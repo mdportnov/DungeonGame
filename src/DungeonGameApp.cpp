@@ -50,7 +50,7 @@ namespace MyGame {
     void DungeonGameApp::Run() {
         MusicInit();
 
-        Clock clock, attackClock, doorClock, chestClock, potionsClock, ladderClock, usingPotionClock;
+        Clock clock, attackClock, doorClock, chestClock, potionsClock, ladderClock, usingPotionClock, itemsClock;
 
         Level level;
         level.loadMapFromFile("../res/level1.tmx");
@@ -79,11 +79,10 @@ namespace MyGame {
 
         list<Chest *> chestsList;
 
-        vector<pair<string, float>> changesList;
-
         for (auto i : level.getObjectsByType("enemy")) {
             enemiesList.push_back(
-                    new Enemy(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width, i.rect.height, stof(i.properties["hp"])));
+                    new Enemy(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width, i.rect.height,
+                              stof(i.properties["hp"])));
         }
 
         for (auto i : level.getObjectsByType("door")) {
@@ -152,15 +151,14 @@ namespace MyGame {
                                               std::stoi(i.properties["materialType"]),
                                               i.properties
                         ));
-//            if (i.subType == "aeweapon")
-//                itemsList.push_back(
-//                        new EnchantedArtefactWeapon(level, i.imagePath, i.name, i.type, i.subType,
-//                                                    i.rect.left, i.rect.top, i.rect.width, i.rect.height,
-//                                                    std::stoi(i.properties["state"]),
-//                                                    std::stof(i.properties["damage"]),
-//                                                    i.properties
-//                        ));
-
+            if (i.subType == "aeweapon")
+                itemsList.push_back(
+                        new EnchantedArtefactWeapon(level, i.imagePath, i.name, i.type, i.subType,
+                                                    i.rect.left, i.rect.top, i.rect.width, i.rect.height,
+                                                    std::stoi(i.properties["state"]),
+                                                    std::stof(i.properties["damage"]),
+                                                    i.properties
+                        ));
             if (i.subType == "key")
                 itemsList.push_back(
                         new Key(level, i.imagePath, i.name, i.type, i.subType,
@@ -221,21 +219,21 @@ namespace MyGame {
                     if (potionsClock.getElapsedTime().asMilliseconds() > 60) {
                         if (Keyboard::isKeyPressed(Keyboard::O)) {
                             potionsClock.restart();
-                            if (p.currentPotion == p.potions.size() - 1) {
-                                p.currentPotion = 0;
+                            if (p.currPotion == p.potions.size() - 1) {
+                                p.currPotion = 0;
                                 break;
                             } else {
-                                p.currentPotion++;
+                                p.currPotion++;
                                 break;
                             }
                         }
                         if (Keyboard::isKeyPressed(Keyboard::P)) {
                             potionsClock.restart();
-
-                            changesList = p.drinkPotion();
-
                             if (!p.potions.empty()) {
-                                p.attributes[changesList[0].first] += changesList[0].second;
+                                if (!p.potions[p.currPotion]->isUsingNow) {
+                                    p.potions[p.currPotion]->isUsingNow = true;
+                                    p.attributes[p.drinkPotion()[0].first] += p.drinkPotion()[0].second;
+                                }
                             }
                         }
 
@@ -244,17 +242,20 @@ namespace MyGame {
 
                 p.update(time);
 
-                /// по всем зельям
-//                if (time >
-//                &&!changesList.empty()
-//                        ) {
-//                    p.isPotionUsingNow = false;
-//                    if (changesList[0].first != "hp") {
-//                        p.attributes[changesList[0].first] -= changesList[0].second;
-//                    }
-//                    p.deletePotion();
-//                    changesList.clear();
-//                }
+                if (usingPotionClock.getElapsedTime().asSeconds() > 1) {
+                    for (auto potion: p.potions) {
+                        if (potion->isUsingNow) {
+                            potion->timer--;
+                            if (potion->timer == 0) {
+                                if (potion->changesList[0].first != "hp") {
+                                    p.attributes[potion->changesList[0].first] -= potion->changesList[0].second;
+                                }
+                                p.deletePotion();
+                            }
+                        }
+                    }
+                    usingPotionClock.restart();
+                }
 
                 for (auto it = enemiesList.begin(); it != enemiesList.end(); it++) {
                     Enemy *b = *it;
@@ -303,20 +304,16 @@ namespace MyGame {
                     }
                 }
 
-                for (auto it = itemsList.begin(); it != itemsList.end(); it++) {
-                    Item *b = *it;
-
-                    if (p.getRect().intersects(b->getRect()) && b->state == Item::STATE::onMap) {
-                        p.takeItem(b);
+                if (itemsClock.getElapsedTime().asMilliseconds() > 251)
+                    for (auto b : itemsList) {
+                        if (p.getRect().intersects(b->getRect()) && b->state == Item::STATE::onMap) {
+                            if (Mouse::isButtonPressed(sf::Mouse::Left)) {
+                                p.takeItem(b);
+                                itemsClock.restart();
+                            }
+                        }
+                        b->update(time);
                     }
-
-                    b->update(time);
-                    if (b->state == Item::STATE::nowhere) {
-                        it = itemsList.erase(it);
-                        delete dynamic_cast<Item *>(b);
-                        delete b;
-                    }
-                }
 
                 if (attackClock.getElapsedTime().asMilliseconds() > 100)
                     for (auto &it : enemiesList) {
