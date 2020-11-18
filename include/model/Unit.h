@@ -12,17 +12,16 @@ using namespace std;
 class Unit : public ObjectOnField {
 public:
     float dx, dy, speed;
-    float health, defaultDamage;
+    float health, damage;
     int framesCount = 0;
     double currentFrame = 0;
     bool isAlive;
     std::vector<MapObject> map; //вектор тайлов карты
-    std::vector<MapObject> objects; //вектор персонажей, предметов карты
 
     std::string name;
 
     Unit(Level &level, string &fileName,
-         string &name, float x, float y, float w, float h);
+         string &name, float x, float y, float w, float h, int layer);
 
     void update(float time) override;
 

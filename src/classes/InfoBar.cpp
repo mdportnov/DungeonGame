@@ -29,7 +29,8 @@ void InfoBar::draw(RenderWindow &window) {
         Text text;
         text.setFont(font);
         text.setPosition(barOriginX, barOriginY + 2);
-        text.setString(ch.first + ": " + to_string_with_precision(ch.second, 3));
+//        text.setString(ch.first + ": " + to_string_with_precision(ch.second, 3));
+        text.setString(ch.first + ": " + to_string_with_precision(player->getSkillValue(ch.first), 4));
         text.setCharacterSize(16);
         text.setFillColor(Color::Black);
         window.draw(text);

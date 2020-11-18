@@ -13,9 +13,9 @@ using namespace std;
 
 class Level {
 public:
-    bool loadMapFromFile(const string &filename);
+    bool loadStaticMapFromFile(const string &filename);
 
-    bool loadStateFromFile(const string &filename);
+    bool loadDynamicObjectsFromFile(const string &filename);
 
     vector<MapObject> getAllStaticObjects();
 
@@ -27,13 +27,11 @@ public:
 
     void goDown();
 
-    int currentTileLayer = 0, currentObjectsLayer = 0;
+    int currentLayer;
 
     MapObject getPlayer();
 
     vector<MapObject> getObjectsByType(const string &type);
-
-    void deleteObject(vector<MapObject>::const_iterator it);
 
 private:
     int countOfLayers;

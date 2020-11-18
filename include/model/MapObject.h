@@ -10,6 +10,7 @@ public:
     string name;
     string type;
     string subType;
+    int layer;
     sf::Rect<float> rect;
     map<string, string> properties;
 

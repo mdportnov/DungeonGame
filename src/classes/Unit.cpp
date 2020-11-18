@@ -2,8 +2,7 @@
 #include "include/model/ObjectOnField.h"
 
 Unit::Unit(Level &level, string &fileName, string &name,
-           float x, float y, float w, float h) : ObjectOnField(level, fileName, name, x, y, w, h) {
-    objects = level.getAllDynamicObjects();
+           float x, float y, float w, float h, int layer) : ObjectOnField(level, fileName, name, x, y, w, h, layer) {
     this->map = level.getAllStaticObjects();
     this->name = name;
     isAlive = true;
@@ -15,7 +14,7 @@ Unit::Unit(Level &level, string &fileName, string &name,
 }
 
 float Unit::calculateDamage(Unit *unit) {
-    return defaultDamage;
+    return damage;
 }
 
 void Unit::update(float time) {

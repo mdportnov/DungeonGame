@@ -2,11 +2,12 @@
 
 
 EnchantedArtefactWeapon::EnchantedArtefactWeapon(Level &level, string &fileName, string &name, string &type,
-                                                 string &subType, float x, float y, float w, float h, int state,
-                                                 float damage, const map<string, string> &properties)
-        : ArtefactWeapon(level, fileName, name, type, subType, x, y, w, h, state, damage, properties),
-          EnchantedWeapon(level, fileName, name, type, subType, x, y, w, h, state, damage, properties),
-          Weapon(level, fileName, name, type, subType, x, y, w, h, state, damage) {
+                                                 string &subType, float x, float y, float w, float h, int layer,
+                                                 int state,
+                                                 float damage, const map<string, string> &properties) :
+        ArtefactWeapon(level, fileName, name, type, subType, x, y, w, h, layer, state, damage, properties),
+        EnchantedWeapon(level, fileName, name, type, subType, x, y, w, h, layer, state, damage, properties),
+        Weapon(level, fileName, name, type, subType, x, y, w, h, layer, state, damage) {
 }
 
 void EnchantedArtefactWeapon::draw(RenderWindow &window) {

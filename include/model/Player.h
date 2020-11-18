@@ -16,9 +16,9 @@ class Player : public Unit {
 public:
     Equipment *equipment[3] = {nullptr, nullptr, nullptr}; // helmet, breastplate, boots
     std::vector<Potion *> potions;
-    Weapon *weapon = nullptr; // удалять меньший по урону с карты
-
+    Weapon *weapon = nullptr;
     int currPotion = 0;
+    int playerLevel;
 //    TableOfCharacteristics attributes; потом реализовать мапу самому
     std::map<string, float> attributes;
     std::map<string, float> attributesDiff;
@@ -33,12 +33,10 @@ public:
 
     std::map<std::string, bool> key;
 
-    Player(Level &level, MyView &view, std::string fileName, std::string name,
-           float x, float y, float w, float h);
+    Player(Level &level, MyView &view, string fileName, string name, float x, float y, float w, float h, int layer,
+           std::map<string, string> map);
 
     void update(float time) override;
-
-    void init(std::map<string, float> t);
 
     void keyboard();
 
@@ -60,11 +58,9 @@ public:
 
     void changeSkillValue(const string &shortname, float diff);
 
-    void improveCharacteristicByXP(string shortname);
-
     bool isHit(double prob);
 
     void deletePotion();
 
-    float calculateDamage(Unit* unit) override;
+    float calculateDamage(Unit *unit) override;
 };

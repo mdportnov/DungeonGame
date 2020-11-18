@@ -3,9 +3,9 @@
 #include <utility>
 
 ArtefactEquipment::ArtefactEquipment(Level &level, string &fileName, string &name, string &type, string &subType,
-                                     float x, float y, float w, float h, int state, float protection, int eqType,
+                                     float x, float y, float w, float h, int layer, int state, float protection, int eqType,
                                      int materialType, map<string, string> properties) : Equipment(
-        level, fileName, name, type, subType, x, y, w, h, state, protection, eqType, materialType),
+        level, fileName, name, type, subType, x, y, w, h, layer, state, protection, eqType, materialType),
                                                                                          changesMapFromXML(std::move(
                                                                                                  properties)) {
     for (const auto &p: changesMapFromXML) {

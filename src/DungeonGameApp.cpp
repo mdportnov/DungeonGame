@@ -53,20 +53,13 @@ namespace MyGame {
         Clock clock, attackClock, doorClock, chestClock, potionsClock, ladderClock, usingPotionClock, itemsClock;
 
         Level level;
-        level.loadMapFromFile("../res/level1.tmx");
-        level.loadStateFromFile("../res/level1objects.xml");
+        level.loadStaticMapFromFile("../res/level1.tmx");
+        level.loadDynamicObjectsFromFile("../res/level1objects.xml");
 
         MapObject player = level.getPlayer();
 
         Player p(level, myView, player.imagePath, player.name, player.rect.left, player.rect.top, player.rect.width,
-                 player.rect.height);
-
-        std::map<string, float> tmpMap;
-        for (auto &a: player.properties) {
-            tmpMap.insert({a.first, std::stof(a.second)});
-        }
-
-        p.init(tmpMap);
+                 player.rect.height, player.layer, player.properties);
 
         InfoBar infoBar;
         infoBar.observe(&p);
@@ -81,20 +74,21 @@ namespace MyGame {
 
         for (auto i : level.getObjectsByType("enemy")) {
             enemiesList.push_back(
-                    new Enemy(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width, i.rect.height,
-                              stof(i.properties["hp"])));
+                    new Enemy(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width, i.rect.height, i.layer,
+                              stof(i.properties["hp"]), stof(i.properties["lvl"]),
+                              stof(i.properties["damage"])));
         }
 
         for (auto i : level.getObjectsByType("door")) {
             doorsList.push_back(
-                    new Door(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width, i.rect.height,
+                    new Door(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width, i.rect.height, i.layer,
                              (bool) std::stoi(i.properties["isLocked"])));
         }
 
         for (auto i : level.getObjectsByType("chest")) {
             chestsList.push_back(
                     new Chest(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width,
-                              i.rect.height, std::stoi(i.properties["lockLevel"]),
+                              i.rect.height, i.layer, std::stoi(i.properties["lockLevel"]),
                               (bool) std::stoi(i.properties["isLocked"])));
         }
 
@@ -107,19 +101,19 @@ namespace MyGame {
                 }
                 itemsList.push_back(
                         new Potion(level, i.imagePath, i.name, i.type, i.subType,
-                                   i.rect.left, i.rect.top, i.rect.width, i.rect.height,
+                                   i.rect.left, i.rect.top, i.rect.width, i.rect.height, i.layer,
                                    std::stoi(i.properties["state"]), chList));
             }
             if (i.subType == "weapon")
                 itemsList.push_back(
                         new Weapon(level, i.imagePath, i.name, i.type, i.subType,
-                                   i.rect.left, i.rect.top, i.rect.width, i.rect.height,
+                                   i.rect.left, i.rect.top, i.rect.width, i.rect.height, i.layer,
                                    std::stoi(i.properties["state"]),
                                    std::stof(i.properties["damage"])));
             if (i.subType == "aweapon")
                 itemsList.push_back(
                         new ArtefactWeapon(level, i.imagePath, i.name, i.type, i.subType,
-                                           i.rect.left, i.rect.top, i.rect.width, i.rect.height,
+                                           i.rect.left, i.rect.top, i.rect.width, i.rect.height, i.layer,
                                            std::stoi(i.properties["state"]),
                                            std::stof(i.properties["damage"]),
                                            i.properties
@@ -128,6 +122,7 @@ namespace MyGame {
                 itemsList.push_back(
                         new EnchantedWeapon(level, i.imagePath, i.name, i.type, i.subType,
                                             i.rect.left, i.rect.top, i.rect.width, i.rect.height,
+                                            i.layer,
                                             std::stoi(i.properties["state"]),
                                             std::stof(i.properties["damage"]),
                                             i.properties
@@ -136,6 +131,7 @@ namespace MyGame {
                 itemsList.push_back(
                         new Equipment(level, i.imagePath, i.name, i.type, i.subType,
                                       i.rect.left, i.rect.top, i.rect.width, i.rect.height,
+                                      i.layer,
                                       std::stoi(i.properties["state"]),
                                       std::stof(i.properties["protection"]),
                                       std::stoi(i.properties["eqType"]),
@@ -145,6 +141,7 @@ namespace MyGame {
                 itemsList.push_back(
                         new ArtefactEquipment(level, i.imagePath, i.name, i.type, i.subType,
                                               i.rect.left, i.rect.top, i.rect.width, i.rect.height,
+                                              i.layer,
                                               std::stoi(i.properties["state"]),
                                               std::stof(i.properties["protection"]),
                                               std::stoi(i.properties["eqType"]),
@@ -155,6 +152,7 @@ namespace MyGame {
                 itemsList.push_back(
                         new EnchantedArtefactWeapon(level, i.imagePath, i.name, i.type, i.subType,
                                                     i.rect.left, i.rect.top, i.rect.width, i.rect.height,
+                                                    i.layer,
                                                     std::stoi(i.properties["state"]),
                                                     std::stof(i.properties["damage"]),
                                                     i.properties
@@ -162,7 +160,7 @@ namespace MyGame {
             if (i.subType == "key")
                 itemsList.push_back(
                         new Key(level, i.imagePath, i.name, i.type, i.subType,
-                                i.rect.left, i.rect.top, i.rect.width, i.rect.height,
+                                i.rect.left, i.rect.top, i.rect.width, i.rect.height, i.layer,
                                 std::stoi(i.properties["state"])));
 
         }
@@ -206,13 +204,21 @@ namespace MyGame {
                         ladderClock.restart();
                         if (p.STATE == Player::STATE::onladderup) {
                             level.goUp();
+                            p.layer = 1;
                             p.STATE = Player::STATE::stay;
                             p.map = level.getAllStaticObjects();
+                            for (auto enemy: enemiesList) {
+                                enemy->map = level.getAllStaticObjects();;
+                            }
                         }
                         if (p.STATE == Player::STATE::onladderdown) {
                             level.goDown();
+                            p.layer = 0;
                             p.STATE = Player::STATE::stay;
                             p.map = level.getAllStaticObjects();
+                            for (auto enemy: enemiesList) {
+                                enemy->map = level.getAllStaticObjects();;
+                            }
                         }
                     }
 
@@ -258,84 +264,100 @@ namespace MyGame {
                 }
 
                 for (auto it = enemiesList.begin(); it != enemiesList.end(); it++) {
-                    Enemy *b = *it;
-                    b->update(time);
-                    if (!b->isAlive) {
-                        it = enemiesList.erase(it);
-                        delete b;
+                    if ((*it)->layer == level.currentLayer) {
+                        Enemy *b = *it;
+                        b->update(time);
+                        if (!b->isAlive) {
+                            it = enemiesList.erase(it);
+                            delete b;
+                        }
                     }
                 }
 
                 if (doorClock.getElapsedTime().asMilliseconds() > 200) {
                     for (auto b : doorsList) {
-                        if (p.getRect().intersects(b->getRect()) && b->isLocked) {
-                            if (p.dy > 0) {
-                                p.y = b->getRect().top - p.h;
-                                p.dy = 0;
+                        if (b->layer == level.currentLayer) {
+                            if (p.getRect().intersects(b->getRect()) && b->isLocked) {
+                                if (p.dy > 0) {
+                                    p.y = b->getRect().top - p.h;
+                                    p.dy = 0;
+                                }
+                                if (p.dy < 0) {
+                                    p.y = b->getRect().top + b->getRect().height;
+                                    p.dy = 0;
+                                }
+                                if (p.dx > 0) { p.x = b->getRect().left - p.w; }
+                                if (p.dx < 0) { p.x = b->getRect().left + b->getRect().width; }
                             }
-                            if (p.dy < 0) {
-                                p.y = b->getRect().top + b->getRect().height;
-                                p.dy = 0;
+                            if (p.getRect().intersects(b->getAreaRect())) {
+                                if (Mouse::isButtonPressed(sf::Mouse::Left)) {
+                                    b->changeDoorState();
+                                    doorSound.play();
+                                    doorClock.restart();
+                                }
                             }
-                            if (p.dx > 0) { p.x = b->getRect().left - p.w; }
-                            if (p.dx < 0) { p.x = b->getRect().left + b->getRect().width; }
+                            b->update();
                         }
-                        if (p.getRect().intersects(b->getAreaRect())) {
-                            if (Mouse::isButtonPressed(sf::Mouse::Left)) {
-                                b->changeDoorState();
-                                doorSound.play();
-                                doorClock.restart();
-                            }
-                        }
-                        b->update();
                     }
                 }
 
                 if (chestClock.getElapsedTime().asMilliseconds() > 70) {
                     for (auto b : chestsList) {
-                        if (p.getRect().intersects(b->getAreaRect())) {
-                            if (Mouse::isButtonPressed(sf::Mouse::Left) && b->isLocked) {
-                                if (b->open(p))
-                                    chestSound.play();
-                                chestClock.restart();
+                        if (b->layer == level.currentLayer) {
+                            if (p.getRect().intersects(b->getAreaRect())) {
+                                if (Mouse::isButtonPressed(sf::Mouse::Left) && b->isLocked) {
+                                    if (b->open(p))
+                                        chestSound.play();
+                                    chestClock.restart();
+                                }
                             }
+                            b->update(time);
                         }
-                        b->update(time);
                     }
                 }
 
-                if (itemsClock.getElapsedTime().asMilliseconds() > 251)
+                if (itemsClock.getElapsedTime().asMilliseconds() > 200)
                     for (auto b : itemsList) {
-                        if (p.getRect().intersects(b->getRect()) && b->state == Item::STATE::onMap) {
-                            if (Mouse::isButtonPressed(sf::Mouse::Left)) {
-                                p.takeItem(b);
-                                itemsClock.restart();
+                        if (b->layer == level.currentLayer) {
+                            if (p.getRect().intersects(b->getRect()) && b->state == Item::STATE::onMap) {
+                                if (Mouse::isButtonPressed(sf::Mouse::Left)) {
+                                    p.takeItem(b);
+                                    itemsClock.restart();
+                                }
                             }
+                            b->update(time);
                         }
-                        b->update(time);
                     }
 
                 if (attackClock.getElapsedTime().asMilliseconds() > 100)
                     for (auto &it : enemiesList) {
-                        if (p.getRect().intersects(it->getRect())) {
-                            if (p.dx > 0) {
-                                it->dx = 0.1;
+                        if (it->layer == level.currentLayer) {
+                            if (p.getRect().intersects(it->getRect())) {
+                                if (p.dx > 0) {
+                                    it->dx = 0.1;
+                                }
+                                if (p.dx < 0) {
+                                    it->dx = -0.1;
+                                }
+                                if (p.dy > 0) {
+                                    it->dy = 0.1;
+                                }
+                                if (p.dy < 0) {
+                                    it->dy = -0.1;
+                                }
+                                it->dx = 0;
+                                it->dy = 0;
+                                it->acceptDamageFrom(&p);
+                                p.acceptDamageFrom(it);
+
+                                if (it->health <= 0) {
+                                    p.changeSkillValue("lvl", it->lvl);
+                                    p.playerLevel = (int) p.getSkillValue("lvl") / 100;
+                                }
+
+                                it->update(time);
+                                attackClock.restart();
                             }
-                            if (p.dx < 0) {
-                                it->dx = -0.1;
-                            }
-                            if (p.dy > 0) {
-                                it->dy = 0.1;
-                            }
-                            if (p.dy < 0) {
-                                it->dy = -0.1;
-                            }
-                            it->update(time);
-                            it->dx = 0;
-                            it->dy = 0;
-                            it->acceptDamageFrom(&p);
-                            p.acceptDamageFrom(it);
-                            attackClock.restart();
                         }
                     }
             }
@@ -357,21 +379,25 @@ namespace MyGame {
 //                    rect.setOutlineColor(sf::Color(250, 150, 100));
 //                    window->draw(rect);
 //                }
-                enemy->draw(*window);
+                if (enemy->layer == level.currentLayer)
+                    enemy->draw(*window);
             }
             for (auto door: doorsList) {
-                door->draw(*window);
+                if (door->layer == level.currentLayer)
+                    door->draw(*window);
             }
             for (auto chest: chestsList) {
-                chest->draw(*window);
+                if (chest->layer == level.currentLayer)
+                    chest->draw(*window);
             }
             for (auto item: itemsList) {
-                if (item->state == Item::onMap)
-                    item->draw(*window);
+                if (item->layer == level.currentLayer)
+                    if (item->state == Item::onMap)
+                        item->draw(*window);
             }
-
             infoBar.draw(*window);
             p.draw(*window);
+
             window->display();
             ObjectsParser::saveToFileProgress(level, p, enemiesList, itemsList, doorsList, chestsList);
         }

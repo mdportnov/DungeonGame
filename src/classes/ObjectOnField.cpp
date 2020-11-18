@@ -1,11 +1,12 @@
 #include "include/model/ObjectOnField.h"
 
-ObjectOnField::ObjectOnField(Level &level, string &fileName, string &name, float x, float y, float w, float h) {
+ObjectOnField::ObjectOnField(Level &level, string &fileName, string &name, float x, float y, float w, float h, int layer) {
     this->x = x;
     this->y = y;
     this->w = w;
     this->h = h;
     this->level = level;
+    this->layer = layer;
     this->name = name;
     this->image.loadFromFile("../res/img/" + fileName);
     texture.loadFromImage(image);

@@ -13,7 +13,7 @@ public:
 
     Potion(Level &level, string &fileName, string &name, string &type, string &subType, float x, float y,
            float w,
-           float h, int state, const vector<pair<string, float>> &changesList);
+           float h, int layer, int state, const vector<pair<string, float>> &changesList);
 };
 
 #endif

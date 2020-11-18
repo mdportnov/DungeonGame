@@ -1,16 +1,14 @@
-#include <include/model/Player.h>
-#include <include/model/equip/EnchantedWeapon.h>
 #include "include/model/Enemy.h"
 #include "include/model/Unit.h"
 
-Enemy::Enemy(Level &level, std::string fileName, std::string name,
-             float x, float y, float w, float h, float xp) : Unit(level, fileName, name, x, y, w, h) {
+Enemy::Enemy(Level &level, string fileName, string name, float x, float y, float w, float h, int layer, float hp, float lvl,
+             float damage)
+        : Unit(level, fileName, name, x, y, w, h, layer) {
     state = false;
     isAlive = true;
-    health = xp;
-    defaultDamage = 10;
-    objects = level.getAllDynamicObjects();
-    this->map = level.getAllStaticObjects();
+    health = hp;
+    this->lvl = lvl;
+    this->damage = damage;
     speed = 0.1;
 }
 
@@ -46,7 +44,6 @@ void Enemy::checkCollision(int num) {
                 }
             }
         }
-
 }
 
 void Enemy::acceptDamageFrom(Unit *unit) {

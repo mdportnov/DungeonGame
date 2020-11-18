@@ -1,7 +1,8 @@
 #include "include/model/equip/Weapon.h"
 
 Weapon::Weapon(Level &level, string &fileName, string &name, string &type, string &subType, float x, float y, float w,
-               float h, int state, float damage) : Item(level, fileName, name, type, subType, x, y, w, h, state) {
+               float h, int layer, int state, float damage) : Item(level, fileName, name, type, subType, x, y, w, h,
+                                                                   layer, state) {
     this->damage = damage;
 }
 
@@ -13,6 +14,6 @@ void Weapon::draw(RenderWindow &window) {
     ObjectOnField::draw(window);
 }
 
-Weapon::~Weapon()= default;
+Weapon::~Weapon() = default;
 
 

@@ -15,7 +15,7 @@ public:
     bool isLocked;
     int lockLevel;
 
-    Chest(Level &level, string &fileName, string &name, float x, float y, float w, float h, int lockLevel,
+    Chest(Level &level, string &fileName, string &name, float x, float y, float w, float h, int layer, int lockLevel,
           bool isLocked);
 
     FloatRect getAreaRect();
@@ -25,9 +25,6 @@ public:
     bool open(Player &player);
 
     bool canOpen(double prob);
-
-    pair<int, int> getInfo();
-
 private:
     Item *storedItem;
 

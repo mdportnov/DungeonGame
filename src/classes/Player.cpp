@@ -8,12 +8,15 @@
 #include <include/model/equip/EnchantedWeapon.h>
 #include "include/model/Player.h"
 
-Player::Player(Level &level, MyView &view, std::string fileName, std::string name, float x, float y, float w, float h)
-        : Unit(level, fileName, name, x, y, w, h) {
+Player::Player(Level &level, MyView &view, string fileName, string name, float x, float y, float w, float h, int layer,
+               std::map<string, string> props)
+        : Unit(level, fileName, name, x, y, w, h, layer) {
     this->view = &view;
+    for (auto &a: props) {
+        attributes.insert({a.first, std::stof(a.second)});
+    }
     framesCount = 5;
     speed = getSkillValue("sp");
-    defaultDamage = getSkillValue("pw");
     bunchOfKeys = BunchOfKeys();
 
     attributesDiff = {
@@ -24,6 +27,7 @@ Player::Player(Level &level, MyView &view, std::string fileName, std::string nam
             {"dx",   0.05},
             {"st",   0.05}
     };
+    playerLevel = (int) getSkillValue("lvl") / 100;
 }
 
 void Player::update(float time) {
@@ -120,20 +124,26 @@ void Player::takeItem(Item *&item) {
     if (dynamic_cast<Weapon *>(item) != nullptr) {
         dynamic_cast<Weapon *>(item)->state = Item::STATE::onMe;
 
-        if (weapon != nullptr) {
-            weapon->sprite.setScale(1.0, 1.0);
-            weapon->x = x;
-            weapon->y = y;
-            weapon->state = Item::STATE::onMap;
+        if (dynamic_cast<ArtefactWeapon *>(weapon) != nullptr) {
+            for (const auto &prop: dynamic_cast<ArtefactWeapon *>(weapon)->changesListA) {
+                attributes[prop.first] -= prop.second;
+            }
         }
-
-        weapon = dynamic_cast<Weapon *>(item);
 
         if (dynamic_cast<ArtefactWeapon *>(item) != nullptr) {
             for (const auto &prop: dynamic_cast<ArtefactWeapon *>(item)->changesListA) {
                 attributes[prop.first] += prop.second;
             }
         }
+
+        if (weapon != nullptr) {
+            weapon->sprite.setScale(1.0, 1.0);
+            weapon->x = x - 10;
+            weapon->y = y - 50;
+            weapon->state = Item::STATE::onMap;
+        }
+
+        weapon = dynamic_cast<Weapon *>(item);
     }
 
     if (dynamic_cast<Potion *>(item) != nullptr) {
@@ -146,30 +156,29 @@ void Player::takeItem(Item *&item) {
 
     if (dynamic_cast<Equipment *>(item) != nullptr) {
         auto *equip = dynamic_cast<Equipment *>(item);
+        equip->state = Item::STATE::onMe;
 
-        if (equipment[equip->eqType] == nullptr) {
-            dynamic_cast<Equipment *>(item)->state = Item::STATE::onMe;
-            equipment[equip->eqType] = equip;
-
-            if (dynamic_cast<ArtefactEquipment *>(item) != nullptr) {
-                for (const auto &prop: dynamic_cast<ArtefactEquipment *>(item)->changesListA) {
-                    attributes[prop.first] += prop.second;
-                }
+        if (dynamic_cast<ArtefactEquipment *>(equipment[equip->eqType]) != nullptr) {
+            for (const auto &prop: dynamic_cast<ArtefactEquipment *>(equipment[equip->eqType])->changesListA) {
+                attributes[prop.first] -= prop.second;
             }
-        } else {
-            if (dynamic_cast<Equipment *>(item)->protection > equipment[equip->eqType]->protection) {
-                equipment[equip->eqType] = dynamic_cast<Equipment *>(item);
-                dynamic_cast<Equipment *>(item)->state = Item::STATE::onMe;
-
-                if (dynamic_cast<ArtefactEquipment *>(item) != nullptr) {
-                    for (const auto &prop: dynamic_cast<ArtefactEquipment *>(item)->changesListA) {
-                        attributes[prop.first] += prop.second;
-                    }
-                }
-            }
-//            else
-//                dynamic_cast<Equipment *>(item)->state = Item::STATE::nowhere;
         }
+
+        if (dynamic_cast<ArtefactEquipment *>(equip) != nullptr) {
+            for (const auto &prop: dynamic_cast<ArtefactEquipment *>(item)->changesListA) {
+                attributes[prop.first] += prop.second;
+            }
+        }
+
+        if (equipment[equip->eqType] != nullptr) {
+            equipment[equip->eqType]->sprite.setScale(1.0, 1.0);
+            equipment[equip->eqType]->x = x - 50;
+            equipment[equip->eqType]->y = y;
+            equipment[equip->eqType]->state = Item::STATE::onMap;
+        }
+
+        equipment[equip->eqType] = dynamic_cast<Equipment *>(item);
+
     }
 
     if (dynamic_cast<Key *>(item) != nullptr) {
@@ -189,26 +198,17 @@ vector<pair<string, float>> Player::drinkPotion() {
 void Player::deletePotion() {
     int index = 0;
     for (auto potion: potions) {
-        if(potion->timer==0){
+        if (potion->timer == 0) {
             potions.erase(potions.begin() + index);
             currPotion = 0;
         }
         index++;
     }
-//    if (!potions.empty()) {
-//        (*(potions.begin() + currentPotion))->state = Item::STATE::nowhere;
-//        potions.erase(potions.begin() + currentPotion);
-//        currentPotion = 0;
-//    }
-}
-
-void Player::init(std::map<string, float> t) {
-    this->attributes = std::move(t);
 }
 
 void Player::acceptDamageFrom(Unit *unit) {
     if (isHit(getSkillValue("dx")))
-        changeSkillValue("hp", (calculateProtection() - unit->calculateDamage(this)));
+        changeSkillValue("hp", -(1 - calculateProtection() / 120) * unit->calculateDamage(this));
 }
 
 float Player::calculateProtection() {
@@ -226,12 +226,12 @@ float Player::calculateDamage(Unit *unit) {
     if (weapon != nullptr) {
         auto *enchantedWeapon = dynamic_cast<EnchantedWeapon *>(weapon);
         if (enchantedWeapon != nullptr) {
-            return defaultDamage * getSkillValue("st") +
-                   weapon->getDamage() * enchantedWeapon->calculateDamage(unit->name);
+            return getSkillValue("pw") * getSkillValue("st") +
+                   enchantedWeapon->calculateDamage(unit->name);
         }
-        return defaultDamage * getSkillValue("st") + weapon->getDamage();
+        return getSkillValue("pw") * getSkillValue("st") + weapon->getDamage();
     } else
-        return defaultDamage * getSkillValue("st");
+        return getSkillValue("pw") * getSkillValue("st");
 }
 
 void Player::draw(RenderWindow &window) {
@@ -250,11 +250,15 @@ bool Player::isHit(double prob) {
 }
 
 float Player::getSkillValue(const string &shortname) {
-    // НА ХОДУ РАСЧЕТ НОВЫХ ЗНАЧЕНИЙ
-    return attributes[shortname] + attributes["lvl"] * attributesDiff[shortname];
+    return attributes[shortname] + (float) playerLevel * attributesDiff[shortname];
 }
 
 void Player::changeSkillValue(const string &shortname, float diff) {
     attributes[shortname] += diff;
 }
+
+//void Player::improveCharacteristicByXP() {
+//    for (auto a: attributes)
+//        a.second += attributesDiff[a.first];
+//}
 

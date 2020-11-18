@@ -1,7 +1,7 @@
 #include "include/model/Door.h"
 
-Door::Door(Level &level, string &fileName, string &name, float x, float y, float w, float h, bool isLocked)
-        : ObjectOnField(level, fileName, name, x, y, w, h) {
+Door::Door(Level &level, string &fileName, string &name, float x, float y, float w, float h, int layer, bool isLocked)
+        : ObjectOnField(level, fileName, name, x, y, w, h, layer) {
     this->isLocked = isLocked;
 
     if(!isLocked){

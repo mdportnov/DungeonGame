@@ -36,20 +36,6 @@ public:
         root->LinkEndChild(objects);
         TiXmlElement *object;
 
-//        for (auto layers: level.getCountOfLayers())
-        // ВРАГИ
-        for (auto it: enemiesList) {
-            object = new TiXmlElement("object");
-            object->SetAttribute("name", it->name.c_str());
-            object->SetAttribute("type", "enemy");
-            object->SetDoubleAttribute("health", it->health);
-            object->SetDoubleAttribute("x", it->x);
-            object->SetDoubleAttribute("y", it->y);
-            object->SetDoubleAttribute("width", it->w);
-            object->SetDoubleAttribute("height", it->h);
-            objects->LinkEndChild(object);
-        }
-
         // Герой
         object = new TiXmlElement("object");
         object->SetAttribute("name", player.name.c_str());
@@ -58,6 +44,7 @@ public:
         object->SetDoubleAttribute("y", player.y);
         object->SetDoubleAttribute("width", player.w);
         object->SetDoubleAttribute("height", player.h);
+        object->SetAttribute("layer", player.layer);
 
         // Характеристики героя
         auto *properties = new TiXmlElement("properties");
@@ -70,6 +57,40 @@ public:
         object->LinkEndChild(properties);
         objects->LinkEndChild(object);
 
+//        for (auto layers: level.getCountOfLayers())
+        // ВРАГИ
+        for (auto it: enemiesList) {
+            object = new TiXmlElement("object");
+            object->SetAttribute("name", it->name.c_str());
+            object->SetAttribute("type", "enemy");
+            object->SetDoubleAttribute("x", it->x);
+            object->SetDoubleAttribute("y", it->y);
+            object->SetDoubleAttribute("width", it->w);
+            object->SetDoubleAttribute("height", it->h);
+            object->SetAttribute("layer", it->layer);
+
+            auto *property = new TiXmlElement("property");
+            auto *properties = new TiXmlElement("properties");
+
+            property = new TiXmlElement("property");
+            property->SetAttribute("name", "hp");
+            property->SetDoubleAttribute("value", it->health);
+            properties->LinkEndChild(property);
+
+            property = new TiXmlElement("property");
+            property->SetAttribute("name", "lvl");
+            property->SetDoubleAttribute("value", it->lvl);
+            properties->LinkEndChild(property);
+
+            property = new TiXmlElement("property");
+            property->SetAttribute("name", "damage");
+            property->SetDoubleAttribute("value", it->damage);
+            properties->LinkEndChild(property);
+
+            object->LinkEndChild(properties);
+            objects->LinkEndChild(object);
+        }
+
         for (auto &it: doorsList) {
             object = new TiXmlElement("object");
             object->SetAttribute("name", it->name.c_str());
@@ -78,6 +99,8 @@ public:
             object->SetDoubleAttribute("y", it->y);
             object->SetDoubleAttribute("width", it->w);
             object->SetDoubleAttribute("height", it->h);
+            object->SetAttribute("layer", it->layer);
+
             properties = new TiXmlElement("properties");
             auto *property = new TiXmlElement("property");
             property = new TiXmlElement("property");
@@ -98,6 +121,8 @@ public:
             object->SetDoubleAttribute("y", it->y);
             object->SetDoubleAttribute("width", it->w);
             object->SetDoubleAttribute("height", it->h);
+            object->SetAttribute("layer", it->layer);
+
 
             properties = new TiXmlElement("properties");
             auto *property = new TiXmlElement("property");
@@ -127,6 +152,7 @@ public:
             object->SetDoubleAttribute("y", it->y);
             object->SetDoubleAttribute("width", it->w);
             object->SetDoubleAttribute("height", it->h);
+            object->SetAttribute("layer", it->layer);
 
             auto *property = new TiXmlElement("property");
 
@@ -136,23 +162,23 @@ public:
                 property->SetAttribute("value", to_string((int) dynamic_cast<Weapon *>(it)->getDamage()).c_str());
                 properties->LinkEndChild(property);
 
-//                if (dynamic_cast<ArtefactWeapon *>(it) != nullptr) {
-//                    for (auto a : dynamic_cast<ArtefactEquipment *>(it)->changesListA) {
-//                        property = new TiXmlElement("property");
-//                        property->SetAttribute("name", (a.first).c_str());
-//                        property->SetAttribute("value", to_string(a.second).c_str());
-//                        properties->LinkEndChild(property);
-//                    }
-//                }
+                if (dynamic_cast<ArtefactWeapon *>(it) != nullptr) {
+                    for (const auto& a : dynamic_cast<ArtefactWeapon *>(it)->changesListA) {
+                        property = new TiXmlElement("property");
+                        property->SetAttribute("name", (a.first).c_str());
+                        property->SetAttribute("value", to_string(a.second).c_str());
+                        properties->LinkEndChild(property);
+                    }
+                }
 
-//                if (dynamic_cast<EnchantedWeapon *>(it) != nullptr) {
-//                    for (auto a : dynamic_cast<EnchantedWeapon *>(it)->changesListE) {
-//                        property = new TiXmlElement("property");
-//                        property->SetAttribute("name", (a.first).c_str());
-//                        property->SetAttribute("value", to_string(a.second).c_str());
-//                        properties->LinkEndChild(property);
-//                    }
-//                }
+                if (dynamic_cast<EnchantedWeapon *>(it) != nullptr) {
+                    for (const auto& a : dynamic_cast<EnchantedWeapon *>(it)->changesListE) {
+                        property = new TiXmlElement("property");
+                        property->SetAttribute("name", (a.first).c_str());
+                        property->SetAttribute("value", to_string(a.second).c_str());
+                        properties->LinkEndChild(property);
+                    }
+                }
             }
             if (dynamic_cast<Potion *>(it) != nullptr)
                 for (auto &i:  dynamic_cast<Potion *>(it)->changesList) {

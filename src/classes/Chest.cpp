@@ -2,8 +2,8 @@
 #include "include/model/Chest.h"
 
 Chest::Chest(Level &level, string &fileName, string &name,
-             float x, float y, float w, float h, int lockLevel, bool isLocked) : ObjectOnField(level, fileName, name, x,
-                                                                                               y, w, h) {
+             float x, float y, float w, float h, int layer, int lockLevel, bool isLocked) :
+        ObjectOnField(level, fileName, name, x, y, w, h, layer) {
     this->lockLevel = lockLevel;
     this->isLocked = isLocked;
     if (!isLocked) {
@@ -28,6 +28,7 @@ bool Chest::open(Player &player) {
             sprite.setTextureRect(IntRect(0, 0, w, h));
             storedItem->state = Item::STATE::onMap;
             isLocked = false;
+            player.bunchOfKeys.brokeKey();
             return true;
         }
     }

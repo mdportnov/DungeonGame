@@ -3,7 +3,7 @@
 #include "include/model/MapObject.h"
 
 // грузит ТОЛЬКО тайлы и объекты стен (solid) и лестниц (ladder_up/_down)
-bool Level::loadMapFromFile(const std::string &filename) {
+bool Level::loadStaticMapFromFile(const std::string &filename) {
     TiXmlDocument levelFile(filename.c_str());
 
     // Загружаем XML-карту
@@ -218,7 +218,7 @@ bool Level::loadMapFromFile(const std::string &filename) {
     return true;
 }
 
-bool Level::loadStateFromFile(const std::string &filename) {
+bool Level::loadDynamicObjectsFromFile(const std::string &filename) {
     TiXmlDocument stateFile(filename.c_str());
 
     // Загружаем XML
@@ -295,6 +295,10 @@ bool Level::loadStateFromFile(const std::string &filename) {
                 if (objectElement->Attribute("name") != nullptr) {
                     objectName = objectElement->Attribute("name");
                 }
+                int layer;
+                if (objectElement->Attribute("layer") != nullptr) {
+                    layer = stoi(objectElement->Attribute("layer"));
+                }
 
                 int x = stoi(objectElement->Attribute("x"));
                 int y = stoi(objectElement->Attribute("y"));
@@ -302,7 +306,6 @@ bool Level::loadStateFromFile(const std::string &filename) {
                 int width, height;
                 sf::Sprite sprite;
                 sprite.setPosition(x, y);
-
 
                 if (objectElement->Attribute("width") != nullptr) {
                     width = atoi(objectElement->Attribute("width"));
@@ -338,18 +341,21 @@ bool Level::loadStateFromFile(const std::string &filename) {
                     image.loadFromFile("../res/img/chest_opened.png");
                     imagePath = objectName + ".png";
                 }
+                if (objectType == "player") {
+                    currentLayer = layer;
+                }
 
                 texture.loadFromImage(image);
                 sprite.setTexture(texture);
                 sprite.setTextureRect(sf::IntRect(0, 0, 50, 50));
 
-                // Экземпляр объекта
                 MapObject object;
                 object.name = objectName;
                 object.type = objectType;
                 object.sprite = sprite;
                 object.imagePath = imagePath;
                 object.subType = objectSubType;
+                object.layer = layer;
 
                 sf::Rect<float> objectRect;
                 objectRect.top = y;
@@ -358,19 +364,16 @@ bool Level::loadStateFromFile(const std::string &filename) {
                 objectRect.width = width;
                 object.rect = objectRect;
 
-                // "Переменные" объекта
-                TiXmlElement *properties;
+                TiXmlElement *properties; // Переменные объекта
                 properties = objectElement->FirstChildElement("properties");
                 if (properties != nullptr) {
                     TiXmlElement *prop;
                     prop = properties->FirstChildElement("property");
                     if (prop != nullptr) {
                         while (prop) {
-                            std::string propertyName = prop->Attribute("name");
-                            std::string propertyValue = prop->Attribute("value");
-
+                            string propertyName = prop->Attribute("name");
+                            string propertyValue = prop->Attribute("value");
                             object.properties[propertyName] = propertyValue;
-
                             prop = prop->NextSiblingElement("property");
                         }
                     }
@@ -390,52 +393,43 @@ bool Level::loadStateFromFile(const std::string &filename) {
 }
 
 MapObject Level::getPlayer() {
-    for (auto &object : dynamicObjects[currentObjectsLayer])
+    for (auto &object : dynamicObjects[0])
         if (object.type == "player")
             return object;
 }
 
 std::vector<MapObject> Level::getObjectsByType(const std::string &type) {
     std::vector<MapObject> vec;
-    for (auto &object : dynamicObjects[currentObjectsLayer])
+    for (auto &object : dynamicObjects[0])
         if (object.type == type)
             vec.push_back(object);
     return vec;
 }
 
 std::vector<MapObject> Level::getAllStaticObjects() {
-    return staticObjects[currentObjectsLayer];
-};
+    return staticObjects[currentLayer];
+}
 
 std::vector<MapObject> Level::getAllDynamicObjects() {
-    return dynamicObjects[currentObjectsLayer];
-};
-
-void Level::deleteObject(std::vector<MapObject>::const_iterator it) {
-//    dynamicObjects[currentObjectsLayer].erase(it);
+    return dynamicObjects[0];
 }
 
 void Level::draw(sf::RenderWindow &window) {
     // Рисуем все тайлы (объекты НЕ рисуем!)
-//    for (auto &layer : layers)
-    for (const auto &tile : layers[currentTileLayer].tiles)
+    for (const auto &tile : layers[currentLayer].tiles)
         window.draw(tile);
 }
 
 void Level::goUp() {
-    if (currentTileLayer < 1) {
-        currentTileLayer++;
-        currentObjectsLayer++;
-        std::cout << "Current tiles layer is: " << currentTileLayer << std::endl;
-        std::cout << "Current objects layer is: " << currentObjectsLayer << std::endl;
+    if (currentLayer < 1) {
+        currentLayer++;
+        std::cout << "Current objects layer is: " << currentLayer << std::endl;
     }
 }
 
 void Level::goDown() {
-    if (currentTileLayer > 0) {
-        currentObjectsLayer--;
-        currentTileLayer--;
-        std::cout << "Current tiles layer is: " << currentTileLayer << std::endl;
-        std::cout << "Current objects layer is: " << currentObjectsLayer << std::endl;
+    if (currentLayer > 0) {
+        currentLayer--;
+        std::cout << "Current objects layer is: " << currentLayer << std::endl;
     }
 }
