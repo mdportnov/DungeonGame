@@ -53,8 +53,8 @@ namespace MyGame {
         Clock clock, attackClock, doorClock, chestClock, potionsClock, ladderClock, usingPotionClock, itemsClock;
 
         Level level;
-        level.loadStaticMapFromFile("../res/level2.tmx");
-        level.loadDynamicObjectsFromFile("../res/level2objects.xml");
+        level.loadStaticMapFromFile("../res/level1.tmx");
+        level.loadDynamicObjectsFromFile("../res/level1objects.xml");
 
         MapObject player = level.getPlayer();
 
@@ -75,8 +75,7 @@ namespace MyGame {
         for (auto i : level.getObjectsByType("enemy")) {
             enemiesList.push_back(
                     new Enemy(level, i.imagePath, i.name, i.rect.left, i.rect.top, i.rect.width, i.rect.height, i.layer,
-                              stof(i.properties["hp"]), stof(i.properties["lvl"]),
-                              stof(i.properties["damage"])));
+                              i.properties));
         }
 
         for (auto i : level.getObjectsByType("door")) {
@@ -94,15 +93,10 @@ namespace MyGame {
 
         for (auto i : level.getObjectsByType("item")) {
             if (i.subType == "potion") {
-                vector<pair<string, float>> chList;
-                for (auto &prop : i.properties) {
-                    if (prop.first != "state")
-                        chList.emplace_back(prop.first, stof(prop.second));
-                }
                 itemsList.push_back(
                         new Potion(level, i.imagePath, i.name, i.type, i.subType,
                                    i.rect.left, i.rect.top, i.rect.width, i.rect.height, i.layer,
-                                   std::stoi(i.properties["state"]), chList));
+                                   std::stoi(i.properties["state"]), i.properties));
             }
             if (i.subType == "weapon")
                 itemsList.push_back(
@@ -253,8 +247,8 @@ namespace MyGame {
                         if (potion->isUsingNow) {
                             potion->timer--;
                             if (potion->timer == 0) {
-                                if (potion->changesList[0].first != "hp") {
-                                    p.attributes[potion->changesList[0].first] -= potion->changesList[0].second;
+                                if (potion->changesListA[0].first != "hp") {
+                                    p.attributes[potion->changesListA[0].first] -= potion->changesListA[0].second;
                                 }
                                 p.deletePotion();
                             }

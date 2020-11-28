@@ -1,19 +1,11 @@
 #include "include/model/equip/ArtefactEquipment.h"
 
-#include <utility>
-
-ArtefactEquipment::ArtefactEquipment(Level &level, string &fileName, string &name, string &type, string &subType,
-                                     float x, float y, float w, float h, int layer, int state, float protection, int eqType,
-                                     int materialType, map<string, string> properties) : Equipment(
-        level, fileName, name, type, subType, x, y, w, h, layer, state, protection, eqType, materialType),
-                                                                                         changesMapFromXML(std::move(
-                                                                                                 properties)) {
-    for (const auto &p: changesMapFromXML) {
-        if (p.first.length() == 2) {
-            changesListA.emplace_back(p.first, stof(p.second));
-        }
-    }
-
+ArtefactEquipment::ArtefactEquipment(Level &level,
+                                     string &fileName, string &name, string &type, string &subType, float x,
+                                     float y, float w, float h, int layer, int state, float protection, int eqType,
+                                     int materialType, const map<string, string> &properties) :
+        ChangesAttributes(properties),
+        Equipment(level, fileName, name, type, subType, x, y, w, h, layer, state, protection, eqType, materialType) {
 }
 
 void ArtefactEquipment::draw(RenderWindow &window) {

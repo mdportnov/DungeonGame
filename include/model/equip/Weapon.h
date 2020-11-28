@@ -7,7 +7,7 @@ public:
     Weapon(Level &level, string &fileName, string &name, string &type, string &subType,
            float x, float y, float w, float h, int layer, int state, float damage);
 
-    float getDamage() const;
+    float calculateDamage() const;
 
     void draw(RenderWindow &window) override;
 

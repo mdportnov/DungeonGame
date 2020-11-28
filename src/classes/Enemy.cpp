@@ -1,15 +1,14 @@
 #include "include/model/Enemy.h"
 #include "include/model/Unit.h"
 
-Enemy::Enemy(Level &level, string fileName, string name, float x, float y, float w, float h, int layer, float hp, float lvl,
-             float damage)
+Enemy::Enemy(Level &level, string fileName, string name, float x, float y, float w, float h, int layer, std::map<string, string> props)
         : Unit(level, fileName, name, x, y, w, h, layer) {
     state = false;
     isAlive = true;
-    health = hp;
-    this->lvl = lvl;
-    this->damage = damage;
-    speed = 0.1;
+    health = stof(props["hp"]);
+    lvl = stof(props["lvl"]);
+    damage = stof(props["damage"]);
+    speed = stof(props["sp"]);
 }
 
 void Enemy::update(float time) {

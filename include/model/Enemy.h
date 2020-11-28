@@ -13,9 +13,7 @@ public:
     int dir = 1;
     float lvl;
 
-//    FloatRect getEnemyArea() { return {x - 100, y - 100, w + 100, h + 100}; }
-
-    Enemy(Level &level, string fileName, string name, float x, float y, float w, float h, int layer, float hp, float d, float d1);
+    Enemy(Level &level, string fileName, string name, float x, float y, float w, float h, int layer, std::map<string, string> props);
 
     void update(float time) override;
 

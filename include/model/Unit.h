@@ -11,6 +11,7 @@ using namespace std;
 
 class Unit : public ObjectOnField {
 public:
+    std::map<string, float> attributes;
     float dx, dy, speed;
     float health, damage;
     int framesCount = 0;

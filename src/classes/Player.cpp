@@ -190,7 +190,7 @@ void Player::takeItem(Item *&item) {
 vector<pair<string, float>> Player::drinkPotion() {
     vector<pair<string, float>> changesList;
     if (!potions.empty()) {
-        changesList = (*(potions.begin() + currPotion))->changesList;
+        changesList = (*(potions.begin() + currPotion))->changesListA;
     }
     return changesList;
 }
@@ -229,7 +229,7 @@ float Player::calculateDamage(Unit *unit) {
             return getSkillValue("pw") * getSkillValue("st") +
                    enchantedWeapon->calculateDamage(unit->name);
         }
-        return getSkillValue("pw") * getSkillValue("st") + weapon->getDamage();
+        return getSkillValue("pw") * getSkillValue("st") + weapon->calculateDamage();
     } else
         return getSkillValue("pw") * getSkillValue("st");
 }

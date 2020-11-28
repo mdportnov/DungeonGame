@@ -2,13 +2,8 @@
 
 ArtefactWeapon::ArtefactWeapon(Level &level, string &fileName, string &name, string &type, string &subType, float x,
                                float y, float w, float h, int layer, int state, float damage,
-                               const map<string, string> &properties)
-        : Weapon(level, fileName, name, type, subType, x, y, w, h, layer, state, damage) {
-    for (const auto &p: properties) {
-        if (p.first.length()==2) {
-            changesListA.emplace_back(p.first, stof(p.second));
-        }
-    }
+                               const map<string, string> &changesList)
+        : Weapon(level, fileName, name, type, subType, x, y, w, h, layer, state, damage), ChangesAttributes(changesList) {
 }
 
 void ArtefactWeapon::draw(RenderWindow &window) {

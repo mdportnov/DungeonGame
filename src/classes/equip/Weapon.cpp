@@ -6,7 +6,7 @@ Weapon::Weapon(Level &level, string &fileName, string &name, string &type, strin
     this->damage = damage;
 }
 
-float Weapon::getDamage() const {
+float Weapon::calculateDamage() const {
     return damage;
 }
 

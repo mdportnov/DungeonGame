@@ -159,7 +159,7 @@ public:
             if (dynamic_cast<Weapon *>(it) != nullptr) {
                 property = new TiXmlElement("property");
                 property->SetAttribute("name", "damage");
-                property->SetAttribute("value", to_string((int) dynamic_cast<Weapon *>(it)->getDamage()).c_str());
+                property->SetAttribute("value", to_string((int) dynamic_cast<Weapon *>(it)->calculateDamage()).c_str());
                 properties->LinkEndChild(property);
 
                 if (dynamic_cast<ArtefactWeapon *>(it) != nullptr) {
@@ -181,7 +181,7 @@ public:
                 }
             }
             if (dynamic_cast<Potion *>(it) != nullptr)
-                for (auto &i:  dynamic_cast<Potion *>(it)->changesList) {
+                for (auto &i:  dynamic_cast<Potion *>(it)->changesListA) {
                     property = new TiXmlElement("property");
                     property->SetAttribute("name", (i.first).c_str());
                     property->SetAttribute("value", to_string(i.second).c_str());

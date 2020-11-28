@@ -10,16 +10,15 @@ EnchantedWeapon::EnchantedWeapon(Level &level, string &fileName, string &name, s
             changesListE.insert({p.first, stof(p.second)});
         }
     }
-
 }
 
 float EnchantedWeapon::calculateDamage(string &enemyType) {
     for (const auto &list: changesListE) {
         if (list.first == enemyType) {
-            return getDamage() * list.second;
+            return Weapon::calculateDamage() * list.second;
         }
     }
-    return getDamage();
+    return Weapon::calculateDamage();
 }
 
 void EnchantedWeapon::draw(RenderWindow &window) {

@@ -57,7 +57,7 @@ void InfoBar::draw(RenderWindow &window) {
         text.setFont(font);
         text.setPosition(itemsBar1OriginX + 13, itemsBar1OriginY + 25);
 
-        text.setString(to_string_with_precision(player->weapon->getDamage(), 2));
+        text.setString(to_string_with_precision(player->weapon->calculateDamage(), 2));
         text.setFillColor(Color::Black);
         text.setCharacterSize(13);
         window.draw(text);

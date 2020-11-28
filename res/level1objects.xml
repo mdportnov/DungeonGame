@@ -18,6 +18,7 @@
                 <property name="hp" value="250"/>
                 <property name="lvl" value="40"/>
                 <property name="damage" value="10"/>
+                <property name="sp" value="0.1"/>
             </properties>
         </object>
         <object name="egorov" type="enemy" x="200" y="200" width="30" height="50" layer="1">
@@ -25,6 +26,7 @@
                 <property name="hp" value="250"/>
                 <property name="lvl" value="40"/>
                 <property name="damage" value="10"/>
+                <property name="sp" value="0.2"/>
             </properties>
         </object>
         <object name="egorov" type="enemy" x="500" y="200" width="30" height="50" layer="0">
@@ -32,6 +34,7 @@
                 <property name="hp" value="300"/>
                 <property name="lvl" value="40"/>
                 <property name="damage" value="10"/>
+                <property name="sp" value="0.1"/>
             </properties>
         </object>
         <object name="egorov" type="enemy" x="800" y="500" width="30" height="50" layer="0">
@@ -39,6 +42,7 @@
                 <property name="hp" value="300"/>
                 <property name="lvl" value="40"/>
                 <property name="damage" value="10"/>
+                <property name="sp" value="0.1"/>
             </properties>
         </object>
         <object name="egorov" type="enemy" x="900" y="500" width="30" height="50" layer="0">
@@ -46,6 +50,7 @@
                 <property name="hp" value="300"/>
                 <property name="lvl" value="40"/>
                 <property name="damage" value="10"/>
+                <property name="sp" value="0.1"/>
             </properties>
         </object>
         <object name="python" type="enemy" x="250" y="50" width="50" height="50" layer="0">
@@ -53,6 +58,7 @@
                 <property name="hp" value="150"/>
                 <property name="lvl" value="50"/>
                 <property name="damage" value="20"/>
+                <property name="sp" value="0.4"/>
             </properties>
         </object>
 
@@ -183,13 +189,6 @@
         <object name="potion_stamina" type="item" subType="potion" x="250" y="100" width="50" height="50" layer="0">
             <properties>
                 <property name="st" value="10"/>
-                <property name="state" value="0"/>
-            </properties>
-        </object>
-
-        <object name="potion_speed" type="item" subType="potion" x="200" y="100" width="50" height="50" layer="1">
-            <properties>
-                <property name="sp" value="0.1"/>
                 <property name="state" value="0"/>
             </properties>
         </object>

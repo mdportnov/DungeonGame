@@ -2571,24 +2571,7 @@
 											"top": 390,
 											"width": 143,
 											"height": 13,
-											"text": "+type: string",
-											"horizontalAlignment": 0
-										},
-										{
-											"_type": "UMLAttributeView",
-											"_id": "AAAAAAF1E7TBpDeKZOU=",
-											"_parent": {
-												"$ref": "AAAAAAF1E6t7CzQpveU="
-											},
-											"model": {
-												"$ref": "AAAAAAF1E7TBgDeHOHE="
-											},
-											"font": "Arial;13;0",
-											"left": 933,
-											"top": 405,
-											"width": 143,
-											"height": 13,
-											"text": "+protection: int",
+											"text": "+eqType: int",
 											"horizontalAlignment": 0
 										},
 										{
@@ -2602,10 +2585,27 @@
 											},
 											"font": "Arial;13;0",
 											"left": 933,
+											"top": 405,
+											"width": 143,
+											"height": 13,
+											"text": "+materialType: int",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLAttributeView",
+											"_id": "AAAAAAF1E7TBpDeKZOU=",
+											"_parent": {
+												"$ref": "AAAAAAF1E6t7CzQpveU="
+											},
+											"model": {
+												"$ref": "AAAAAAF1E7TBgDeHOHE="
+											},
+											"font": "Arial;13;0",
+											"left": 933,
 											"top": 420,
 											"width": 143,
 											"height": 13,
-											"text": "+material: string",
+											"text": "+protection: float",
 											"horizontalAlignment": 0
 										}
 									],
@@ -9586,7 +9586,7 @@
 											"top": 734,
 											"width": 255,
 											"height": 13,
-											"text": "+changesListA: vector<pair<string int>>",
+											"text": "+changesListA: vector<pair<string float>>",
 											"horizontalAlignment": 0
 										}
 									],
@@ -11521,16 +11521,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF1E6t7CjQhKmY="
 							},
-							"name": "type",
-							"type": "string"
-						},
-						{
-							"_type": "UMLAttribute",
-							"_id": "AAAAAAF1E7TBgDeHOHE=",
-							"_parent": {
-								"$ref": "AAAAAAF1E6t7CjQhKmY="
-							},
-							"name": "protection",
+							"name": "eqType",
 							"type": "int"
 						},
 						{
@@ -11539,8 +11530,17 @@
 							"_parent": {
 								"$ref": "AAAAAAF1E6t7CjQhKmY="
 							},
-							"name": "material",
-							"type": "string"
+							"name": "materialType",
+							"type": "int"
+						},
+						{
+							"_type": "UMLAttribute",
+							"_id": "AAAAAAF1E7TBgDeHOHE=",
+							"_parent": {
+								"$ref": "AAAAAAF1E6t7CjQhKmY="
+							},
+							"name": "protection",
+							"type": "float"
 						}
 					]
 				},
@@ -13626,7 +13626,7 @@
 								"$ref": "AAAAAAF19Y08c+kEfFM="
 							},
 							"name": "changesListA",
-							"type": "vector<pair<string int>>"
+							"type": "vector<pair<string float>>"
 						}
 					]
 				}

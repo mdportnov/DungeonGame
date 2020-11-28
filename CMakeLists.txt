@@ -15,6 +15,7 @@ set(TINY_SOURCES "include/TinyXML/tinyxml.h"
 
 find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 
+add_executable(map src/HashMap.cpp src/HashMap.h)
 add_executable(DungeonGame
         src/main.cpp
         include/main.h
@@ -63,6 +64,8 @@ add_executable(DungeonGame
         src/classes/equip/ArtefactEquipment.cpp
         src/classes/equip/ArtefactWeapon.cpp
         src/classes/equip/EnchantedArtefactWeapon.cpp
+        src/classes/equip/ChangesAttributes.cpp
+        include/model/equip/ChangesAttributes.h
         ${TINY_SOURCES}
         )
 
