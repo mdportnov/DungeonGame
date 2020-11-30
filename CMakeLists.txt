@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 include_directories(.)
 include_directories(/src/)
+add_subdirectory(gtest/)
 
 set(TINY_SOURCES "include/TinyXML/tinyxml.h"
         "include/TinyXML/tinystr.h"
