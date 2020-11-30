@@ -2,12 +2,9 @@
 
 #include "include/model/Item.h"
 
-enum EquipmentTypes {
-    HELMET, SHIELD, BREASTPLATE
-};
-enum EquipmentMaterials {
-    BRONZE, GOLD, DIAMOND
-};
+/**
+ * Класс, отвечающий за броню, одетую на персонажа
+ */
 
 class Equipment : public Item {
 public:

@@ -2,6 +2,9 @@
 
 #include <include/model/ObjectOnField.h>
 
+/**
+ * Класс объекта двери. Дверь может мешать пройти игроку. НЕ может быть заперта
+ */
 class Door : public ObjectOnField {
 public:
     bool isLocked;
@@ -12,5 +15,8 @@ public:
 
     void update();
 
+    /**
+     * Изменение состояния двери
+     */
     void changeDoorState();
 };

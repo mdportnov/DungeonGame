@@ -11,26 +11,54 @@
 
 using namespace std;
 
+/**
+ * Класс, характеризующих загруженный уровень
+ */
 class Level {
 public:
-    bool loadStaticMapFromFile(const string &filename);
-
-    bool loadDynamicObjectsFromFile(const string &filename);
-
-    vector<MapObject> getAllStaticObjects();
-
-    vector<MapObject> getAllDynamicObjects();
-
-    void draw(sf::RenderWindow &window);
-
-    void goUp();
-
-    void goDown();
-
     int currentLayer;
 
+    /**
+     * Загрузка карты: тайлы, объекты (лестницы, стены)
+     */
+    bool loadStaticMapFromFile(const string &filename);
+
+    /**
+     * Загрузка характеристик объектов на уровне
+     */
+    bool loadDynamicObjectsFromFile(const string &filename);
+
+    /**
+     * Получить статические объекты текущего слоя уровня
+     */
+    vector<MapObject> getAllStaticObjects();
+
+    /**
+     * Получить динамические объекты текущего слоя уровня
+     */
+    vector<MapObject> getAllDynamicObjects();
+    /**
+     * Отрисовка уровня
+     */
+    void draw(sf::RenderWindow &window);
+
+    /**
+     * Поднимемся наверх!
+     */
+    void goUp();
+
+    /**
+     * Опустимся вниз!
+     */
+    void goDown();
+    /**
+     * Получение объекта игрока
+     */
     MapObject getPlayer();
 
+    /**
+     * Получение объектов по их типу
+     */
     vector<MapObject> getObjectsByType(const string &type);
 
 private:

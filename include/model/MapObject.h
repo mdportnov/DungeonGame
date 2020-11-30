@@ -5,6 +5,9 @@
 
 using namespace std;
 
+/**
+ * Util-класс для десериализации данных из XML
+ */
 class MapObject {
 public:
     string name;

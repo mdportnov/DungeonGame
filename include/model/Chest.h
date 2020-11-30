@@ -10,6 +10,9 @@
 
 using namespace std;
 
+/**
+ * Класс сундука, в котором хранится один предмет
+ */
 class Chest : public ObjectOnField {
 public:
     bool isLocked;
@@ -20,15 +23,28 @@ public:
 
     FloatRect getAreaRect();
 
+    /**
+     * Установка хранимого предмета
+     */
     void setItem(Item *item);
 
+    /**
+    * Совершение попытки открыть в зависимости от характеристик игрока
+    */
     bool open(Player &player);
-
-    bool canOpen(double prob);
 private:
-    Item *storedItem;
+    /**
+     * Получение ответа, можем ли открыть сундук или нет в зависимости от вероятности
+     * @param prob вероятность
+     */
+    bool canOpen(double prob);
 
+    /**
+     * Получение вероятности открывания сундука в зависимости от характеристик игрока
+     */
     float getProbabilityOfOpen(Player &player);
+
+    Item *storedItem;
 };
 
 #endif //_CHEST_H

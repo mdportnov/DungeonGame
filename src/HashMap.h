@@ -5,6 +5,9 @@
 
 using namespace std;
 
+/**
+ * Узел ассоциативного массива, состоящий из ключа и значения
+ */
 template<class K, class V>
 class MapNode {
 
@@ -33,6 +36,9 @@ public:
     }
 };
 
+/**
+ * Ассоциативный динамический массив
+ */
 template<class K, class V>
 class HashMap {
     MapNode<K, V> *array;
@@ -40,6 +46,9 @@ class HashMap {
     int _capacity;
     int _size;
 
+    /**
+     * Сортировка
+     */
     void sort() {
         for (int i = 1; i < size(); i++) {
             for (int j = i; j > 0 && array[j - 1].first > array[j].first; j--) {
@@ -57,6 +66,9 @@ public:
         _size = 0;
     }
 
+    /**
+     * Вставка в массив
+     */
     void insert(K key, V value) {
         if (!contains(key)) {
             if (_size == _capacity) {
@@ -85,14 +97,22 @@ public:
 
         iterator(pointer ptr) : ptr_(ptr) {}
 
-        self_type operator++() { ptr_++; return *this; }
-        self_type operator++(int j) { self_type i = *this; ptr_++; return i; }
+        self_type operator++() {
+            ptr_++;
+            return *this;
+        }
+
+        self_type operator++(int j) {
+            self_type i = *this;
+            ptr_++;
+            return i;
+        }
 
         reference operator*() { return *ptr_; }
 
         pointer operator->() { return ptr_; }
 
-        bool operator==(const self_type &rhs) const{ return ptr_ == rhs.ptr_; }
+        bool operator==(const self_type &rhs) const { return ptr_ == rhs.ptr_; }
 
         bool operator!=(const self_type &rhs) const { return ptr_ != rhs.ptr_; }
 
@@ -109,13 +129,22 @@ public:
 
         const_iterator(pointer ptr) : ptr_(ptr) {}
 
-        self_type operator++() { ptr_++; return *this; }
-        self_type operator++(int j) { self_type i = *this; ptr_++; return i; }
+        self_type operator++() {
+            ptr_++;
+            return *this;
+        }
+
+        self_type operator++(int j) {
+            self_type i = *this;
+            ptr_++;
+            return i;
+        }
 
         const reference operator*() { return *ptr_; }
-        const value_type* operator->() { return ptr_; }
 
-        bool operator==(const self_type &rhs) const{ return ptr_ == rhs.ptr_; }
+        const value_type *operator->() { return ptr_; }
+
+        bool operator==(const self_type &rhs) const { return ptr_ == rhs.ptr_; }
 
         bool operator!=(const self_type &rhs) const { return ptr_ != rhs.ptr_; }
 
@@ -153,6 +182,9 @@ public:
         }
     }
 
+    /**
+     * Проверка на существование элемента в массиве
+     */
     bool contains(K key, int &index) {
         int l = 0, r = size(), mid;
 
@@ -169,6 +201,9 @@ public:
         }
     }
 
+    /**
+     * Проверка на существование элемента в массиве
+     */
     bool contains(K key) {
         int l = 0, r = size(), mid;
 

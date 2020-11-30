@@ -3,6 +3,10 @@
 #include "EnchantedWeapon.h"
 #include "ArtefactWeapon.h"
 
+/**
+ * Класс зачарованного артефактного оружия
+ */
+
 class EnchantedArtefactWeapon : public EnchantedWeapon, public ArtefactWeapon {
 public:
     EnchantedArtefactWeapon(Level &level, string &fileName, string &name, string &type,

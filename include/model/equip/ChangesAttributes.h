@@ -9,15 +9,12 @@
 
 using namespace std;
 
-/*
- *
- *
- *
- * */
-
+/**
+ * Класс изменений, которые производят артефакты и зелья
+ */
 
 class ChangesAttributes {
-    vector<string> asdasd{
+    vector<string> existingChars{
             "sp",
             "st",
             "pw",

@@ -2,7 +2,7 @@
 #include "include/DungeonGameApp.h"
 
 int main() {
-    MyGame::DungeonGameApp App;
+    DungeonGameApp App;
     App.Init();
     App.MusicInit();
     App.Run();

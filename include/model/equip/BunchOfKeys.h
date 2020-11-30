@@ -9,6 +9,9 @@ using namespace std;
 
 #include "include/model/Item.h"
 
+/**
+ * Класс связки отмычек, которую носит герой
+ */
 
 class BunchOfKeys {
 public:

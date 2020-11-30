@@ -79,7 +79,7 @@ void Player::control(float time) {
         currentFrame += 0.005 * time;
         if (currentFrame > framesCount) currentFrame -= framesCount;
         sprite.setTextureRect(IntRect(30 * int(currentFrame), 0, 30, 50));
-        view->getPlayerCoordinateForView(this->getX(), this->getY());
+        view->getPlayerCoordinateForView(this->x, this->y);
     }
 
     if (key["D"]) {
@@ -89,21 +89,21 @@ void Player::control(float time) {
         currentFrame += 0.005 * time;
         if (currentFrame > framesCount) currentFrame -= framesCount;
         sprite.setTextureRect(IntRect(30 * int(currentFrame), 0, 30, 50));
-        view->getPlayerCoordinateForView(this->getX(), this->getY());
+        view->getPlayerCoordinateForView(this->x, this->y);
     }
 
     if (key["W"]) {
         currentFrame += 0.005 * time;
         if (currentFrame > framesCount) currentFrame -= framesCount;
         sprite.setTextureRect(IntRect(30 * int(currentFrame), 0, 30, 50));
-        view->getPlayerCoordinateForView(this->getX(), this->getY());
+        view->getPlayerCoordinateForView(this->x, this->y);
     }
 
     if (key["S"]) {
         currentFrame += 0.005 * time;
         if (currentFrame > framesCount) currentFrame -= framesCount;
         sprite.setTextureRect(IntRect(30 * int(currentFrame), 0, 30, 50));
-        view->getPlayerCoordinateForView(this->getX(), this->getY());
+        view->getPlayerCoordinateForView(this->x, this->y);
     }
 }
 

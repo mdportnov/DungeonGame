@@ -2,6 +2,9 @@
 
 #include "ObjectOnField.h"
 
+/**
+ * Класс предмета, лежащего в инвентаре, на карте или в сундуке
+ */
 class Item : public ObjectOnField {
 public:
     Item(Level &level, string &fileName, string &name, string &type, string &subType,

@@ -32,20 +32,20 @@ void Unit::update(float time) {
     }
 }
 
-void Unit::checkCollision(int num) {
+void Unit::checkCollision(int axis) {
     for (auto &i : map)
         if (getRect().intersects(i.rect)) {
             if (i.name == "solid") {
-                if (dy > 0 && num == 1) {
+                if (dy > 0 && axis == 1) {
                     y = i.rect.top - h;
                     dy = 0;
                 }
-                if (dy < 0 && num == 1) {
+                if (dy < 0 && axis == 1) {
                     y = i.rect.top + i.rect.height;
                     dy = 0;
                 }
-                if (dx > 0 && num == 0) { x = i.rect.left - w; }
-                if (dx < 0 && num == 0) { x = i.rect.left + i.rect.width; }
+                if (dx > 0 && axis == 0) { x = i.rect.left - w; }
+                if (dx < 0 && axis == 0) { x = i.rect.left + i.rect.width; }
             }
         }
 }

@@ -7,6 +7,9 @@
 
 using namespace sf;
 
+/**
+ * Класс врага
+ */
 class Enemy : public Unit {
 public:
     bool state;

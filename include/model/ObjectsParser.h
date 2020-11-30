@@ -10,9 +10,14 @@
 #include <include/model/equip/EnchantedWeapon.h>
 #include "Door.h"
 #include "Chest.h"
-
+/**
+ * Сериализатор данных в файл
+ */
 class ObjectsParser {
 public:
+    /**
+     * Сохранение прогресса на уровне
+     */
     static void saveToFileProgress(const Level &level, const Player &player, const list<Enemy *> &enemiesList,
                                    const list<Item *> &itemsList, list<Door *> &doorsList, list<Chest *> chestsList) {
         TiXmlDocument doc;
@@ -226,10 +231,6 @@ public:
         }
 
         doc.SaveFile("../res/level1objectss.xml");
-    }
-
-    void loadFromFileProgress(const Level &level, const Player &player, const std::list<Enemy *> &enemiesList) {
-
     }
 
 };

@@ -16,14 +16,6 @@ ObjectOnField::ObjectOnField(Level &level, string &fileName, string &name, float
         cout << "Font cannot be downloaded";
 }
 
-float ObjectOnField::getX() const {
-    return x;
-}
-
-float ObjectOnField::getY() const {
-    return y;
-}
-
 void ObjectOnField::update(float time) {
     sprite.setPosition(x, y);
 }

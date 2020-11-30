@@ -6,6 +6,10 @@
 #include "string"
 #include "ChangesAttributes.h"
 
+/**
+ * Класс зелья, изменяющего соответствующие характеристики героя
+ */
+
 class Potion : public Item, public ChangesAttributes {
 public:
     int timer = 10;

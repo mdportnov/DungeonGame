@@ -10,6 +10,9 @@
 using namespace sf;
 using namespace std;
 
+/**
+ * Класс персонажа, имеющий определенные характеристики
+ */
 class Unit : public ObjectOnField {
 public:
 //    std::map<string, float> attributes;
@@ -28,11 +31,20 @@ public:
 
     void update(float time) override;
 
-    virtual void checkCollision(int num);
+    /**
+     * Проверка столкновения персонажа по оси
+     */
+    virtual void checkCollision(int axis);
 
+    /**
+     * Получение урона от другого персонажа
+     */
     virtual void acceptDamageFrom(Unit *unit);
 
     virtual void draw(RenderWindow &window);
 
+    /**
+     * Вычисление наносимого урона с учётом носимого инвентаря
+     */
     virtual float calculateDamage(Unit *unit);
 };

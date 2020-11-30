@@ -7,6 +7,10 @@
 
 using namespace std;
 
+/**
+ * Класс зачарованного оружия, наносящего больший урон соответствующим злодеям
+ */
+
 class EnchantedWeapon : virtual public Weapon {
 public:
     EnchantedWeapon(Level &level, string &fileName, string &name, string &type, string &subType, float x, float y,

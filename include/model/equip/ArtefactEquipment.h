@@ -9,6 +9,10 @@ using namespace std;
 
 #include "Equipment.h"
 
+/**
+ * Класс артефактного оружия, величивающего определённые характеристики героя
+ */
+
 class ArtefactEquipment : public Equipment, public ChangesAttributes {
 public:
     ArtefactEquipment(Level &level, string &fileName, string &name, string &type, string &subType, float x, float y,

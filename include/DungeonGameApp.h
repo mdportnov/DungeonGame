@@ -1,25 +1,38 @@
 #include "main.h"
 
-namespace MyGame {
-    class DungeonGameApp {
-    protected:
-        sf::RenderWindow *window;
-    public:
-        sf::SoundBuffer buffer1, buffer2, buffer3;
-        sf::Sound doorSound, chestSound, mainSound;
 
-        DungeonGameApp();
+/**
+ * Главный класс игры, в функциях которого инициализируются игровые объекты,
+ * создаёт основной цикл игры, обновляются параметры
+ */
+class DungeonGameApp {
+protected:
+    sf::RenderWindow *window;
+public:
+    sf::SoundBuffer buffer1, buffer2, buffer3;
+    sf::Sound doorSound, chestSound, mainSound;
 
-        ~DungeonGameApp();
+    DungeonGameApp();
 
-        void Init();
+    ~DungeonGameApp();
 
-        void Run();
+    /**
+     *  Создание окна
+     */
+    void Init();
 
-        void End();
+    /**
+     *  Загрузка данных и их взаимодействие между собой
+     */
+    void Run();
 
-        void MusicInit();
+    /**
+     *  Закрытие окна
+     */
+    void End();
 
-        void playSound(std::string name);
-    };
-}
+    /**
+     *  Инициализация звуковых файлов игры
+     */
+    void MusicInit();
+};

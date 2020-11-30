@@ -6,6 +6,9 @@
 
 using namespace sf;
 
+/**
+ * Класс для отрисовки характеристик игрока
+ */
 class InfoBar {
 private:
     Player *player;
@@ -23,6 +26,10 @@ public:
 
     void draw(RenderWindow &window);
 
+
+    /**
+     * Получение ссылки на игрока
+     */
     void observe(Player *p);
 };
 
