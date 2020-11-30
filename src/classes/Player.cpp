@@ -13,7 +13,6 @@ Player::Player(Level &level, MyView &view, string fileName, string name, float x
         : Unit(level, fileName, name, x, y, w, h, layer) {
     this->view = &view;
     for (auto &a: props) {
-//        attributes.insert({a.first, std::stof(a.second)});
         attributes.insert(a.first, std::stof(a.second));
     }
     framesCount = 5;
