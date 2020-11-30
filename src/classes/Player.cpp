@@ -26,6 +26,8 @@ Player::Player(Level &level, MyView &view, string fileName, string name, float x
     attributesDiff.insert("pw", 3);
     attributesDiff.insert("st", 0.05);
     attributesDiff.insert("dx", 0.05);
+    attributesDiff.insert("lvl", 0);
+    attributesDiff.insert("hp", 0);
 
     playerLevel = (int) getSkillValue("lvl") / 100;
 }
@@ -250,6 +252,7 @@ bool Player::isHit(double prob) {
 }
 
 float Player::getSkillValue(const string &shortname) {
+//    return attributes[shortname];
     return attributes[shortname] + (float) playerLevel * attributesDiff[shortname];
 }
 

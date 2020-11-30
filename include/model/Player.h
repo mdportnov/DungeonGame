@@ -18,7 +18,7 @@ public:
     std::vector<Potion *> potions;
     Weapon *weapon = nullptr;
     int currPotion = 0;
-    int playerLevel;
+    int playerLevel = 0;
 //    std::map<string, float> attributesDiff;
     HashMap<string, float> attributesDiff;
     BunchOfKeys bunchOfKeys;

@@ -28,14 +28,6 @@ public:
 
     MapNode() {}
 
-//    K getKey() const {
-//        return first;
-//    }
-//
-//    V &getValue() {
-//        return second;
-//    }
-
     void setValue(V value) {
         second = value;
     }
@@ -93,24 +85,16 @@ public:
 
         iterator(pointer ptr) : ptr_(ptr) {}
 
-        self_type operator++() {
-            self_type i = *this;
-            ptr_++;
-            return i;
-        }
-
-        self_type operator++(int junk) {
-            ptr_++;
-            return *this;
-        }
+        self_type operator++() { ptr_++; return *this; } // PREFIX
+        self_type operator++(int junk) { self_type i = *this; ptr_++; return i; } // POSTFIX
 
         reference operator*() { return *ptr_; }
 
         pointer operator->() { return ptr_; }
 
-        bool operator==(const self_type &rhs) { return ptr_ == rhs.ptr_; }
+        bool operator==(const self_type &rhs) const{ return ptr_ == rhs.ptr_; }
 
-        bool operator!=(const self_type &rhs) { return ptr_ != rhs.ptr_; }
+        bool operator!=(const self_type &rhs) const { return ptr_ != rhs.ptr_; }
 
     private:
         pointer ptr_;
@@ -122,29 +106,19 @@ public:
         typedef MapNode<K, V> value_type;
         typedef MapNode<K, V> &reference;
         typedef MapNode<K, V> *pointer;
-        typedef int difference_type;
         typedef std::forward_iterator_tag iterator_category;
 
         const_iterator(pointer ptr) : ptr_(ptr) {}
 
-        self_type operator++() {
-            self_type i = *this;
-            ptr_++;
-            return i;
-        }
-
-        self_type operator++(int junk) {
-            ptr_++;
-            return *this;
-        }
+        self_type operator++() { ptr_++; return *this; } // PREFIX
+        self_type operator++(int junk) { self_type i = *this; ptr_++; return i; } // POSTFIX
 
         const reference operator*() { return *ptr_; }
+        const value_type* operator->() { return ptr_; }
 
-        const pointer operator->() { return ptr_; }
+        bool operator==(const self_type &rhs) const{ return ptr_ == rhs.ptr_; }
 
-        bool operator==(const self_type &rhs) { return ptr_ == rhs.ptr_; }
-
-        bool operator!=(const self_type &rhs) { return ptr_ != rhs.ptr_; }
+        bool operator!=(const self_type &rhs) const { return ptr_ != rhs.ptr_; }
 
     private:
         pointer ptr_;
