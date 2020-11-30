@@ -85,8 +85,8 @@ public:
 
         iterator(pointer ptr) : ptr_(ptr) {}
 
-        self_type operator++() { ptr_++; return *this; } // PREFIX
-        self_type operator++(int junk) { self_type i = *this; ptr_++; return i; } // POSTFIX
+        self_type operator++() { ptr_++; return *this; }
+        self_type operator++(int j) { self_type i = *this; ptr_++; return i; }
 
         reference operator*() { return *ptr_; }
 
@@ -106,12 +106,11 @@ public:
         typedef MapNode<K, V> value_type;
         typedef MapNode<K, V> &reference;
         typedef MapNode<K, V> *pointer;
-        typedef std::forward_iterator_tag iterator_category;
 
         const_iterator(pointer ptr) : ptr_(ptr) {}
 
-        self_type operator++() { ptr_++; return *this; } // PREFIX
-        self_type operator++(int junk) { self_type i = *this; ptr_++; return i; } // POSTFIX
+        self_type operator++() { ptr_++; return *this; }
+        self_type operator++(int j) { self_type i = *this; ptr_++; return i; }
 
         const reference operator*() { return *ptr_; }
         const value_type* operator->() { return ptr_; }
