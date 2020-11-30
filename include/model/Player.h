@@ -19,9 +19,8 @@ public:
     Weapon *weapon = nullptr;
     int currPotion = 0;
     int playerLevel;
-//    TableOfCharacteristics attributes; потом реализовать мапу самому
-    std::map<string, float> attributes;
-    std::map<string, float> attributesDiff;
+//    std::map<string, float> attributesDiff;
+    HashMap<string, float> attributesDiff;
     BunchOfKeys bunchOfKeys;
     MyView *view;
 

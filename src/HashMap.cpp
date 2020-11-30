@@ -6,15 +6,19 @@ using namespace std;
 
 int main() {
     HashMap<string, float> h;
-    h.push("sp", 20);
-    h.push("dx", 0.1);
-    h.push("hp", 100);
-    h.push("pw", 10);
-    h.push("hp", 1000);
-    h.push("hp", 10000);
-    h.print();
-    cout<<h.get("hp")<<endl;
-    cout<<h.get("st");
+
+    h.insert("mxhp", 20);
+    h.insert("xp", 20);
+    h.insert("sp", 0.01);
+    h.insert("pw", 3);
+    h.insert("dx", 0.05);
+    h.insert("st", 0.05);
+
+    h["hp"] = 100.0;
+
+    for (auto & it : h) {
+        it.print();
+    }
 
     return 0;
 }

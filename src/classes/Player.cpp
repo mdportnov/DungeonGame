@@ -13,20 +13,21 @@ Player::Player(Level &level, MyView &view, string fileName, string name, float x
         : Unit(level, fileName, name, x, y, w, h, layer) {
     this->view = &view;
     for (auto &a: props) {
-        attributes.insert({a.first, std::stof(a.second)});
+//        attributes.insert({a.first, std::stof(a.second)});
+        attributes.insert(a.first, std::stof(a.second));
     }
     framesCount = 5;
+
     speed = getSkillValue("sp");
     bunchOfKeys = BunchOfKeys();
 
-    attributesDiff = {
-            {"mxhp", 20},
-            {"xp",   20},
-            {"sp",   0.01},
-            {"pw",   3},
-            {"dx",   0.05},
-            {"st",   0.05}
-    };
+    attributesDiff.insert("mxhp", 20);
+    attributesDiff.insert("xp", 20);
+    attributesDiff.insert("sp", 0.01);
+    attributesDiff.insert("pw", 3);
+    attributesDiff.insert("st", 0.05);
+    attributesDiff.insert("dx", 0.05);
+
     playerLevel = (int) getSkillValue("lvl") / 100;
 }
 
@@ -256,9 +257,4 @@ float Player::getSkillValue(const string &shortname) {
 void Player::changeSkillValue(const string &shortname, float diff) {
     attributes[shortname] += diff;
 }
-
-//void Player::improveCharacteristicByXP() {
-//    for (auto a: attributes)
-//        a.second += attributesDiff[a.first];
-//}
 

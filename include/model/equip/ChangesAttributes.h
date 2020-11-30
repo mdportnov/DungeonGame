@@ -5,10 +5,25 @@
 #include "utility"
 #include "vector"
 #include "map"
+#include "list"
 
 using namespace std;
 
+/*
+ *
+ *
+ *
+ * */
+
+
 class ChangesAttributes {
+    vector<string> asdasd{
+            "sp",
+            "st",
+            "pw",
+            "dx",
+            "hp",
+    };
 public:
     vector<pair<string, float>> changesListA;
 

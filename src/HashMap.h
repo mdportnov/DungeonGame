@@ -7,26 +7,37 @@ using namespace std;
 
 template<class K, class V>
 class MapNode {
-    K _key;
-    V _value;
+
 public:
     MapNode(K &key, V &value) {
-        _key = key;
-        _value = value;
+        first = key;
+        second = value;
+    }
+
+    K first;
+    V second;
+
+    void print() {
+        cout << "{\"";
+        cout << first;
+        cout << "\"";
+        cout << ": \"";
+        cout << second;
+        cout << "\"}\n";
     }
 
     MapNode() {}
 
-    K getKey() const {
-        return _key;
-    }
-
-    V getValue() const {
-        return _value;
-    }
+//    K getKey() const {
+//        return first;
+//    }
+//
+//    V &getValue() {
+//        return second;
+//    }
 
     void setValue(V value) {
-        _value = value;
+        second = value;
     }
 };
 
@@ -39,7 +50,7 @@ class HashMap {
 
     void sort() {
         for (int i = 1; i < size(); i++) {
-            for (int j = i; j > 0 && array[j - 1].getKey() > array[j].getKey(); j--) {
+            for (int j = i; j > 0 && array[j - 1].first > array[j].first; j--) {
                 MapNode<K, V> tmp = array[j - 1];
                 array[j - 1] = array[j];
                 array[j] = tmp;
@@ -54,7 +65,7 @@ public:
         _size = 0;
     }
 
-    void push(K key, V value) {
+    void insert(K key, V value) {
         if (!contains(key)) {
             if (_size == _capacity) {
                 auto *temp = new MapNode<K, V>[2 * _capacity];
@@ -74,12 +85,98 @@ public:
         }
     }
 
-    V get(K key) {
+    class iterator {
+    public:
+        typedef iterator self_type;
+        typedef MapNode<K, V> &reference;
+        typedef MapNode<K, V> *pointer;
+
+        iterator(pointer ptr) : ptr_(ptr) {}
+
+        self_type operator++() {
+            self_type i = *this;
+            ptr_++;
+            return i;
+        }
+
+        self_type operator++(int junk) {
+            ptr_++;
+            return *this;
+        }
+
+        reference operator*() { return *ptr_; }
+
+        pointer operator->() { return ptr_; }
+
+        bool operator==(const self_type &rhs) { return ptr_ == rhs.ptr_; }
+
+        bool operator!=(const self_type &rhs) { return ptr_ != rhs.ptr_; }
+
+    private:
+        pointer ptr_;
+    };
+
+    class const_iterator {
+    public:
+        typedef const_iterator self_type;
+        typedef MapNode<K, V> value_type;
+        typedef MapNode<K, V> &reference;
+        typedef MapNode<K, V> *pointer;
+        typedef int difference_type;
+        typedef std::forward_iterator_tag iterator_category;
+
+        const_iterator(pointer ptr) : ptr_(ptr) {}
+
+        self_type operator++() {
+            self_type i = *this;
+            ptr_++;
+            return i;
+        }
+
+        self_type operator++(int junk) {
+            ptr_++;
+            return *this;
+        }
+
+        const reference operator*() { return *ptr_; }
+
+        const pointer operator->() { return ptr_; }
+
+        bool operator==(const self_type &rhs) { return ptr_ == rhs.ptr_; }
+
+        bool operator!=(const self_type &rhs) { return ptr_ != rhs.ptr_; }
+
+    private:
+        pointer ptr_;
+    };
+
+    iterator begin() {
+        return iterator(array);
+    }
+
+    iterator end() {
+        return iterator(array + _size);
+    }
+
+    const_iterator begin() const {
+        return const_iterator(array);
+    }
+
+    const_iterator end() const {
+        return const_iterator(array + _size);
+    }
+
+    V &operator[](K key) {
         int index;
         if (contains(key, index)) {
-            return array[index].getValue();
-        } else {
-            cout << "\nThere is no value with key \"" << key << "\"";
+            return array[index].second;
+        }
+    }
+
+    V operator[](K key) const {
+        int index;
+        if (contains(key, index)) {
+            return array[index].second;
         }
     }
 
@@ -88,12 +185,12 @@ public:
 
         while (l < r) {
             mid = (l + r) / 2;
-            if (array[mid].getKey() > key) r = mid;
+            if (array[mid].first > key) r = mid;
             else l = mid + 1;
         }
         r--;
 
-        if (array[r].getKey() == key) {
+        if (array[r].first == key) {
             index = r;
             return true;
         }
@@ -104,30 +201,17 @@ public:
 
         while (l < r) {
             mid = (l + r) / 2;
-            if (array[mid].getKey() > key) r = mid;
+            if (array[mid].first > key) r = mid;
             else l = mid + 1;
         }
         r--;
 
-        if (array[r].getKey() == key) {
+        if (array[r].first == key) {
             return true;
         }
     }
 
     int size() { return _size; }
-
-    int capacity() { return _capacity; }
-
-    void print() {
-        for (int i = 0; i < size(); ++i) {
-            cout << "{\"";
-            cout << array[i].getKey();
-            cout << "\"";
-            cout << ": \"";
-            cout << array[i].getValue();
-            cout << "\"}\n";
-        }
-    }
 };
 
 #endif

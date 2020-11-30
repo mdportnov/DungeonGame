@@ -1,6 +1,7 @@
 #pragma once
 
 #include <include/model/equip/Weapon.h>
+#include <src/HashMap.h>
 #include "include/main.h"
 #include "Level.h"
 #include "ObjectOnField.h"
@@ -11,7 +12,8 @@ using namespace std;
 
 class Unit : public ObjectOnField {
 public:
-    std::map<string, float> attributes;
+//    std::map<string, float> attributes;
+    HashMap<string, float> attributes;
     float dx, dy, speed;
     float health, damage;
     int framesCount = 0;

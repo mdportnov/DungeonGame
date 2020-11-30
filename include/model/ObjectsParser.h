@@ -48,7 +48,8 @@ public:
 
         // Характеристики героя
         auto *properties = new TiXmlElement("properties");
-        for (auto &a: player.attributes) {
+//        for (HashMap<string, float>::iterator it = player.attributes.begin()) {
+        for (const auto& a: player.attributes) {
             auto *property = new TiXmlElement("property");
             property->SetAttribute("name", (a.first).c_str());
             property->SetAttribute("value", to_string(a.second).c_str());
@@ -57,7 +58,6 @@ public:
         object->LinkEndChild(properties);
         objects->LinkEndChild(object);
 
-//        for (auto layers: level.getCountOfLayers())
         // ВРАГИ
         for (auto it: enemiesList) {
             object = new TiXmlElement("object");
