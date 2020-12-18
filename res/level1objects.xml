@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <map version="1.0">
-    <image source="img/tileset_items.png" width="300" height="300" tileWidth="50" tileHeight="50"/>
+    <image source="../res/img/tileset_items.png" width="300" height="300" tileWidth="50" tileHeight="50"/>
     <objectgroup>
         <object name="temik" type="player" x="156.535" y="201.628" width="30" height="50" layer="0">
             <properties>

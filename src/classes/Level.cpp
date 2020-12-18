@@ -34,7 +34,7 @@ bool Level::loadStaticMapFromFile(const std::string &filename) {
     std::string imagePath = image->Attribute("source");
     // ПУТЬ К ТАЙЛСЕТУ, загрузка
     sf::Image img;
-    if (!img.loadFromFile("../res/" + imagePath)) {
+    if (!img.loadFromFile(imagePath)) {
         std::cout << "Failed to load level textures tile sheet." << std::endl;
         return false;
     } else {
@@ -236,7 +236,7 @@ bool Level::loadDynamicObjectsFromFile(const std::string &filename) {
 
     // путь к тайлсету предметов, загрузка
     sf::Image img;
-    if (!img.loadFromFile("../res/" + imagePath)) {
+    if (!img.loadFromFile(imagePath)) {
         std::cout << "Failed to load tile sheet." << std::endl;
         return false;
     } else {

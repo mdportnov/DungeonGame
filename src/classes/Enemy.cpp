@@ -1,3 +1,4 @@
+#include <include/model/Player.h>
 #include "include/model/Enemy.h"
 #include "include/model/Unit.h"
 

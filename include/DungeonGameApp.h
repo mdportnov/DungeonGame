@@ -1,3 +1,4 @@
+#include <include/model/Player.h>
 #include "main.h"
 
 
@@ -6,9 +7,8 @@
  * создаёт основной цикл игры, обновляются параметры
  */
 class DungeonGameApp {
-protected:
-    sf::RenderWindow *window;
 public:
+    sf::RenderWindow *window;
     sf::SoundBuffer buffer1, buffer2, buffer3;
     sf::Sound doorSound, chestSound, mainSound;
 

@@ -4,7 +4,6 @@
 #include "include/model/MyView.h"
 #include "include/model/Player.h"
 #include "include/model/ObjectsParser.h"
-#include <vector>
 #include <list>
 #include <include/model/Chest.h>
 #include <include/model/equip/Key.h>
@@ -57,8 +56,9 @@ void DungeonGameApp::Run() {
 
     MapObject player = level.getPlayer();
 
-    Player p(level, myView, player.imagePath, player.name, player.rect.left, player.rect.top, player.rect.width,
-             player.rect.height, player.layer, player.properties);
+    Player p = Player(level, myView, player.imagePath, player.name, player.rect.left, player.rect.top,
+                      player.rect.width,
+                      player.rect.height, player.layer, player.properties);
 
     InfoBar infoBar;
     infoBar.observe(&p);

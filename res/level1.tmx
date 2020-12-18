@@ -4,7 +4,7 @@
   <export target="level1." format="tmx"/>
  </editorsettings>
  <tileset firstgid="1" name="tileset_v2" tilewidth="50" tileheight="50" tilecount="9" columns="3">
-  <image source="img/tileset.png" width="150" height="150"/>
+  <image source="../res/img/tileset.png" width="150" height="150"/>
  </tileset>
  <layer id="1" name="layer" width="20" height="15" visible="0">
   <data>
