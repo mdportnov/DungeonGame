@@ -225,14 +225,15 @@ void DungeonGameApp::Run() {
 
     while (window->isOpen()) {
         float time = clock.getElapsedTime().asMilliseconds();
+        if (Keyboard::isKeyPressed(Keyboard::A)) p.key["A"] = true;
+        if (Keyboard::isKeyPressed(Keyboard::D)) p.key["D"] = true;
+        if (Keyboard::isKeyPressed(Keyboard::W)) p.key["W"] = true;
+        if (Keyboard::isKeyPressed(Keyboard::S)) p.key["S"] = true;
 
         Event event{};
         if (time > 50) {
             clock.restart();
-            if (Keyboard::isKeyPressed(Keyboard::A)) p.key["A"] = true;
-            if (Keyboard::isKeyPressed(Keyboard::D)) p.key["D"] = true;
-            if (Keyboard::isKeyPressed(Keyboard::W)) p.key["W"] = true;
-            if (Keyboard::isKeyPressed(Keyboard::S)) p.key["S"] = true;
+
             while (window->pollEvent(event)) {
                 if (event.type == sf::Event::Closed)
                     window->close();
