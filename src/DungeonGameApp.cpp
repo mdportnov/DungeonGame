@@ -12,16 +12,16 @@
 #include <include/model/equip/ArtefactEquipment.h>
 #include <include/model/equip/EnchantedWeapon.h>
 #include <include/model/equip/EnchantedArtefactWeapon.h>
+#include <thread>
 #include "include/model/Enemy.h"
 #include "include/model/Door.h"
 
 using namespace sf;
 
 MyView myView;
+sf::RenderWindow *window;
 
-DungeonGameApp::DungeonGameApp() :
-        window(nullptr) {
-}
+DungeonGameApp::DungeonGameApp() {}
 
 DungeonGameApp::~DungeonGameApp() = default;
 
@@ -47,7 +47,6 @@ void DungeonGameApp::Init() {
 
 void DungeonGameApp::Run() {
     MusicInit();
-
     Clock clock, attackClock, doorClock, chestClock, potionsClock, ladderClock, usingPotionClock, itemsClock;
 
     Level level;
@@ -179,17 +178,61 @@ void DungeonGameApp::Run() {
         }
     }
 
+    // Многопоточная обработка персонажей
+    sf::Thread thread([&p, &enemiesList, &level]() {
+        Clock clock, attackClock;
+        while (window->isOpen()) {
+            float time = clock.getElapsedTime().asMilliseconds();
+            if (time > 50) {
+                clock.restart();
+                p.update(time);
+            }
+
+            if (attackClock.getElapsedTime().asMilliseconds() > 100)
+                for (auto &it : enemiesList) {
+                    if (it->layer == level.currentLayer) {
+                        if (p.getRect().intersects(it->getRect())) {
+                            if (p.dx > 0) {
+                                it->dx = 0.1;
+                            }
+                            if (p.dx < 0) {
+                                it->dx = -0.1;
+                            }
+                            if (p.dy > 0) {
+                                it->dy = 0.1;
+                            }
+                            if (p.dy < 0) {
+                                it->dy = -0.1;
+                            }
+                            it->dx = 0;
+                            it->dy = 0;
+                            it->acceptDamageFrom(&p);
+                            p.acceptDamageFrom(it);
+
+                            if (it->health <= 0) {
+                                p.changeSkillValue("lvl", it->lvl);
+                                p.playerLevel = (int) p.getSkillValue("lvl") / 100;
+                            }
+
+                            it->update(time);
+                            attackClock.restart();
+                        }
+                    }
+                }
+        }
+    });
+    thread.launch();
+
     while (window->isOpen()) {
         float time = clock.getElapsedTime().asMilliseconds();
-        if (Keyboard::isKeyPressed(Keyboard::A)) p.key["A"] = true;
-        if (Keyboard::isKeyPressed(Keyboard::D)) p.key["D"] = true;
-        if (Keyboard::isKeyPressed(Keyboard::W)) p.key["W"] = true;
-        if (Keyboard::isKeyPressed(Keyboard::S)) p.key["S"] = true;
 
         Event event{};
         if (time > 50) {
             clock.restart();
-
+            if (Keyboard::isKeyPressed(Keyboard::A)) p.key["A"] = true;
+            if (Keyboard::isKeyPressed(Keyboard::D)) p.key["D"] = true;
+            if (Keyboard::isKeyPressed(Keyboard::W)) p.key["W"] = true;
+            if (Keyboard::isKeyPressed(Keyboard::S)) p.key["S"] = true;
             while (window->pollEvent(event)) {
                 if (event.type == sf::Event::Closed)
                     window->close();
@@ -239,7 +282,7 @@ void DungeonGameApp::Run() {
                 }
             }
 
-            p.update(time);
+//            p.update(time);
 
             if (usingPotionClock.getElapsedTime().asSeconds() > 1) {
                 for (auto potion: p.potions) {
@@ -322,37 +365,37 @@ void DungeonGameApp::Run() {
                     }
                 }
 
-            if (attackClock.getElapsedTime().asMilliseconds() > 100)
-                for (auto &it : enemiesList) {
-                    if (it->layer == level.currentLayer) {
-                        if (p.getRect().intersects(it->getRect())) {
-                            if (p.dx > 0) {
-                                it->dx = 0.1;
-                            }
-                            if (p.dx < 0) {
-                                it->dx = -0.1;
-                            }
-                            if (p.dy > 0) {
-                                it->dy = 0.1;
-                            }
-                            if (p.dy < 0) {
-                                it->dy = -0.1;
-                            }
-                            it->dx = 0;
-                            it->dy = 0;
-                            it->acceptDamageFrom(&p);
-                            p.acceptDamageFrom(it);
-
-                            if (it->health <= 0) {
-                                p.changeSkillValue("lvl", it->lvl);
-                                p.playerLevel = (int) p.getSkillValue("lvl") / 100;
-                            }
-
-                            it->update(time);
-                            attackClock.restart();
-                        }
-                    }
-                }
+//            if (attackClock.getElapsedTime().asMilliseconds() > 100)
+//                for (auto &it : enemiesList) {
+//                    if (it->layer == level.currentLayer) {
+//                        if (p.getRect().intersects(it->getRect())) {
+//                            if (p.dx > 0) {
+//                                it->dx = 0.1;
+//                            }
+//                            if (p.dx < 0) {
+//                                it->dx = -0.1;
+//                            }
+//                            if (p.dy > 0) {
+//                                it->dy = 0.1;
+//                            }
+//                            if (p.dy < 0) {
+//                                it->dy = -0.1;
+//                            }
+//                            it->dx = 0;
+//                            it->dy = 0;
+//                            it->acceptDamageFrom(&p);
+//                            p.acceptDamageFrom(it);
+//
+//                            if (it->health <= 0) {
+//                                p.changeSkillValue("lvl", it->lvl);
+//                                p.playerLevel = (int) p.getSkillValue("lvl") / 100;
+//                            }
+//
+//                            it->update(time);
+//                            attackClock.restart();
+//                        }
+//                    }
+//                }
         }
 
         myView.viewMap(time);

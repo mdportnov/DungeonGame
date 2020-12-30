@@ -16,6 +16,8 @@ set(TINY_SOURCES
         "include/TinyXML/tinyxmlparser.cpp"
         "include/TinyXML/tinyxmlerror.cpp")
 
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
+
 set(GAME_SOURCES
         "include/main.h"
         "src/DungeonGameApp.cpp"

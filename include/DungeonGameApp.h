@@ -8,7 +8,6 @@
  */
 class DungeonGameApp {
 public:
-    sf::RenderWindow *window;
     sf::SoundBuffer buffer1, buffer2, buffer3;
     sf::Sound doorSound, chestSound, mainSound;
 
