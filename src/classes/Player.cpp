@@ -109,7 +109,7 @@ void Player::control(float time) {
 
 void Player::checkCollision(int num) {
     Unit::checkCollision(num);
-    for (auto &i : map)
+    for (auto &i : map) {
         if (getRect().intersects(i.rect)) {
             if (Mouse::isButtonPressed(sf::Mouse::Left)) {
                 if (i.name == "ladder_up") {
@@ -120,6 +120,8 @@ void Player::checkCollision(int num) {
                 }
             }
         }
+
+    }
 }
 
 void Player::takeItem(Item *&item) {

@@ -16,7 +16,7 @@ set(TINY_SOURCES
         "include/TinyXML/tinyxmlparser.cpp"
         "include/TinyXML/tinyxmlerror.cpp")
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread -lX11")
 
 set(GAME_SOURCES
         "include/main.h"

@@ -21,20 +21,20 @@
                 <property name="sp" value="0.1"/>
             </properties>
         </object>
-        <object name="egorov" type="enemy" x="200" y="200" width="30" height="50" layer="1">
-            <properties>
-                <property name="hp" value="250"/>
-                <property name="lvl" value="40"/>
-                <property name="damage" value="10"/>
-                <property name="sp" value="0.2"/>
-            </properties>
-        </object>
         <object name="egorov" type="enemy" x="500" y="200" width="30" height="50" layer="0">
             <properties>
                 <property name="hp" value="300"/>
                 <property name="lvl" value="40"/>
                 <property name="damage" value="10"/>
                 <property name="sp" value="0.1"/>
+            </properties>
+        </object>
+        <object name="egorov" type="enemy" x="200" y="200" width="30" height="50" layer="1">
+            <properties>
+                <property name="hp" value="250"/>
+                <property name="lvl" value="40"/>
+                <property name="damage" value="10"/>
+                <property name="sp" value="0.2"/>
             </properties>
         </object>
         <object name="egorov" type="enemy" x="800" y="500" width="30" height="50" layer="0">
@@ -58,7 +58,7 @@
                 <property name="hp" value="150"/>
                 <property name="lvl" value="50"/>
                 <property name="damage" value="20"/>
-                <property name="sp" value="0.4"/>
+                <property name="sp" value="0.2"/>
             </properties>
         </object>
 

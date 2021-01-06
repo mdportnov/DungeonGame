@@ -12,7 +12,6 @@
 #include <include/model/equip/ArtefactEquipment.h>
 #include <include/model/equip/EnchantedWeapon.h>
 #include <include/model/equip/EnchantedArtefactWeapon.h>
-#include <thread>
 #include "include/model/Enemy.h"
 #include "include/model/Door.h"
 
@@ -178,8 +177,7 @@ void DungeonGameApp::Run() {
         }
     }
 
-    // Многопоточная обработка персонажей
-    sf::Thread thread([&p, &enemiesList, &level]() {
+    sf::Thread pThread([&p] {
         Clock clock, attackClock;
         while (window->isOpen()) {
             float time = clock.getElapsedTime().asMilliseconds();
@@ -187,9 +185,19 @@ void DungeonGameApp::Run() {
                 clock.restart();
                 p.update(time);
             }
+        }
+    });
 
-            if (attackClock.getElapsedTime().asMilliseconds() > 100)
-                for (auto &it : enemiesList) {
+    pThread.launch();
+
+    list<sf::Thread> threads;
+
+    for (auto &it : enemiesList) {
+        threads.emplace_back([&p, &level, it] {
+            Clock clock, attackClock;
+            while (window->isOpen()) {
+                float time = clock.getElapsedTime().asMilliseconds();
+                if (attackClock.getElapsedTime().asMilliseconds() > 100)
                     if (it->layer == level.currentLayer) {
                         if (p.getRect().intersects(it->getRect())) {
                             if (p.dx > 0) {
@@ -208,20 +216,24 @@ void DungeonGameApp::Run() {
                             it->dy = 0;
                             it->acceptDamageFrom(&p);
                             p.acceptDamageFrom(it);
+                            it->update(time);
 
                             if (it->health <= 0) {
                                 p.changeSkillValue("lvl", it->lvl);
                                 p.playerLevel = (int) p.getSkillValue("lvl") / 100;
+                                return;
                             }
 
-                            it->update(time);
                             attackClock.restart();
+                            clock.restart();
                         }
                     }
-                }
-        }
-    });
-    thread.launch();
+            }
+        });
+    }
+
+    for (auto &th: threads)
+        th.launch();
 
     while (window->isOpen()) {
         float time = clock.getElapsedTime().asMilliseconds();
@@ -405,17 +417,7 @@ void DungeonGameApp::Run() {
         window->clear(sf::Color(169, 169, 169));
 
         level.draw(*window);
-
         for (auto enemy : enemiesList) {
-//                if ((*enemy).name == "egorov") {
-//                    RectangleShape rect(Vector2f(enemy->getEnemyArea().width, enemy->getEnemyArea().height));
-//                    rect.setPosition(enemy->x - enemy->getEnemyArea().width / 2 + enemy->w / 2,
-//                                     enemy->y - enemy->getEnemyArea().height / 2 + enemy->h / 2);
-//                    rect.setOutlineThickness(5);
-//                    rect.setFillColor(Color::Transparent);
-//                    rect.setOutlineColor(sf::Color(250, 150, 100));
-//                    window->draw(rect);
-//                }
             if (enemy->layer == level.currentLayer)
                 enemy->draw(*window);
         }
